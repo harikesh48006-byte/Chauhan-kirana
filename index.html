@@ -1,1522 +1,205 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chauhan Kirana & Ramlakhan Tent House | Kutubpur Mau</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- HTML to Image Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <style>
-    #cart-bar { z-index: 9999 !important; bottom: 16px !important; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    @keyframes marquee {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-    .animate-marquee {
-      display: inline-block;
-      white-space: nowrap;
-      animation: marquee 16s linear infinite;
-    }
-    @media print {
-      body * { visibility: hidden; }
-      #printableReceipt, #printableReceipt * { visibility: visible; }
-      #printableReceipt { position: absolute; left: 0; top: 0; width: 100%; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chauhan Kirana Store | Kutubpur, Mau</title>
+<meta name="theme-color" content="#581c87">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+  .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
+  .product-img{height:120px;object-fit:contain;background:#fff}
+  .modal{background:rgba(0,0,0,.65)}
+</style>
 </head>
-<body class="bg-gray-100 pb-36 font-sans">
-
-  <!-- Header -->
-  <div class="bg-purple-900 text-white p-3.5 sticky top-0 z-40 shadow-lg">
-    <div class="flex justify-between items-start">
-      <div>
-        <h1 class="text-lg font-black tracking-wide flex items-center gap-1.5">
-          <span>🛒</span> चौहान किराना स्टोर
-        </h1>
-        <p class="text-[11px] text-yellow-300 font-bold mt-0.5">
-          📍 Kutubpur, Bahadurpur Mau (कुतुबपुर)
-        </p>
-      </div>
-      <div class="flex flex-col items-end gap-1.5">
-        <span id="shopStatusBadge" class="text-[10px] px-2 py-0.5 rounded-full font-bold">...</span>
-        <button onclick="openAdminModal()" class="bg-purple-950 text-yellow-300 text-[10px] px-2 py-1 rounded-md border border-purple-500 font-bold shadow-sm">
-          ⚙️ Dukandar Panel (दुकानदार)
-        </button>
-      </div>
-    </div>
-
-    <!-- Ramlakhan Tent House Banner / Button -->
-    <div class="mt-2.5">
-      <button onclick="openTentModal()" class="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-600 hover:from-amber-600 hover:to-red-700 text-white font-black py-2.5 px-3 rounded-xl shadow-md flex items-center justify-between text-xs border border-yellow-200 active:scale-95 transition-all">
-        <span class="flex items-center gap-1.5">
-          <span class="text-base animate-bounce">🎪</span>
-          <span>Ramlakhan Tent House (रामलखन टेंट हाउस)</span>
-        </span>
-        <span class="bg-white/20 text-white text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider font-extrabold flex items-center gap-1">
-          Rates & Booking ➔
-        </span>
-      </button>
-    </div>
-    
-    <div class="text-[10px] text-purple-200 mt-2 flex justify-between items-center bg-purple-950/60 px-2 py-1 rounded">
-      <span>⏰ Dukan Time: 08:00 AM - 08:00 PM</span>
-      <span id="syncIndicator" class="text-emerald-300 font-bold">🟢 Live Google Sheet</span>
-    </div>
-
-    <!-- Search Bar with Mic -->
-    <div class="mt-2.5 flex items-center gap-2">
-      <div class="relative flex-1">
-        <input id="searchBox" oninput="filterAndRender()" type="text" placeholder="🔍 Saman khojein (Aata, Tel, Sabun)..." class="w-full p-2 pr-9 rounded-lg text-gray-800 text-xs focus:outline-none shadow-inner bg-white">
-        <button type="button" onclick="startVoiceSearch()" id="voiceBtn" class="absolute right-1.5 top-1.5 text-purple-800 bg-purple-100 p-1 rounded-full text-xs" title="बोलकर खोजें">
-          🎙️
-        </button>
-      </div>
-    </div>
-
-    <!-- Category Tabs -->
-    <div class="flex gap-2 mt-2.5 overflow-x-auto no-scrollbar pb-1 text-xs font-semibold">
-      <button onclick="setCategory('all')" id="cat-all" class="cat-btn px-3 py-1.5 rounded-full bg-white text-purple-900 shadow whitespace-nowrap font-bold">Sabhi Saman (सभी)</button>
-      <button onclick="setCategory('new')" id="cat-new" class="cat-btn px-3 py-1.5 rounded-full bg-yellow-400 text-gray-900 shadow whitespace-nowrap font-bold">✨ Naya Saman (नया)</button>
-      <button onclick="setCategory('staples')" id="cat-staples" class="cat-btn px-3 py-1.5 rounded-full bg-purple-950 text-purple-200 shadow whitespace-nowrap">Aata, Chawal & Daal</button>
-      <button onclick="setCategory('oil-spices')" id="cat-oil-spices" class="cat-btn px-3 py-1.5 rounded-full bg-purple-950 text-purple-200 shadow whitespace-nowrap">Tel & Masale</button>
-      <button onclick="setCategory('snacks')" id="cat-snacks" class="cat-btn px-3 py-1.5 rounded-full bg-purple-950 text-purple-200 shadow whitespace-nowrap">Biscuits & Drinks</button>
-      <button onclick="setCategory('cleaning')" id="cat-cleaning" class="cat-btn px-3 py-1.5 rounded-full bg-purple-950 text-purple-200 shadow whitespace-nowrap">Sabun & Surf</button>
-    </div>
+<body class="bg-gray-100 text-gray-900 pb-28">
+<header class="bg-purple-900 text-white p-4 sticky top-0 z-30 shadow-lg">
+  <div class="flex items-start justify-between gap-2">
+    <div><h1 class="text-lg font-black">ЁЯЫТ рдЪреМрд╣рд╛рди рдХрд┐рд░рд╛рдирд╛ рд╕реНрдЯреЛрд░</h1><p class="text-xs text-yellow-300">ЁЯУН Kutubpur, Bahadurpur, Mau</p></div>
+    <button onclick="openAdmin()" class="text-xs bg-purple-950 border border-purple-400 rounded-lg px-3 py-2 font-bold">тЪЩя╕П рджреБрдХрд╛рдирджрд╛рд░</button>
   </div>
-
-  <!-- Sliding Daily Offer Bar -->
-  <div class="bg-amber-400 text-amber-950 font-bold text-xs py-1.5 px-3 overflow-hidden shadow-inner flex items-center">
-    <span class="bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-black mr-2 shrink-0">OFFER</span>
-    <div class="w-full overflow-hidden whitespace-nowrap">
-      <span class="animate-marquee">
-        🔥 Kutubpur aur Bahadurpur me ₹150+ par Free Delivery ⚡ Shaadi aur Party ke liye Ramlakhan Tent House se DJ, Generator, Bartan aur Light ki booking shuru hai! 🎪
-      </span>
-    </div>
+  <p class="text-[11px] mt-2 bg-purple-950/70 rounded p-2">тП░ рджреБрдХрд╛рди рдХрд╛ рд╕рдордп: 08:00 AM тАУ 08:00 PM <span id="connection" class="float-right text-yellow-200">ConnectingтАж</span></p>
+  <input id="search" oninput="renderProducts()" placeholder="ЁЯФН рд╕рд╛рдорд╛рди рдЦреЛрдЬреЗрдВтАж" class="mt-3 w-full rounded-lg p-3 text-sm text-gray-900">
+  <div class="flex gap-2 overflow-x-auto no-scrollbar mt-3 text-xs">
+    <button class="category px-3 py-2 rounded-full bg-white text-purple-900 font-bold whitespace-nowrap" data-cat="all" onclick="chooseCategory('all')">рд╕рднреА рд╕рд╛рдорд╛рди</button>
+    <button class="category px-3 py-2 rounded-full bg-purple-950 whitespace-nowrap" data-cat="staples" onclick="chooseCategory('staples')">рдЖрдЯрд╛, рдЪрд╛рд╡рд▓, рджрд╛рд▓</button>
+    <button class="category px-3 py-2 rounded-full bg-purple-950 whitespace-nowrap" data-cat="oil-spices" onclick="chooseCategory('oil-spices')">рддреЗрд▓ рдФрд░ рдорд╕рд╛рд▓реЗ</button>
+    <button class="category px-3 py-2 rounded-full bg-purple-950 whitespace-nowrap" data-cat="snacks" onclick="chooseCategory('snacks')">рдмрд┐рд╕реНрдХреБрдЯ рдФрд░ рдбреНрд░рд┐рдВрдХреНрд╕</button>
+    <button class="category px-3 py-2 rounded-full bg-purple-950 whitespace-nowrap" data-cat="cleaning" onclick="chooseCategory('cleaning')">рд╕рд╛рдмреБрди рдФрд░ рд╕рд░реНрдл</button>
   </div>
+</header>
 
-  <!-- Order Details Box (Kirana) -->
-  <div class="bg-white p-3.5 m-3 rounded-xl shadow-sm border border-gray-200">
-    <h2 class="font-bold text-gray-800 mb-2 text-xs">📦 Saman Kaise Lenge? (सामान कैसे लेंगे?)</h2>
-    
-    <div class="grid grid-cols-2 gap-2 mb-3">
-      <button type="button" onclick="setOrderMode('pickup')" id="mode-pickup" class="border-2 border-purple-600 bg-purple-50 text-purple-800 font-bold py-2 px-2 rounded-lg text-xs flex flex-col items-center">
-        <span>🛍️ Dukan Se Lenge (दुकान से)</span>
-        <span class="text-[9px] text-gray-500 font-normal mt-0.5">Pack ready milega</span>
-      </button>
-      <button type="button" onclick="setOrderMode('delivery')" id="mode-delivery" class="border-2 border-gray-200 bg-white text-gray-700 font-bold py-2 px-2 rounded-lg text-xs flex flex-col items-center">
-        <span>🚚 Ghar Par Delivery (घर पर)</span>
-        <span class="text-[9px] text-gray-500 font-normal mt-0.5">15 se 60 Minute</span>
-      </button>
-    </div>
+<div class="bg-amber-300 text-amber-950 p-2 text-xs font-bold text-center">ЁЯОЙ Kutubpur aur Bahadurpur mein тВ╣150+ par free delivery* | *рджреБрдХрд╛рдирджрд╛рд░ рд╕реЗ рдкреБрд╖реНрдЯрд┐ рдХрд░реЗрдВ</div>
 
-    <div class="grid grid-cols-2 gap-2 mb-2">
-      <input id="custName" type="text" placeholder="Aapka Naam (नाम) *" class="w-full border p-2 rounded-lg text-xs focus:outline-purple-600">
-      <input id="custFather" type="text" placeholder="Pita/Pati Ka Naam (पिता का नाम)" class="w-full border p-2 rounded-lg text-xs focus:outline-purple-600">
+<main class="max-w-5xl mx-auto p-3">
+  <section class="bg-white rounded-xl p-3 mb-4 shadow-sm">
+    <h2 class="font-bold text-sm mb-2">ЁЯУж рдСрд░реНрдбрд░ рдХреА рдЬрд╛рдирдХрд╛рд░реА</h2>
+    <div class="grid grid-cols-2 gap-2">
+      <input id="customerName" class="border rounded-lg p-2 text-sm" placeholder="рдЖрдкрдХрд╛ рдирд╛рдо *">
+      <input id="customerPhone" class="border rounded-lg p-2 text-sm" placeholder="рдореЛрдмрд╛рдЗрд▓ рдирдВрдмрд░ *" inputmode="tel">
     </div>
+    <div class="grid grid-cols-2 gap-2 mt-2">
+      <label class="border rounded-lg p-2 text-sm"><input type="radio" name="mode" value="Pickup" checked> ЁЯЫНя╕П рджреБрдХрд╛рди рд╕реЗ рд▓реЗрдВ</label>
+      <label class="border rounded-lg p-2 text-sm"><input type="radio" name="mode" value="Delivery"> ЁЯЪЪ рдШрд░ рдкрд░ рдбрд┐рд▓реАрд╡рд░реА</label>
+    </div>
+    <input id="address" class="border rounded-lg p-2 text-sm w-full mt-2" placeholder="рдбрд┐рд▓реАрд╡рд░реА рдХрд╛ рдкрддрд╛ / рдЯреЛрд▓рд╛ (рдбрд┐рд▓реАрд╡рд░реА рдХреЗ рд▓рд┐рдП)">
+    <select id="payment" class="border rounded-lg p-2 text-sm w-full mt-2">
+      <option>Cash (рдирдХрдж)</option><option>Online UPI</option><option>Khata (рдЙрдзрд╛рд░ рдЕрдиреБрд░реЛрдз)</option>
+    </select>
+  </section>
+  <div class="flex justify-between items-center mb-3"><h2 class="font-bold">ЁЯЫНя╕П рдЙрдкрд▓рдмреНрдз рд╕рд╛рдорд╛рди</h2><button onclick="loadProducts()" class="text-xs text-purple-800 underline">Refresh</button></div>
+  <div id="productList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+  <p id="emptyMessage" class="hidden text-center text-sm text-gray-500 p-8">рд╕рд╛рдорд╛рди рдирд╣реАрдВ рдорд┐рд▓рд╛ред Search рдмрджрд▓рдХрд░ рджреЗрдЦреЗрдВред</p>
+</main>
 
-    <div class="mb-2">
-      <label class="block text-[11px] font-bold text-gray-700 mb-1">💰 Payment Method (भुगतान का तरीका):</label>
-      <select id="custPayment" class="w-full border p-2 rounded-lg text-xs bg-gray-50 font-medium focus:outline-purple-600">
-        <option value="Cash on Delivery">💵 Cash (नकद)</option>
-        <option value="Online UPI">📱 Online UPI (GooglePay / PhonePe / Paytm)</option>
-        <option value="Khata (Udhaar)">📒 Khata Book (खाता / उधार में लिखें)</option>
-      </select>
-    </div>
-
-    <div id="deliveryFields" class="hidden">
-      <input id="custTola" type="text" placeholder="Tola / Mohalla (जैसे: Chauhan Basti, Purab Tola) *" class="w-full border p-2 rounded-lg mb-2 text-xs focus:outline-purple-600">
-      <textarea id="custLandmark" rows="2" placeholder="🏠 Ghar ki Pehchan (Landmark) - Mandir ke paas, Transformer ke samne *" class="w-full border p-2 rounded-lg text-xs focus:outline-purple-600"></textarea>
-      
-      <button type="button" id="geoBtn" onclick="fetchLiveLocation()" class="w-full mt-2 bg-sky-600 active:bg-sky-700 text-white font-bold py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-2 shadow-sm">
-        📍 Add Live GPS Location (सटीक लोकेशन जोड़ें)
-      </button>
-      <span id="locStatus" class="text-xs mt-1 block font-medium min-h-[16px]"></span>
-    </div>
+<div id="cartBar" class="hidden fixed bottom-3 left-3 right-3 z-40 bg-white border-2 border-green-600 rounded-2xl shadow-xl p-3">
+  <div class="flex items-center justify-between gap-3 max-w-3xl mx-auto">
+    <div><p class="text-xs text-gray-600"><span id="cartCount">0</span> рд╕рд╛рдорд╛рди</p><p class="font-black text-green-700">рдХреБрд▓: тВ╣<span id="cartTotal">0</span></p></div>
+    <button onclick="sendOrder()" class="bg-green-600 text-white rounded-xl px-4 py-3 text-xs font-bold">WhatsApp рдкрд░ рдСрд░реНрдбрд░ рдХрд░реЗрдВ ЁЯЪА</button>
   </div>
+</div>
 
-  <!-- New Arrivals Carousel -->
-  <div id="newArrivalsSection" class="px-3 mb-2">
-    <div class="flex items-center justify-between mb-1.5">
-      <h2 class="font-bold text-gray-800 text-xs flex items-center gap-1">
-        <span>✨ Dukan Me Naya Saman (नया सामान)</span>
-      </h2>
-      <span class="text-[9px] bg-red-100 text-red-600 font-bold px-2 py-0.5 rounded-full">New Arrivals</span>
+<!-- Admin modal -->
+<div id="adminModal" class="hidden fixed inset-0 modal z-50 items-center justify-center p-3">
+ <div class="bg-white w-full max-w-xl max-h-[94vh] overflow-y-auto rounded-2xl p-4">
+  <div class="flex justify-between items-center mb-3"><h2 class="text-lg font-black text-purple-900">тЪЩя╕П рджреБрдХрд╛рдирджрд╛рд░ рдкреИрдирд▓</h2><button onclick="closeAdmin()" class="text-2xl px-2">├Ч</button></div>
+  <div id="loginBox">
+    <p class="text-sm text-gray-600 mb-2">Admin PIN рдбрд╛рд▓реЗрдВред рдкрд╣рд▓реА рдмрд╛рд░ Apps Script рдореЗрдВ PIN рд╕реЗрдЯ рдХрд░рдирд╛ рд╣реЛрдЧрд╛ред</p>
+    <input id="adminPin" type="password" inputmode="numeric" maxlength="12" placeholder="Admin PIN" class="border rounded-lg p-3 w-full text-center tracking-widest">
+    <button onclick="adminLogin()" class="bg-purple-800 text-white rounded-lg p-3 w-full mt-3 font-bold">Login</button>
+    <p class="text-[11px] text-gray-500 mt-2">Default PIN: 1207 (рдЗрд╕реЗ Apps Script setup рдореЗрдВ рднреА 1207 рд░рдЦреЗрдВ)</p>
+    <p id="loginError" class="text-sm text-red-600 mt-2"></p>
+  </div>
+  <div id="adminPanel" class="hidden">
+    <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs mb-3">Product рдХрд╛ рдирд╛рдо, рдХреАрдордд, рд╕реНрдЯреЙрдХ рдФрд░ рдлреЛрдЯреЛ URL рдмрджрд▓реЗрдВред Photo file рдЪреБрдирдиреЗ рдкрд░ рд╡рд╣ Google Drive рдкрд░ upload рд╣реЛрдЧреА (Apps Script setup рдЬрд░реВрд░реА рд╣реИ)ред</div>
+    <input id="editId" type="hidden">
+    <label class="text-xs font-bold">рд╕рд╛рдорд╛рди рдХрд╛ рдирд╛рдо *</label><input id="pName" class="border rounded-lg p-2 w-full mb-2" placeholder="рдЬреИрд╕реЗ: рдЖрдЯрд╛ 5kg">
+    <div class="grid grid-cols-2 gap-2">
+      <div><label class="text-xs font-bold">рдХреАрдордд (тВ╣) *</label><input id="pPrice" type="number" min="0" class="border rounded-lg p-2 w-full mb-2" placeholder="Price"></div>
+      <div><label class="text-xs font-bold">рд╕реНрдЯреЙрдХ</label><input id="pStock" type="number" min="0" class="border rounded-lg p-2 w-full mb-2" placeholder="Quantity"></div>
     </div>
-    <div id="new-products-carousel" class="flex gap-2.5 overflow-x-auto no-scrollbar pb-2"></div>
-  </div>
-
-  <!-- Products Grid -->
-  <div class="px-3">
-    <div class="flex justify-between items-center mb-2">
-      <h2 id="gridSectionTitle" class="font-bold text-gray-800 text-sm">🔥 Sabhi Saman (सभी सामान)</h2>
-      <span id="deliveryBadgeNote" class="text-[11px] text-gray-500 font-medium">Pack Ready</span>
+    <div class="grid grid-cols-2 gap-2">
+      <div><label class="text-xs font-bold">Category</label><select id="pCategory" class="border rounded-lg p-2 w-full mb-2"><option value="staples">рдЖрдЯрд╛, рдЪрд╛рд╡рд▓, рджрд╛рд▓</option><option value="oil-spices">рддреЗрд▓ рдФрд░ рдорд╕рд╛рд▓реЗ</option><option value="snacks">рдмрд┐рд╕реНрдХреБрдЯ рдФрд░ рдбреНрд░рд┐рдВрдХреНрд╕</option><option value="cleaning">рд╕рд╛рдмреБрди рдФрд░ рд╕рд░реНрдл</option><option value="other">рдЕрдиреНрдп</option></select></div>
+      <div><label class="text-xs font-bold">Photo URL (optional)</label><input id="pImageUrl" class="border rounded-lg p-2 w-full mb-2" placeholder="https://тАж"></div>
     </div>
-    <div id="product-list" class="grid grid-cols-2 gap-3"></div>
+    <label class="text-xs font-bold">рдпрд╛ рдлреЛрдЯреЛ рдлрд╛рдЗрд▓ рдЪреБрдиреЗрдВ (max 1.5 MB)</label><input id="pImageFile" type="file" accept="image/*" class="border rounded-lg p-2 w-full mb-2 text-sm">
+    <div class="flex gap-2"><button onclick="saveProduct()" id="saveBtn" class="bg-green-600 text-white rounded-lg p-3 flex-1 font-bold">ЁЯТ╛ Save Product</button><button onclick="clearForm()" class="bg-gray-200 rounded-lg p-3 font-bold">Clear</button></div>
+    <p id="adminMessage" class="text-sm mt-2"></p>
+    <hr class="my-4">
+    <div class="flex justify-between items-center"><h3 class="font-bold">Products manage рдХрд░реЗрдВ</h3><button onclick="loadProducts()" class="text-purple-800 underline text-xs">Reload</button></div>
+    <div id="adminProductList" class="space-y-2 mt-2"></div>
+    <button onclick="adminLogout()" class="mt-4 bg-gray-800 text-white rounded-lg p-2 w-full text-sm">Logout</button>
   </div>
+ </div>
+</div>
 
-  <!-- Sticky Bottom Cart Bar -->
-  <div id="cart-bar" class="fixed left-3 right-3 bg-white p-3 shadow-2xl rounded-2xl border-2 border-green-600 hidden">
-    <div class="flex justify-between items-center max-w-md mx-auto">
-      <div>
-        <p class="text-xs text-gray-600 font-medium"><span id="total-items">0</span> Saman | <span id="delivery-tag" class="text-green-700 font-bold">Pick-up (Free)</span></p>
-        <p class="text-lg font-extrabold text-green-700">Total: ₹<span id="total-price">0</span></p>
-      </div>
-      <button id="orderSubmitBtn" onclick="sendOrder()" class="bg-green-600 active:bg-green-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-md flex items-center gap-1.5 text-xs">
-        <span id="btnText">Order WhatsApp Par Bhejein</span> 🚀
-      </button>
-    </div>
-  </div>
+<footer class="text-center text-xs text-gray-500 p-5">Chauhan Kirana Store тАв Kutubpur, Mau</footer>
+<script>
+/*
+SETUP: Apps Script deployment URL рдиреАрдЪреЗ рдбрд╛рд▓реЗрдВ.
+WhatsApp рдирдВрдмрд░ рднрд╛рд░рдд рдХрд╛ 10-digit рдирдВрдмрд░ рдмрд┐рдирд╛ +91 рдХреЗ рд▓рд┐рдЦреЗрдВ.
+*/
+const API_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const SHOP_WHATSAPP = "REPLACE_WITH_10_DIGIT_WHATSAPP_NUMBER";
+let products = [];
+let cart = {};
+let activeCategory = "all";
+let adminPinValue = "";
 
-  <!-- Hidden Container for Receipt Capture -->
-  <div id="receiptContainer" style="position: absolute; left: -9999px; top: 0; width: 380px; background-color: #ffffff; padding: 24px 20px; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-    <div id="captureContent" style="width: 100%; box-sizing: border-box;"></div>
-  </div>
-
-  <!-- Printable Receipt Modal -->
-  <div id="receiptModal" class="fixed inset-0 bg-black/60 z-[10001] hidden flex items-center justify-center p-3">
-    <div class="bg-white w-full max-w-sm rounded-2xl p-4 max-h-[90vh] overflow-y-auto">
-      <div id="printableReceipt" class="p-3 bg-white font-mono text-xs border border-dashed border-gray-400 rounded-lg"></div>
-      <div class="flex gap-2 mt-3">
-        <button onclick="window.print()" class="flex-1 bg-purple-700 text-white font-bold py-2 rounded-lg text-xs shadow">
-          🖨️ Parchi Print
-        </button>
-        <button onclick="closeReceiptModal()" class="flex-1 bg-gray-200 text-gray-700 font-bold py-2 rounded-lg text-xs">
-          Band Karein
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- RAMLAKHAN TENT HOUSE DYNAMIC PRE-BOOKING MODAL -->
-  <div id="tentModal" class="fixed inset-0 bg-black/70 z-[10002] hidden flex items-center justify-center p-3">
-    <div class="bg-white w-full max-w-lg rounded-2xl p-4 max-h-[92vh] overflow-y-auto border-2 border-amber-500 shadow-2xl">
-      <div class="flex justify-between items-start border-b border-amber-200 pb-2.5 mb-3 bg-amber-50 -mx-4 -mt-4 p-4 rounded-t-2xl">
-        <div>
-          <h3 class="font-extrabold text-base text-amber-950 flex items-center gap-1.5">
-            <span>🎪</span> रामलखन टेंट हाउस
-          </h3>
-          <p class="text-[11px] text-amber-800 font-bold">Kutubpur, Bahadurpur Mau | Pre-Booking & Rates</p>
-        </div>
-        <button onclick="closeTentModal()" class="text-gray-500 hover:text-red-600 text-2xl font-black leading-none">&times;</button>
-      </div>
-
-      <div class="grid grid-cols-2 gap-2 mb-3 bg-orange-50/70 p-2.5 rounded-xl border border-orange-200">
-        <div>
-          <label class="block text-[11px] font-bold text-gray-700 mb-1">📅 Function Ki Tareekh *:</label>
-          <input id="tentDate" type="date" class="w-full border p-1.5 rounded-lg text-xs focus:outline-amber-600 font-semibold bg-white">
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-gray-700 mb-1">⏳ Kitne Din Chahiye:</label>
-          <select id="tentDays" onchange="calculateTentTotal()" class="w-full border p-1.5 rounded-lg text-xs focus:outline-amber-600 font-semibold bg-white">
-            <option value="1">1 Din (1 Day)</option>
-            <option value="2">2 Din (2 Days)</option>
-            <option value="3">3 Din (3 Days)</option>
-            <option value="4">4 Din (4 Days)</option>
-            <option value="5">5 Din (5 Days)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="flex justify-between items-center mb-1.5">
-          <label class="block text-xs font-bold text-gray-800">📦 Saman & Rate List (सामान और किराया चुनें):</label>
-          <span class="text-[10px] text-amber-700 font-bold">Per Day Rate</span>
-        </div>
-        <div id="tentItemsContainer" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar pr-1"></div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-2 mb-2">
-        <input id="tentCustName" type="text" placeholder="Aapka Naam (नाम) *" class="w-full border p-2 rounded-lg text-xs focus:outline-amber-600">
-        <input id="tentCustFather" type="text" placeholder="Pita Ka Naam (पिता का नाम)" class="w-full border p-2 rounded-lg text-xs focus:outline-amber-600">
-      </div>
-
-      <div class="mb-2">
-        <label class="block text-[11px] font-bold text-gray-700 mb-1">📍 Full Address (कार्यक्रम का पूरा पता) *:</label>
-        <input id="tentVillage" type="text" placeholder="Gaon / Tola (जैसे: Kutubpur, Chauhan Tola) *" class="w-full border p-2 rounded-lg mb-1.5 text-xs focus:outline-amber-600">
-        <textarea id="tentLandmark" rows="2" placeholder="🏠 Ghar / Stage ki Pehchan (Landmark, Mandir, Transformer) *" class="w-full border p-2 rounded-lg text-xs focus:outline-amber-600"></textarea>
-      </div>
-
-      <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 mb-3 space-y-2">
-        <div class="flex justify-between items-center text-xs font-bold text-amber-950 border-b border-amber-200 pb-1.5">
-          <span>Est. Total Kiraya (अनुमानित किराया):</span>
-          <span class="text-sm text-green-700 font-black">₹<span id="tentEstTotal">0</span></span>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2 pt-1">
-          <div>
-            <span class="text-[10px] text-gray-600 font-bold block mb-1">Advance Rashi (₹) *:</span>
-            <input id="tentAdvanceAmt" type="number" value="1000" placeholder="Advance ₹" class="w-full border p-1.5 rounded text-xs bg-white font-bold text-green-700 focus:outline-amber-600">
-          </div>
-          <div>
-            <span class="text-[10px] text-gray-600 font-bold block mb-1">Payment Method:</span>
-            <select id="tentAdvanceMode" class="w-full border p-1.5 rounded text-xs bg-white font-semibold focus:outline-amber-600">
-              <option value="Online UPI (GooglePay/PhonePe)">📱 Online UPI</option>
-              <option value="Cash Diya (नकद)">💵 Cash Diya</option>
-              <option value="Dukan Par Aakar Denge">🤝 Dukan Par Aakar</option>
-            </select>
-          </div>
-        </div>
-        <p class="text-[10px] text-amber-800 font-medium">💡 Baaki rashi event wale din saman setup hone par li jayegi.</p>
-      </div>
-
-      <button type="button" onclick="sendTentBooking()" class="w-full bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-700 hover:to-red-700 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-2">
-        <span id="tentBtnText">Pre-Booking WhatsApp Par Bhejein</span> 🚀
-      </button>
-    </div>
-  </div>
-
-  <!-- ADMIN PANEL -->
-  <div id="adminModal" class="fixed inset-0 bg-black/60 z-[10000] hidden flex items-center justify-center p-3">
-    <div class="bg-white w-full max-w-lg rounded-2xl p-4 max-h-[90vh] overflow-y-auto">
-      <div id="adminAuthDiv">
-        <div class="flex justify-between items-center mb-3">
-          <h3 class="font-bold text-base text-purple-900">🔒 Dukandar Login (दुकानदार लॉगिन)</h3>
-          <button onclick="closeAdminModal()" class="text-gray-400 text-2xl font-bold">&times;</button>
-        </div>
-        <p class="text-xs text-gray-500 mb-2">Apna PIN dalein (Default: 1234):</p>
-        <input id="adminPinInput" type="password" maxlength="6" placeholder="PIN" class="w-full border p-2.5 rounded-lg text-center text-xl font-bold tracking-widest mb-3 focus:outline-purple-600">
-        <button onclick="verifyAdminPin()" class="w-full bg-purple-700 text-white py-2.5 rounded-lg font-bold text-xs">Login</button>
-      </div>
-
-      <div id="adminContentDiv" class="hidden">
-        <div class="flex justify-between items-center border-b pb-2 mb-3">
-          <h3 class="font-bold text-sm text-gray-800">⚙️ Dukan & Tent Management</h3>
-          <button onclick="closeAdminModal()" class="text-gray-500 text-2xl font-bold">&times;</button>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2 mb-3">
-          <button id="adminTabKiranaBtn" onclick="switchAdminTab('kirana')" class="py-1.5 px-3 rounded-lg text-xs font-bold bg-purple-800 text-white shadow-sm">
-            🛒 Kirana Store
-          </button>
-          <button id="adminTabTentBtn" onclick="switchAdminTab('tent')" class="py-1.5 px-3 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-amber-100">
-            🎪 Ramlakhan Tent House
-          </button>
-        </div>
-
-        <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200 mb-3">
-          <div class="flex justify-between items-center cursor-pointer" onclick="togglePinChangeBox()">
-            <span class="text-xs font-bold text-amber-900">🔑 Apna PIN Badlein (पिन बदलें)</span>
-            <span id="pinToggleIcon" class="text-xs font-bold text-amber-700">▼ Kholein</span>
-          </div>
-          <div id="pinChangeBox" class="hidden mt-2 pt-2 border-t border-amber-200">
-            <input id="newPinInput" type="password" maxlength="6" placeholder="Naya PIN likhein" class="w-full border p-2 rounded text-xs bg-white mb-2 text-center font-bold">
-            <button onclick="updateAdminPin()" class="w-full bg-amber-600 active:bg-amber-700 text-white font-bold py-1.5 rounded-lg text-xs shadow">
-              💾 Naya PIN Save Karein
-            </button>
-          </div>
-        </div>
-
-        <!-- KIRANA ADMIN -->
-        <div id="adminKiranaSection">
-          <div class="bg-purple-50 p-3 rounded-xl border border-purple-200 mb-4">
-            <h4 class="font-bold text-xs text-purple-900 mb-2">➕ Naya Kirana Saman Jodein:</h4>
-            <input id="newProdName" type="text" placeholder="Saman ka Naam (Jaise: Haldiram Bhujia)" class="w-full border p-2 rounded mb-2 text-xs bg-white">
-            <div class="grid grid-cols-2 gap-2 mb-2">
-              <input id="newProdPrice" type="number" placeholder="Price (₹)" class="border p-2 rounded text-xs bg-white">
-              <input id="newProdStock" type="number" placeholder="Stock Qty (Pcs)" class="border p-2 rounded text-xs bg-white">
-            </div>
-            <div class="grid grid-cols-2 gap-2 mb-2">
-              <select id="newProdCategory" class="border p-2 rounded text-xs bg-white">
-                <option value="staples">Aata, Chawal & Daal</option>
-                <option value="oil-spices">Tel & Masale</option>
-                <option value="snacks">Biscuits & Drinks</option>
-                <option value="cleaning">Sabun & Surf</option>
-              </select>
-              <label class="flex items-center text-xs font-semibold text-gray-700 gap-1 bg-white p-1 rounded border">
-                <input type="checkbox" id="newProdIsNew" class="w-4 h-4">
-                <span>✨ Naya Saman?</span>
-              </label>
-            </div>
-            <div class="mb-2">
-              <label class="block text-[10px] font-bold text-gray-700 mb-1">📷 Photo Kheenchein / Gallery se chunein:</label>
-              <input type="file" id="newProdPhotoFile" accept="image/*" class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white">
-            </div>
-            <button id="addProdBtn" onclick="addNewProductFromAdmin()" class="w-full bg-green-600 text-white font-bold py-2 rounded-lg text-xs shadow">
-              ✅ Saman Save Karein
-            </button>
-          </div>
-
-          <div>
-            <h4 class="font-bold text-xs text-gray-800 mb-2">📦 Kirana Stock Status:</h4>
-            <div id="adminStockList" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar"></div>
-          </div>
-        </div>
-
-        <!-- TENT ADMIN -->
-        <div id="adminTentSection" class="hidden">
-          <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 mb-4">
-            <h4 class="font-bold text-xs text-amber-950 mb-2">➕ Naya Tent / Sadhi Saman Jodein:</h4>
-            <input id="newTentName" type="text" placeholder="Saman ka Naam (Jaise: VIP Sofa)" class="w-full border p-2 rounded mb-2 text-xs bg-white">
-            <div class="grid grid-cols-2 gap-2 mb-2">
-              <input id="newTentPrice" type="number" placeholder="Per Day Rent (₹)" class="border p-2 rounded text-xs bg-white">
-              <input id="newTentUnit" type="text" placeholder="Unit (Set, Piece, Pandal)" class="border p-2 rounded text-xs bg-white">
-            </div>
-            <button onclick="addNewTentItemFromAdmin()" class="w-full bg-amber-600 text-white font-bold py-2 rounded-lg text-xs shadow">
-              ✅ Tent Saman Save Karein
-            </button>
-          </div>
-
-          <div>
-            <h4 class="font-bold text-xs text-gray-800 mb-2">🎪 Ramlakhan Tent Rate & Edit Panel:</h4>
-            <div id="adminTentItemList" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar"></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const SHOP_WHATSAPP_NUMBER = "918595861207";
-    const FREE_DELIVERY_THRESHOLD = 150;
-    const DELIVERY_CHARGE = 10;
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1t8QfEirXN8frOZ20pC6TjowpAxINH_HcwGVQe2_j14ipkRxM6_GTOigXSFJHJZNMJg/exec";
-
-    let currentAdminPin = localStorage.getItem("chauhan_store_pin") || "2006";
-    let orderMode = "pickup";
-    let isShopOpen = true;
-
-    const initialProducts = [
-      { id: 1, category: "staples", isNew: false, inStock: true, stockQty: 10, name: "Aashirvaad Aata (आशीर्वाद आटा 5kg)", variants: [{ unit: "5 Kg", price: 240 }], imgUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🌾" },
-      { id: 2, category: "staples", isNew: false, inStock: true, stockQty: 8, name: "Basmati Chawal (बासमती चावल 1kg)", variants: [{ unit: "1 Kg", price: 80 }], imgUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🍚" },
-      { id: 3, category: "oil-spices", isNew: false, inStock: true, stockQty: 12, name: "Fortune Sarson Tel (सरसों तेल 1L)", variants: [{ unit: "1 Litre", price: 145 }], imgUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🛢️" },
-      { id: 4, category: "staples", isNew: false, inStock: true, stockQty: 20, name: "Chini / Sugar (चीनी 1kg)", variants: [{ unit: "1 Kg", price: 44 }], imgUrl: "https://images.unsplash.com/photo-1622484217112-9844fdf56f91?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🥣" },
-      { id: 5, category: "snacks", isNew: true, inStock: true, stockQty: 15, name: "Kurkure Solid Masti (कुरकुरे)", variants: [{ unit: "Pack", price: 20 }], imgUrl: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🌽" },
-      { id: 6, category: "snacks", isNew: true, inStock: true, stockQty: 24, name: "Sting Energy Drink (स्टिंग)", variants: [{ unit: "250ml", price: 20 }], imgUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "⚡" },
-      { id: 7, category: "snacks", isNew: false, inStock: true, stockQty: 20, name: "Maggi Noodles (मैगी 4 पैक)", variants: [{ unit: "Pack of 4", price: 56 }], imgUrl: "https://images.unsplash.com/photo-1612927601601-6638404737ce?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🍜" },
-      { id: 8, category: "cleaning", isNew: false, inStock: true, stockQty: 6, name: "Surf Excel Powder (सर्फ एक्सेल 1kg)", variants: [{ unit: "1 Kg", price: 130 }], imgUrl: "https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🧺" }
-    ];
-
-    const initialTentItems = [
-      { id: 101, name: "Tent & Pandal Setup (टेंट पंडाल)", price: 5000, unit: "Full Setup", available: true, icon: "🎪" },
-      { id: 102, name: "DJ Sound & Speaker (डीजे साउंड)", price: 2500, unit: "Per Day", available: true, icon: "🔊" },
-      { id: 103, name: "Halogen & LED Lighting (लाइटिंग)", price: 800, unit: "Set", available: true, icon: "💡" },
-      { id: 104, name: "Silent Generator (जनरेटर सेट)", price: 1500, unit: "Per Day", available: true, icon: "⚡" },
-      { id: 105, name: "Sadhi Bartan Set (शादी बर्तन)", price: 2000, unit: "Full Set", available: true, icon: "🍽️" },
-      { id: 106, name: "Jhumar, Stage & Gate (झूमर गेट)", price: 1800, unit: "Set", available: true, icon: "✨" }
-    ];
-
-    let products = JSON.parse(localStorage.getItem("chauhan_kirana_products_v7")) || initialProducts;
-    let tentItems = JSON.parse(localStorage.getItem("ramlakhan_tent_items_v3")) || initialTentItems;
-
-    function saveProductsToStorage() {
-      localStorage.setItem("chauhan_kirana_products_v7", JSON.stringify(products));
+function apiConfigured(){ return API_URL.startsWith("https://script.google.com/") && API_URL.includes("/exec"); }
+function setConnection(text, color="text-yellow-200"){ const el=document.getElementById("connection");el.textContent=text;el.className="float-right "+color; }
+function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function safeImage(url){try{const u=new URL(url);return ["https:","http:"].includes(u.protocol)?u.href:"";}catch{return "";}}
+function chooseCategory(cat){activeCategory=cat;document.querySelectorAll(".category").forEach(b=>{const on=b.dataset.cat===cat;b.classList.toggle("bg-white",on);b.classList.toggle("text-purple-900",on);b.classList.toggle("bg-purple-950",!on);});renderProducts();}
+async function api(action, data={}, pin=""){
+  if(!apiConfigured()) throw new Error("рдкрд╣рд▓реЗ index.html рдореЗрдВ Google Apps Script Web App URL рд╕реЗрдЯ рдХрд░реЗрдВред");
+  const response=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action,...data,pin})});
+  if(!response.ok) throw new Error("Server HTTP "+response.status);
+  const result=await response.json();
+  if(!result.success) throw new Error(result.error||"Request failed");
+  return result;
+}
+async function loadProducts(){
+  setConnection("LoadingтАж");
+  try{
+    if(!apiConfigured()){products=JSON.parse(localStorage.getItem("chauhanDemoProducts")||"[]");setConnection("Setup needed","text-red-200");renderProducts();renderAdminProducts();return;}
+    const r=await api("listProducts");
+    products=Array.isArray(r.products)?r.products:[];
+    setConnection("Google Sheet Live","text-emerald-200");
+  }catch(e){setConnection("Sync error","text-red-200");console.error(e);if(!products.length)document.getElementById("emptyMessage").textContent="рдбреЗрдЯрд╛ load рдирд╣реАрдВ рд╣реБрдЖ: "+e.message;}
+  renderProducts();renderAdminProducts();
+}
+function renderProducts(){
+  const q=document.getElementById("search").value.trim().toLowerCase();
+  const list=products.filter(p=>(activeCategory==="all"||p.category===activeCategory)&&(`${p.name} ${p.category}`.toLowerCase().includes(q)));
+  document.getElementById("emptyMessage").classList.toggle("hidden",list.length>0);
+  document.getElementById("productList").innerHTML=list.map(p=>{
+    const img=safeImage(p.imageUrl);
+    return `<article class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+      ${img?`<img class="product-img w-full" src="${escapeHtml(img)}" alt="${escapeHtml(p.name)}" onerror="this.style.display='none'">`:`<div class="product-img flex items-center justify-center text-4xl">ЁЯЫНя╕П</div>`}
+      <div class="p-3 flex flex-col flex-1"><h3 class="font-bold text-sm">${escapeHtml(p.name)}</h3><p class="text-xs text-gray-500 mt-1">рд╕реНрдЯреЙрдХ: ${Number(p.stock||0)}</p>
+      <div class="mt-auto pt-3 flex items-center justify-between gap-1"><span class="font-black text-green-700">тВ╣${Number(p.price||0)}</span>
+      <button onclick="addToCart('${escapeHtml(String(p.id))}')" ${Number(p.stock||0)<=0?'disabled':''} class="bg-purple-800 disabled:bg-gray-300 text-white rounded-lg px-3 py-2 text-xs font-bold">+ рдЬреЛрдбрд╝реЗрдВ</button></div></div></article>`;
+  }).join("");
+}
+function addToCart(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;cart[id]=(cart[id]||0)+1;updateCart();}
+function updateCart(){let count=0,total=0;Object.entries(cart).forEach(([id,qty])=>{const p=products.find(x=>String(x.id)===String(id));if(p){count+=qty;total+=qty*Number(p.price||0);}});document.getElementById("cartCount").textContent=count;document.getElementById("cartTotal").textContent=total.toFixed(2).replace(/\.00$/,"");document.getElementById("cartBar").classList.toggle("hidden",count===0);}
+function sendOrder(){
+  if(!Object.keys(cart).length)return alert("рдкрд╣рд▓реЗ рд╕рд╛рдорд╛рди рдЪреБрдиреЗрдВред");
+  const name=document.getElementById("customerName").value.trim(),phone=document.getElementById("customerPhone").value.trim();
+  if(!name||!phone)return alert("рдХреГрдкрдпрд╛ рдирд╛рдо рдФрд░ рдореЛрдмрд╛рдЗрд▓ рдирдВрдмрд░ рднрд░реЗрдВред");
+  if(!/^\d{10}$/.test(SHOP_WHATSAPP))return alert("index.html рдореЗрдВ SHOP_WHATSAPP рдореЗрдВ рджреБрдХрд╛рди рдХрд╛ 10-digit WhatsApp рдирдВрдмрд░ рдбрд╛рд▓реЗрдВред");
+  const mode=document.querySelector('input[name="mode"]:checked').value,address=document.getElementById("address").value.trim();
+  if(mode==="Delivery"&&!address)return alert("рдбрд┐рд▓реАрд╡рд░реА рдХрд╛ рдкрддрд╛ рднрд░реЗрдВред");
+  let total=0,lines=[];Object.entries(cart).forEach(([id,qty])=>{const p=products.find(x=>String(x.id)===String(id));if(p){total+=qty*Number(p.price||0);lines.push(`${p.name} x ${qty} = тВ╣${qty*Number(p.price||0)}`);}});
+  const msg=`рдирдпрд╛ рдСрд░реНрдбрд░ - Chauhan Kirana Store%0Aрдирд╛рдо: ${encodeURIComponent(name)}%0AрдореЛрдмрд╛рдЗрд▓: ${encodeURIComponent(phone)}%0Aрддрд░реАрдХрд╛: ${encodeURIComponent(mode)}%0Aрдкрддрд╛: ${encodeURIComponent(address||"рджреБрдХрд╛рди рд╕реЗ pickup")}%0APayment: ${encodeURIComponent(document.getElementById("payment").value)}%0A%0A${encodeURIComponent(lines.join("\n"))}%0AрдХреБрд▓: тВ╣${total}`;
+  window.open(`https://wa.me/91${SHOP_WHATSAPP}?text=${msg}`,"_blank");
+}
+function openAdmin(){document.getElementById("adminModal").classList.remove("hidden");document.getElementById("adminModal").classList.add("flex");}
+function closeAdmin(){document.getElementById("adminModal").classList.add("hidden");document.getElementById("adminModal").classList.remove("flex");}
+async function adminLogin(){
+  const pin=document.getElementById("adminPin").value.trim();
+  if(!pin)return;
+  try{
+    if(!apiConfigured()){if(pin!=="1207")throw new Error("PIN рдЧрд▓рдд рд╣реИред");adminPinValue=pin;showAdmin();document.getElementById("adminMessage").textContent="Demo mode: changes рд╕рд┐рд░реНрдл рдЗрд╕ browser рдореЗрдВ save рд╣реЛрдВрдЧреЗ, Google Sheet рдореЗрдВ рдирд╣реАрдВред";return;}
+    await api("adminLogin",{},pin);adminPinValue=pin;showAdmin();await loadProducts();
+  }catch(e){document.getElementById("loginError").textContent=e.message;}
+}
+function showAdmin(){document.getElementById("loginBox").classList.add("hidden");document.getElementById("adminPanel").classList.remove("hidden");}
+function adminLogout(){adminPinValue="";document.getElementById("adminPin").value="";document.getElementById("loginBox").classList.remove("hidden");document.getElementById("adminPanel").classList.add("hidden");}
+function clearForm(){["editId","pName","pPrice","pStock","pImageUrl"].forEach(id=>document.getElementById(id).value="");document.getElementById("pCategory").value="staples";document.getElementById("pImageFile").value="";}
+function editProduct(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;document.getElementById("editId").value=p.id;document.getElementById("pName").value=p.name||"";document.getElementById("pPrice").value=p.price??"";document.getElementById("pStock").value=p.stock??0;document.getElementById("pCategory").value=p.category||"other";document.getElementById("pImageUrl").value=p.imageUrl||"";document.getElementById("pImageFile").value="";document.getElementById("adminMessage").textContent="рдЕрдм рдмрджрд▓рд╛рд╡ рдХрд░реЗрдВ рдФрд░ Save Product рджрдмрд╛рдПрдБред";document.getElementById("pName").scrollIntoView({behavior:"smooth",block:"center"});}
+function renderAdminProducts(){const el=document.getElementById("adminProductList");if(!el)return;el.innerHTML=products.map(p=>`<div class="border rounded-lg p-2 flex justify-between items-center gap-2"><div class="min-w-0"><p class="font-bold text-sm truncate">${escapeHtml(p.name)}</p><p class="text-xs text-gray-500">тВ╣${Number(p.price||0)} тАв Stock ${Number(p.stock||0)}</p></div><div class="flex gap-1 shrink-0"><button class="bg-blue-100 text-blue-800 rounded px-2 py-1 text-xs" onclick="editProduct('${escapeHtml(String(p.id))}')">Edit</button><button class="bg-red-100 text-red-800 rounded px-2 py-1 text-xs" onclick="deleteProduct('${escapeHtml(String(p.id))}')">Delete</button></div></div>`).join("")||'<p class="text-xs text-gray-500">рдЕрднреА рдХреЛрдИ product рдирд╣реАрдВ рд╣реИред</p>';}
+async function fileToBase64(file){if(file.size>1.5*1024*1024)throw new Error("Photo 1.5 MB рд╕реЗ рдЫреЛрдЯреА рд░рдЦреЗрдВред");return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(",")[1]);r.onerror=reject;r.readAsDataURL(file);});}
+async function saveProduct(){
+  const name=document.getElementById("pName").value.trim(),price=Number(document.getElementById("pPrice").value),stock=Number(document.getElementById("pStock").value||0),category=document.getElementById("pCategory").value,id=document.getElementById("editId").value;
+  const message=document.getElementById("adminMessage"),btn=document.getElementById("saveBtn");
+  if(!name||document.getElementById("pPrice").value===""||!Number.isFinite(price)||price<0||stock<0)return alert("рд╕рд╛рдорд╛рди рдХрд╛ рдирд╛рдо, рд╕рд╣реА рдХреАрдордд рдФрд░ stock рднрд░реЗрдВред");
+  btn.disabled=true;btn.textContent="SavingтАж";message.className="text-sm mt-2 text-gray-600";
+  try{
+    let imageUrl=document.getElementById("pImageUrl").value.trim();
+    const file=document.getElementById("pImageFile").files[0];
+    if(file){
+      if(!apiConfigured())throw new Error("Photo upload рдХреЗ рд▓рд┐рдП Google Apps Script setup рдХрд░реЗрдВред");
+      const base64=await fileToBase64(file);
+      const up=await api("uploadImage",{fileName:file.name,mimeType:file.type,base64},adminPinValue);
+      imageUrl=up.imageUrl;
     }
-    function saveTentItemsToStorage() {
-      localStorage.setItem("ramlakhan_tent_items_v3", JSON.stringify(tentItems));
+    const product={id:id||"",name,price,stock,category,imageUrl};
+    if(apiConfigured()){
+      await api(id?"updateProduct":"addProduct",{product},adminPinValue);
+      message.textContent="тЬЕ Google Sheet рдкрд░ save рд╣реЛ рдЧрдпрд╛ред";message.className="text-sm mt-2 text-green-700";
+      clearForm();await loadProducts();
+    }else{
+      if(id){products=products.map(p=>String(p.id)===String(id)?{...p,...product}:p);}else{product.id="local-"+Date.now();products.push(product);}
+      localStorage.setItem("chauhanDemoProducts",JSON.stringify(products));renderProducts();renderAdminProducts();message.textContent="Demo рдореЗрдВ save рд╣реБрдЖред Google Sheet рдХреЗ рд▓рд┐рдП API setup рдЬрд░реВрд░реА рд╣реИред";clearForm();
     }
-
-    // Google Sheets Sync
-    async function syncFromGoogleSheets() {
-      if (!GOOGLE_SCRIPT_URL) return;
-      try {
-        const resK = await fetch(`${GOOGLE_SCRIPT_URL}?sheet=Kirana_Items`);
-        const dataK = await resK.json();
-        if (Array.isArray(dataK) && dataK.length > 0) {
-          products = dataK.map(r => ({
-            id: Number(r.id) || Date.now(),
-            category: r.category || "staples",
-            isNew: r.isNew === true || r.isNew === "TRUE" || r.isNew === "true",
-            inStock: r.inStock === undefined ? true : (r.inStock === true || r.inStock === "TRUE" || r.inStock === "true"),
-            stockQty: Number(r.stockQty) || 10,
-            name: r.name,
-            variants: [{ unit: r.unit || "Pack", price: Number(r.price) || 0 }],
-            imgUrl: r.imgUrl || "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&auto=format&fit=crop&q=60",
-            fallbackEmoji: "🛒"
-          }));
-          saveProductsToStorage();
-          filterAndRender();
-        }
-
-        const resT = await fetch(`${GOOGLE_SCRIPT_URL}?sheet=Tent_Items`);
-        const dataT = await resT.json();
-        if (Array.isArray(dataT) && dataT.length > 0) {
-          tentItems = dataT.map(r => ({
-            id: Number(r.id) || Date.now(),
-            name: r.name,
-            price: Number(r.price) || 0,
-            unit: r.unit || "Set",
-            available: r.available === undefined ? true : (r.available === true || r.available === "TRUE" || r.available === "true"),
-            icon: r.icon || "🎪"
-          }));
-          saveTentItemsToStorage();
-          renderTentItemsList();
-        }
-      } catch (err) {
-        console.log("Sheet sync error:", err);
-      }
-    }
-
-    let tentSelectedQty = {};
-    let selectedVariants = {};
-    let cart = {};
-    let latitude = null;
-    let longitude = null;
-    let currentCategory = "all";
-
-    function checkShopTiming() {
-      const now = new Date();
-      const currentHour = now.getHours();
-      const badge = document.getElementById("shopStatusBadge");
-      const orderBtn = document.getElementById("orderSubmitBtn");
-
-      if (currentHour >= 8 && currentHour < 20) {
-        isShopOpen = true;
-        badge.innerText = "OPEN (खुली है)";
-        badge.className = "text-[10px] px-2 py-0.5 rounded-full font-bold bg-green-500 text-white animate-pulse";
-        orderBtn.disabled = false;
-        orderBtn.classList.remove("bg-gray-400", "cursor-not-allowed");
-        orderBtn.classList.add("bg-green-600");
-      } else {
-        isShopOpen = false;
-        badge.innerText = "CLOSED (बंद है)";
-        badge.className = "text-[10px] px-2 py-0.5 rounded-full font-bold bg-red-500 text-white";
-        orderBtn.disabled = true;
-        orderBtn.classList.remove("bg-green-600");
-        orderBtn.classList.add("bg-gray-400", "cursor-not-allowed");
-      }
-    }
-
-    // Direct WhatsApp Opener Utility
-    function openDirectWhatsApp(phone, text) {
-      const encoded = encodeURIComponent(text);
-      const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`;
-      window.location.href = url;
-    }
-
-    // --- TENT MODAL LOGIC ---
-    function openTentModal() {
-      renderTentItemsList();
-      calculateTentTotal();
-      document.getElementById("tentModal").classList.remove("hidden");
-    }
-
-    function closeTentModal() {
-      document.getElementById("tentModal").classList.add("hidden");
-    }
-
-    function renderTentItemsList() {
-      const container = document.getElementById("tentItemsContainer");
-      container.innerHTML = tentItems.map(item => {
-        const qty = tentSelectedQty[item.id] || 0;
-        return `
-          <div class="flex items-center justify-between p-2 rounded-xl border ${item.available ? 'bg-gray-50 border-gray-200' : 'bg-red-50/50 border-red-200 opacity-60'}">
-            <div class="flex items-center gap-2">
-              <span class="text-xl">${item.icon || '🎪'}</span>
-              <div>
-                <p class="font-bold text-xs text-gray-800 leading-tight">${item.name}</p>
-                <p class="text-[11px] font-extrabold text-amber-700">₹${item.price} <span class="text-[9px] font-normal text-gray-500">/${item.unit}</span></p>
-              </div>
-            </div>
-            <div>
-              ${!item.available ? `
-                <span class="text-[10px] bg-red-600 text-white font-bold px-2 py-1 rounded">Booked / N/A</span>
-              ` : qty > 0 ? `
-                <div class="flex items-center gap-2 bg-amber-100 rounded-lg p-1 border border-amber-300">
-                  <button type="button" onclick="updateTentQty(${item.id}, -1)" class="w-6 h-6 bg-amber-600 text-white rounded font-black text-xs">-</button>
-                  <span class="text-xs font-black text-amber-950">${qty}</span>
-                  <button type="button" onclick="updateTentQty(${item.id}, 1)" class="w-6 h-6 bg-amber-600 text-white rounded font-black text-xs">+</button>
-                </div>
-              ` : `
-                <button type="button" onclick="updateTentQty(${item.id}, 1)" class="bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-bold text-xs px-3 py-1.5 rounded-lg shadow-xs">
-                  + Add
-                </button>
-              `}
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function updateTentQty(id, change) {
-      tentSelectedQty[id] = (tentSelectedQty[id] || 0) + change;
-      if (tentSelectedQty[id] <= 0) delete tentSelectedQty[id];
-      renderTentItemsList();
-      calculateTentTotal();
-    }
-
-    function calculateTentTotal() {
-      const days = parseInt(document.getElementById("tentDays").value) || 1;
-      let totalPerDay = 0;
-      for (let id in tentSelectedQty) {
-        const item = tentItems.find(x => x.id == id);
-        if (item) totalPerDay += item.price * tentSelectedQty[id];
-      }
-      const totalAmount = totalPerDay * days;
-      document.getElementById("tentEstTotal").innerText = totalAmount;
-      return { totalAmount, days };
-    }
-
-    async function sendTentBooking() {
-      const tentDate = document.getElementById("tentDate").value;
-      const { totalAmount, days } = calculateTentTotal();
-      const custName = document.getElementById("tentCustName").value.trim();
-      const custFather = document.getElementById("tentCustFather").value.trim();
-      const village = document.getElementById("tentVillage").value.trim();
-      const landmark = document.getElementById("tentLandmark").value.trim();
-      const advanceAmt = document.getElementById("tentAdvanceAmt").value.trim();
-      const advanceMode = document.getElementById("tentAdvanceMode").value;
-
-      if (!tentDate) {
-        alert("Kripya program ki tareekh (Date) zaroor chunein!");
-        return;
-      }
-
-      let selectedList = [];
-      for (let id in tentSelectedQty) {
-        const item = tentItems.find(x => x.id == id);
-        if (item) {
-          selectedList.push({
-            name: item.name,
-            qty: tentSelectedQty[id],
-            unitPrice: item.price,
-            total: item.price * tentSelectedQty[id] * days
-          });
-        }
-      }
-
-      if (selectedList.length === 0) {
-        alert("Kripya kam se kam ek saman zaroor jodein!");
-        return;
-      }
-      if (!custName || !village || !landmark) {
-        alert("Apna naam aur pura pata zaroor bharein!");
-        return;
-      }
-
-      const tentBtnText = document.getElementById("tentBtnText");
-      const originalText = tentBtnText.innerText;
-      tentBtnText.innerText = "⏳ Parchi Ban Rahi Hai...";
-
-      let itemsText = "";
-      selectedList.forEach((item, idx) => {
-        itemsText += `${idx + 1}. ${item.name} ➔ *[ ${item.qty} Piece ]* = ₹${item.total}\n`;
-      });
-
-      const bookingMsg = `🎪 *RAMLAKHAN TENT HOUSE (PRE-BOOKING)*\n` +
-                         `📍 *Kutubpur, Bahadurpur Mau*\n` +
-                         `──────────────────\n` +
-                         `👤 *Grahak:* ${custName}\n` +
-                         (custFather ? `👨‍🦳 *Pita:* ${custFather}\n` : '') +
-                         `📅 *Event Date:* ${tentDate}\n` +
-                         `⏳ *Avadhi (Duration):* ${days} Din\n` +
-                         `──────────────────\n` +
-                         `🏡 *Pura Pata (Address):*\n` +
-                         `  • Gaon/Tola: ${village}\n` +
-                         `  • Landmark: ${landmark}\n` +
-                         `──────────────────\n` +
-                         `📦 *Saman & Rate Details:*\n` +
-                         itemsText +
-                         `──────────────────\n` +
-                         `💵 *Est. Total Kiraya:* ₹${totalAmount}\n` +
-                         `💰 *Advance Rashi:* ₹${advanceAmt || '0'}\n` +
-                         `💳 *Payment Mode:* ${advanceMode}\n` +
-                         `──────────────────\n` +
-                         `📸 *(Booking Parchi photo download ho rahi hai)*`;
-
-      const captureDiv = document.getElementById("captureContent");
-      captureDiv.innerHTML = `
-        <div style="border: 2px solid #b45309; border-radius: 8px; padding: 16px; background-color: #ffffff;">
-          <div style="text-align: center; border-bottom: 2px dashed #b45309; padding-bottom: 10px; margin-bottom: 10px;">
-            <h2 style="font-size: 18px; font-weight: 800; color: #92400e; margin: 0; text-transform: uppercase;">RAMLAKHAN TENT HOUSE</h2>
-            <p style="font-size: 12px; font-weight: 600; color: #374151; margin: 2px 0;">Kutubpur, Bahadurpur (Mau) | Mob: ${SHOP_WHATSAPP_NUMBER}</p>
-            <p style="font-size: 11px; color: #b45309; font-weight: bold; margin-top: 4px;">PRE-BOOKING RECEIPT</p>
-          </div>
-          
-          <div style="font-size: 12px; line-height: 1.5; color: #1f2937; margin-bottom: 12px; background: #fffbeb; padding: 8px; border-radius: 6px; border: 1px solid #fde68a;">
-            <div><strong>Grahak:</strong> ${custName}</div>
-            ${custFather ? `<div><strong>Pita/Pati:</strong> ${custFather}</div>` : ''}
-            <div><strong>Event Date:</strong> ${tentDate} (${days} Din)</div>
-            <div><strong>Pata:</strong> ${village}, ${landmark}</div>
-            <div><strong>Advance Paid:</strong> ₹${advanceAmt || '0'} (${advanceMode})</div>
-          </div>
-
-          <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 10px;">
-            <thead>
-              <tr style="border-top: 1.5px solid #b45309; border-bottom: 1.5px solid #b45309; background-color: #fef3c7;">
-                <th style="text-align: left; padding: 6px 4px; font-weight: 700;">Tent Saman</th>
-                <th style="text-align: center; padding: 6px 4px; font-weight: 700;">Qty</th>
-                <th style="text-align: right; padding: 6px 4px; font-weight: 700;">Kiraya</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${selectedList.map(item => `
-                <tr style="border-bottom: 1px dashed #e5e7eb;">
-                  <td style="padding: 6px 4px; font-weight: 500; color: #111827;">${item.name}</td>
-                  <td style="text-align: center; padding: 6px 4px; font-weight: 700; color: #111827;">${item.qty}</td>
-                  <td style="text-align: right; padding: 6px 4px; font-weight: 700; color: #111827;">₹${item.total}</td>
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-
-          <div style="border-top: 1.5px solid #b45309; padding-top: 8px; font-size: 13px; line-height: 1.6; text-align: right; color: #111827;">
-            <div>Est. Total: <strong>₹${totalAmount}</strong></div>
-            <div>Advance: <strong>₹${advanceAmt || '0'}</strong></div>
-            <div style="font-size: 15px; font-weight: 900; color: #b45309; margin-top: 4px; border-top: 2px solid #b45309; padding-top: 6px;">
-              Baqi Rashi: ₹${Math.max(0, totalAmount - (parseFloat(advanceAmt) || 0))}
-            </div>
-          </div>
-
-          <div style="text-align: center; font-size: 11px; margin-top: 14px; color: #4b5563; font-weight: 600;">
-            🎪 Ramlakhan Tent House Kutubpur | Dhanyawad! 🙏
-          </div>
-        </div>
-      `;
-
-      try {
-        const captureElement = document.getElementById("receiptContainer");
-        const canvas = await html2canvas(captureElement, { scale: 2.5, useCORS: true, backgroundColor: "#ffffff" });
-
-        canvas.toBlob(async (blob) => {
-          tentBtnText.innerText = originalText;
-          const imageFile = new File([blob], `TentBooking_${custName.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
-
-          if (navigator.canShare && navigator.canShare({ files: [imageFile] })) {
-            try {
-              await navigator.share({ files: [imageFile], title: 'Ramlakhan Tent Booking Parchi', text: bookingMsg });
-              closeTentModal();
-              return;
-            } catch (err) {}
-          }
-
-          const downloadUrl = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = downloadUrl;
-          link.download = `TentBooking_Parchi.png`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-
-          closeTentModal();
-          openDirectWhatsApp(SHOP_WHATSAPP_NUMBER, bookingMsg);
-        }, 'image/png');
-
-      } catch (e) {
-        tentBtnText.innerText = originalText;
-        closeTentModal();
-        openDirectWhatsApp(SHOP_WHATSAPP_NUMBER, bookingMsg);
-      }
-    }
-
-    // --- ADMIN LOGIC WITH PIN 2005 ---
-    function openAdminModal() {
-      document.getElementById("adminModal").classList.remove("hidden");
-      document.getElementById("adminAuthDiv").classList.remove("hidden");
-      document.getElementById("adminContentDiv").classList.add("hidden");
-      document.getElementById("adminPinInput").value = "";
-    }
-
-    function closeAdminModal() {
-      document.getElementById("adminModal").classList.add("hidden");
-    }
-
-    function verifyAdminPin() {
-      const pin = document.getElementById("adminPinInput").value.trim();
-      if (pin === currentAdminPin) {
-        document.getElementById("adminAuthDiv").classList.add("hidden");
-        document.getElementById("adminContentDiv").classList.remove("hidden");
-        switchAdminTab('kirana');
-      } else {
-        alert("Galat PIN! Sahi PIN dalein (2005).");
-      }
-    }
-
-    function togglePinChangeBox() {
-      const box = document.getElementById("pinChangeBox");
-      const icon = document.getElementById("pinToggleIcon");
-      const isHidden = box.classList.toggle("hidden");
-      icon.innerText = isHidden ? "▼ Kholein" : "▲ Band Karein";
-    }
-
-    function updateAdminPin() {
-      const newPin = document.getElementById("newPinInput").value.trim();
-      if (newPin.length < 4) {
-        alert("PIN kam se kam 4 number ka hona chahiye!");
-        return;
-      }
-      currentAdminPin = newPin;
-      localStorage.setItem("chauhan_store_pin", newPin);
-      document.getElementById("newPinInput").value = "";
-      togglePinChangeBox();
-      alert("✅ PIN badal gaya!");
-    }
-
-    function switchAdminTab(tab) {
-      const kiranaSec = document.getElementById("adminKiranaSection");
-      const tentSec = document.getElementById("adminTentSection");
-      const kiranaBtn = document.getElementById("adminTabKiranaBtn");
-      const tentBtn = document.getElementById("adminTabTentBtn");
-
-      if (tab === 'kirana') {
-        kiranaSec.classList.remove("hidden");
-        tentSec.classList.add("hidden");
-        kiranaBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-purple-800 text-white shadow-sm";
-        tentBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-amber-100";
-        renderAdminStockList();
-      } else {
-        kiranaSec.classList.add("hidden");
-        tentSec.classList.remove("hidden");
-        tentBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-amber-600 text-white shadow-sm";
-        kiranaBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-purple-100";
-        renderAdminTentItemList();
-      }
-    }
-
-    function renderAdminStockList() {
-      const container = document.getElementById("adminStockList");
-      container.innerHTML = products.map(p => `
-        <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg border text-xs">
-          <div class="flex items-center gap-2">
-            <span class="text-lg">${p.fallbackEmoji || '🛒'}</span>
-            <div>
-              <p class="font-bold text-gray-800">${p.name}</p>
-              <p class="text-gray-500">₹${p.variants[0].price} | Stock: <span class="font-bold text-purple-700">${p.stockQty || 0}</span></p>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button onclick="toggleProductStock(${p.id})" class="px-2 py-1 rounded font-bold text-[10px] ${p.inStock ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-red-100 text-red-600 border border-red-300'}">
-              ${p.inStock ? 'In Stock' : 'Out of Stock'}
-            </button>
-            <button onclick="deleteProduct(${p.id})" class="text-red-500 font-bold px-1.5 py-1 text-sm">&times;</button>
-          </div>
-        </div>
-      `).join("");
-    }
-
-    async function toggleProductStock(id) {
-      const p = products.find(x => x.id === id);
-      if (p) {
-        p.inStock = !p.inStock;
-        saveProductsToStorage();
-        renderAdminStockList();
-        filterAndRender();
-
-        if (GOOGLE_SCRIPT_URL) {
-          try {
-            await fetch(GOOGLE_SCRIPT_URL, {
-              method: 'POST',
-              body: JSON.stringify({
-                pin: currentAdminPin,
-                sheet: "Kirana_Items",
-                action: "updateItem",
-                id: p.id,
-                inStock: p.inStock
-              })
-            });
-          } catch(e) {}
-        }
-      }
-    }
-
-    function deleteProduct(id) {
-      if (confirm("Kya aap is saman ko hatana chahte hain?")) {
-        products = products.filter(x => x.id !== id);
-        saveProductsToStorage();
-        renderAdminStockList();
-        filterAndRender();
-      }
-    }
-
-    async function addNewProductFromAdmin() {
-      const name = document.getElementById("newProdName").value.trim();
-      const price = parseFloat(document.getElementById("newProdPrice").value);
-      const stockQty = parseInt(document.getElementById("newProdStock").value) || 10;
-      const category = document.getElementById("newProdCategory").value;
-      const isNew = document.getElementById("newProdIsNew").checked;
-      const fileInput = document.getElementById("newProdPhotoFile");
-      const addBtn = document.getElementById("addProdBtn");
-
-      if (!name || isNaN(price) || price <= 0) {
-        alert("Saman ka naam aur sahi daam bharein!");
-        return;
-      }
-
-      addBtn.innerText = "⏳ Upload Ho Raha Hai...";
-      addBtn.disabled = true;
-
-      let imageBase64 = null;
-      if (fileInput.files && fileInput.files[0]) {
-        imageBase64 = await new Promise(resolve => {
-          const reader = new FileReader();
-          reader.onload = e => resolve(e.target.result);
-          reader.readAsDataURL(fileInput.files[0]);
-        });
-      }
-
-      const newId = Date.now();
-      const newProduct = {
-        id: newId,
-        name: name,
-        category: category,
-        isNew: isNew,
-        inStock: stockQty > 0,
-        stockQty: stockQty,
-        variants: [{ unit: "Standard Pack", price: price }],
-        imgUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&auto=format&fit=crop&q=60",
-        fallbackEmoji: "🛒"
-      };
-
-      products.unshift(newProduct);
-      saveProductsToStorage();
-      renderAdminStockList();
-      filterAndRender();
-
-      if (GOOGLE_SCRIPT_URL) {
-        try {
-          const res = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-              pin: currentAdminPin,
-              sheet: "Kirana_Items",
-              action: "addItem",
-              imageColIndex: 5,
-              imageBase64: imageBase64,
-              rowData: [newId, category, name, price, "Standard Pack", "", stockQty > 0, isNew]
-            })
-          });
-          const result = await res.json();
-          if (result && result.imageUrl) {
-            newProduct.imgUrl = result.imageUrl;
-            saveProductsToStorage();
-            filterAndRender();
-          }
-        } catch (e) {
-          console.log("Sheet add error:", e);
-        }
-      }
-
-      addBtn.innerText = "✅ Saman Save Karein";
-      addBtn.disabled = false;
-      document.getElementById("newProdName").value = "";
-      document.getElementById("newProdPrice").value = "";
-      document.getElementById("newProdStock").value = "";
-      document.getElementById("newProdPhotoFile").value = "";
-      alert("✅ Naya saman jud gaya aur Google Sheet me update ho gaya!");
-    }
-
-    function renderAdminTentItemList() {
-      const container = document.getElementById("adminTentItemList");
-      container.innerHTML = tentItems.map(item => `
-        <div class="flex items-center justify-between p-2.5 bg-gray-50 rounded-xl border border-gray-200 text-xs">
-          <div class="flex-1 mr-2">
-            <input type="text" value="${item.name}" onchange="editTentItemField(${item.id}, 'name', this.value)" class="w-full font-bold text-gray-800 bg-white border border-gray-300 rounded px-1.5 py-0.5 text-xs mb-1">
-            <div class="flex items-center gap-2">
-              <span class="text-gray-500 text-[10px]">Rent ₹:</span>
-              <input type="number" value="${item.price}" onchange="editTentItemField(${item.id}, 'price', this.value)" class="w-20 font-extrabold text-amber-700 bg-white border border-gray-300 rounded px-1.5 py-0.5 text-xs">
-              <span class="text-gray-400 text-[10px]">/${item.unit}</span>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button onclick="toggleTentItemAvailability(${item.id})" class="px-2 py-1 rounded font-bold text-[10px] ${item.available ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-red-100 text-red-600 border border-red-300'}">
-              ${item.available ? 'Available' : 'Booked'}
-            </button>
-            <button onclick="deleteTentItem(${item.id})" class="text-red-500 font-bold px-1.5 py-1 text-sm">&times;</button>
-          </div>
-        </div>
-      `).join("");
-    }
-
-    async function editTentItemField(id, field, value) {
-      const item = tentItems.find(x => x.id === id);
-      if (item) {
-        if (field === 'price') item.price = parseFloat(value) || 0;
-        if (field === 'name') item.name = value.trim();
-        saveTentItemsToStorage();
-
-        if (GOOGLE_SCRIPT_URL) {
-          try {
-            await fetch(GOOGLE_SCRIPT_URL, {
-              method: 'POST',
-              body: JSON.stringify({
-                pin: currentAdminPin,
-                sheet: "Tent_Items",
-                action: "updateItem",
-                id: item.id,
-                price: item.price
-              })
-            });
-          } catch(e) {}
-        }
-      }
-    }
-
-    async function toggleTentItemAvailability(id) {
-      const item = tentItems.find(x => x.id === id);
-      if (item) {
-        item.available = !item.available;
-        saveTentItemsToStorage();
-        renderAdminTentItemList();
-
-        if (GOOGLE_SCRIPT_URL) {
-          try {
-            await fetch(GOOGLE_SCRIPT_URL, {
-              method: 'POST',
-              body: JSON.stringify({
-                pin: currentAdminPin,
-                sheet: "Tent_Items",
-                action: "updateItem",
-                id: item.id,
-                inStock: item.available
-              })
-            });
-          } catch(e) {}
-        }
-      }
-    }
-
-    function deleteTentItem(id) {
-      if (confirm("Kya aap is tent saman ko hatana chahte hain?")) {
-        tentItems = tentItems.filter(x => x.id !== id);
-        saveTentItemsToStorage();
-        renderAdminTentItemList();
-      }
-    }
-
-    async function addNewTentItemFromAdmin() {
-      const name = document.getElementById("newTentName").value.trim();
-      const price = parseFloat(document.getElementById("newTentPrice").value);
-      const unit = document.getElementById("newTentUnit").value.trim() || "Set";
-
-      if (!name || isNaN(price) || price <= 0) {
-        alert("Tent saman ka naam aur sahi rent bharein!");
-        return;
-      }
-
-      const newItem = {
-        id: Date.now(),
-        name: name,
-        price: price,
-        unit: unit,
-        available: true,
-        icon: "🎪"
-      };
-
-      tentItems.push(newItem);
-      saveTentItemsToStorage();
-      renderAdminTentItemList();
-
-      if (GOOGLE_SCRIPT_URL) {
-        try {
-          await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-              pin: currentAdminPin,
-              sheet: "Tent_Items",
-              action: "addItem",
-              rowData: [newItem.id, name, price, unit, "🎪", true]
-            })
-          });
-        } catch(e) {}
-      }
-
-      document.getElementById("newTentName").value = "";
-      document.getElementById("newTentPrice").value = "";
-      document.getElementById("newTentUnit").value = "";
-      alert("✅ Naya tent saman jud gaya!");
-    }
-
-    // --- STANDARD KIRANA UI ---
-    function setOrderMode(mode) {
-      orderMode = mode;
-      const pickupBtn = document.getElementById("mode-pickup");
-      const deliveryBtn = document.getElementById("mode-delivery");
-      const deliveryFields = document.getElementById("deliveryFields");
-      const note = document.getElementById("deliveryBadgeNote");
-
-      if (mode === "pickup") {
-        pickupBtn.className = "border-2 border-purple-600 bg-purple-50 text-purple-800 font-bold py-2 px-2 rounded-lg text-xs flex flex-col items-center";
-        deliveryBtn.className = "border-2 border-gray-200 bg-white text-gray-700 font-bold py-2 px-2 rounded-lg text-xs flex flex-col items-center";
-        deliveryFields.classList.add("hidden");
-        note.innerText = "Pack Ready (तैयार पैक)";
-      } else {
-        deliveryBtn.className = "border-2 border-purple-600 bg-purple-50 text-purple-800 font-bold py-2 px-2 rounded-lg text-xs flex flex-col items-center";
-        pickupBtn.className = "border-2 border-gray-200 bg-white text-gray-700 font-bold py-2 px-2 rounded-lg text-xs flex flex-col items-center";
-        deliveryFields.classList.remove("hidden");
-        note.innerText = "Delivery: 15-60 Min";
-      }
-      updateCartBar();
-    }
-
-    function setCategory(cat) {
-      currentCategory = cat;
-      document.querySelectorAll(".cat-btn").forEach(btn => {
-        btn.className = "cat-btn px-3 py-1.5 rounded-full bg-purple-950 text-purple-200 shadow whitespace-nowrap";
-      });
-      document.getElementById("cat-" + cat).className = "cat-btn px-3 py-1.5 rounded-full bg-white text-purple-900 shadow whitespace-nowrap font-bold";
-      document.getElementById("newArrivalsSection").classList.toggle("hidden", cat === "new");
-      filterAndRender();
-    }
-
-    function startVoiceSearch() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert("Voice search ke liye Chrome browser ka use karein.");
-        return;
-      }
-      const recognition = new SpeechRecognition();
-      recognition.lang = 'hi-IN';
-      const btn = document.getElementById("voiceBtn");
-      btn.innerText = "🔴";
-
-      recognition.onresult = function(event) {
-        document.getElementById("searchBox").value = event.results[0][0].transcript;
-        filterAndRender();
-        btn.innerText = "🎙️";
-      };
-      recognition.onerror = () => { btn.innerText = "🎙️"; };
-      recognition.onend = () => { btn.innerText = "🎙️"; };
-      recognition.start();
-    }
-
-    function changeVariant(prodId, varIndex) {
-      selectedVariants[prodId] = varIndex;
-      filterAndRender();
-    }
-
-    function getProductVariant(product) {
-      const vIndex = selectedVariants[product.id] || 0;
-      return {
-        variant: product.variants[vIndex] || product.variants[0],
-        vIndex: vIndex,
-        cartKey: `${product.id}-${vIndex}`
-      };
-    }
-
-    function renderNewArrivals() {
-      const container = document.getElementById("new-products-carousel");
-      const newItems = products.filter(p => p.isNew);
-
-      container.innerHTML = newItems.map(p => {
-        const { variant, cartKey } = getProductVariant(p);
-        const qty = cart[cartKey] || 0;
-
-        return `
-          <div class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 flex-shrink-0 w-36 flex flex-col justify-between shadow-xs">
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-[9px] bg-red-500 text-white px-1.5 py-0.5 rounded font-bold">NEW</span>
-                ${!p.inStock ? '<span class="text-[9px] bg-red-600 text-white px-1 py-0.5 rounded font-bold">Khatam</span>' : `<span class="text-[9px] text-gray-500 font-semibold">${p.stockQty || 0} bacha</span>`}
-              </div>
-              <div class="h-20 w-full rounded-lg overflow-hidden bg-white my-1 flex items-center justify-center border border-amber-100">
-                <img src="${p.imgUrl}" alt="${p.name}" class="h-full w-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-3xl\'>${p.fallbackEmoji || '🛒'}</span>';">
-              </div>
-              <h4 class="font-bold text-xs text-gray-800 leading-snug line-clamp-2">${p.name}</h4>
-              <p class="text-green-700 font-extrabold text-sm mt-1">₹${variant.price}</p>
-            </div>
-            <div class="mt-2">
-              ${!p.inStock ? `
-                <div class="w-full bg-gray-200 text-gray-500 font-bold py-1 rounded-lg text-xs text-center cursor-not-allowed">
-                  Out of Stock
-                </div>
-              ` : qty > 0 ? `
-                <div class="flex items-center justify-between bg-white border border-purple-400 rounded-lg p-0.5">
-                  <button type="button" onclick="updateQty('${cartKey}', -1)" class="bg-purple-600 text-white w-5 h-5 rounded text-xs font-bold">-</button>
-                  <span class="font-bold text-xs text-purple-900">${qty}</span>
-                  <button type="button" onclick="updateQty('${cartKey}', 1)" class="bg-purple-600 text-white w-5 h-5 rounded text-xs font-bold">+</button>
-                </div>
-              ` : `
-                <button type="button" onclick="updateQty('${cartKey}', 1)" class="w-full bg-purple-700 text-white font-bold py-1 rounded-lg text-xs hover:bg-purple-800">
-                  + Add
-                </button>
-              `}
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function filterAndRender() {
-      const search = (document.getElementById("searchBox").value || "").toLowerCase().trim();
-      const container = document.getElementById("product-list");
-      const title = document.getElementById("gridSectionTitle");
-
-      title.innerText = currentCategory === "new" ? "✨ Naya Saman (नया सामान)" : "🔥 Sabhi Saman (सभी सामान)";
-
-      const filtered = products.filter(p => {
-        let matchesCategory = (currentCategory === "new") ? p.isNew : (currentCategory === "all" || p.category === currentCategory);
-        return matchesCategory && p.name.toLowerCase().includes(search);
-      });
-
-      if (filtered.length === 0) {
-        container.innerHTML = `<div class="col-span-2 text-center text-gray-500 py-8">Koi saman nahi mila.</div>`;
-        return;
-      }
-
-      container.innerHTML = filtered.map(p => {
-        const { variant, vIndex, cartKey } = getProductVariant(p);
-        const qty = cart[cartKey] || 0;
-
-        return `
-          <div class="bg-white p-3 rounded-xl shadow-sm flex flex-col justify-between border ${!p.inStock ? 'opacity-70 border-red-200 bg-red-50/20' : p.isNew ? 'border-amber-300 ring-1 ring-amber-200' : 'border-gray-100'}">
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                ${p.isNew ? '<span class="text-[9px] bg-red-500 text-white px-1.5 py-0.5 rounded font-bold">NEW</span>' : '<span></span>'}
-                ${!p.inStock ? '<span class="text-[9px] bg-red-600 text-white px-1 py-0.5 rounded font-bold">Khatam</span>' : `<span class="text-[10px] text-gray-400 font-semibold">${p.stockQty || 0} stock</span>`}
-              </div>
-              
-              <div class="h-28 w-full rounded-lg overflow-hidden bg-gray-50 my-1 flex items-center justify-center border border-gray-100 relative">
-                <img src="${p.imgUrl}" alt="${p.name}" class="h-full w-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>${p.fallbackEmoji || '🛒'}</span>';">
-                ${!p.inStock ? '<div class="absolute inset-0 bg-black/40 flex items-center justify-center"><span class="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded">Out of Stock</span></div>' : ''}
-              </div>
-
-              <h3 class="font-bold text-xs text-gray-800 leading-snug mt-1">${p.name}</h3>
-
-              ${p.variants.length > 1 ? `
-                <div class="mt-1.5">
-                  <select onchange="changeVariant(${p.id}, this.value)" class="w-full text-xs bg-gray-50 border border-purple-200 rounded p-1 font-semibold text-gray-700 focus:outline-none">
-                    ${p.variants.map((v, i) => `<option value="${i}" ${i === vIndex ? 'selected' : ''}>${v.unit} - ₹${v.price}</option>`).join("")}
-                  </select>
-                </div>
-              ` : `
-                <div class="text-[10px] text-gray-500 font-medium mt-1">${variant.unit}</div>
-              `}
-
-              <p class="text-green-700 font-extrabold mt-1 text-sm">₹${variant.price}</p>
-            </div>
-            
-            <div class="mt-2.5">
-              ${!p.inStock ? `
-                <div class="w-full bg-gray-200 text-gray-500 font-bold py-1.5 rounded-lg text-xs text-center cursor-not-allowed">
-                  Khatam (Out of Stock)
-                </div>
-              ` : qty > 0 ? `
-                <div class="flex items-center justify-between bg-purple-100 rounded-lg p-1">
-                  <button type="button" onclick="updateQty('${cartKey}', -1)" class="bg-purple-600 active:bg-purple-700 text-white w-7 h-7 rounded-lg font-bold">-</button>
-                  <span class="font-bold text-sm text-purple-900">${qty}</span>
-                  <button type="button" onclick="updateQty('${cartKey}', 1)" class="bg-purple-600 active:bg-purple-700 text-white w-7 h-7 rounded-lg font-bold">+</button>
-                </div>
-              ` : `
-                <button type="button" onclick="updateQty('${cartKey}', 1)" class="w-full border border-purple-600 text-purple-700 font-bold py-1.5 rounded-lg text-xs hover:bg-purple-50 active:bg-purple-100">
-                  + Add
-                </button>
-              `}
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      renderNewArrivals();
-      updateCartBar();
-    }
-
-    function updateQty(cartKey, change) {
-      const [prodId] = cartKey.split("-");
-      const product = products.find(p => p.id == prodId);
-      if (!product || !product.inStock) return;
-
-      cart[cartKey] = (cart[cartKey] || 0) + change;
-      if (cart[cartKey] <= 0) delete cart[cartKey];
-      filterAndRender();
-    }
-
-    function getCartDetails() {
-      let totalUnits = 0;
-      let itemsPrice = 0;
-      let itemsList = [];
-
-      for (let key in cart) {
-        const [prodId, vIndex] = key.split("-").map(Number);
-        const p = products.find(x => x.id === prodId);
-        if (p) {
-          const variant = p.variants[vIndex] || p.variants[0];
-          const qty = cart[key];
-          const total = variant.price * qty;
-          totalUnits += qty;
-          itemsPrice += total;
-          itemsList.push({
-            name: p.name.split("(")[0].trim(),
-            unit: variant.unit,
-            price: variant.price,
-            qty: qty,
-            total: total
-          });
-        }
-      }
-      return { totalUnits, itemsPrice, itemsList };
-    }
-
-    function updateCartBar() {
-      const { totalUnits, itemsPrice } = getCartDetails();
-
-      let deliveryCharge = 0;
-      const deliveryTag = document.getElementById("delivery-tag");
-
-      if (orderMode === "pickup") {
-        deliveryTag.innerText = "Pick-up (Free)";
-        deliveryTag.className = "text-purple-700 font-bold";
-      } else {
-        const isFree = itemsPrice >= FREE_DELIVERY_THRESHOLD;
-        deliveryCharge = isFree || itemsPrice === 0 ? 0 : DELIVERY_CHARGE;
-        if (isFree) {
-          deliveryTag.innerText = "Free Delivery (15-60m)";
-          deliveryTag.className = "text-green-700 font-bold";
-        } else {
-          deliveryTag.innerText = `+₹${DELIVERY_CHARGE} Delivery Fee`;
-          deliveryTag.className = "text-orange-600 font-semibold";
-        }
-      }
-
-      const finalPrice = itemsPrice + deliveryCharge;
-      document.getElementById("total-items").innerText = totalUnits;
-      document.getElementById("total-price").innerText = finalPrice;
-      document.getElementById("cart-bar").classList.toggle("hidden", totalUnits === 0);
-    }
-
-    function fetchLiveLocation() {
-      const status = document.getElementById("locStatus");
-      const geoBtn = document.getElementById("geoBtn");
-
-      if (!navigator.geolocation) {
-        status.className = "text-xs mt-1 block font-medium text-red-600";
-        status.innerText = "❌ Phone me location support nahi karta.";
-        return;
-      }
-
-      status.className = "text-xs mt-1 block font-medium text-orange-600";
-      status.innerText = "⏳ Location li ja rahi hai...";
-      geoBtn.disabled = true;
-
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          latitude = position.coords.latitude;
-          longitude = position.coords.longitude;
-          status.className = "text-xs mt-1 block font-medium text-green-700";
-          status.innerText = `✅ GPS Jud Gaya (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`;
-          geoBtn.disabled = false;
-        },
-        () => {
-          geoBtn.disabled = false;
-          status.className = "text-xs mt-1 block font-medium text-red-600";
-          status.innerText = "⚠️ Location Allow karein.";
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-      );
-    }
-
-    function showReceipt(orderData) {
-      const receiptDiv = document.getElementById("printableReceipt");
-      receiptDiv.innerHTML = `
-        <div class="text-center pb-2 border-b border-gray-400 mb-2">
-          <h2 class="text-sm font-bold">CHAUHAN KIRANA STORE</h2>
-          <p class="text-[10px]">Kutubpur, Bahadurpur Mau | Mob: ${SHOP_WHATSAPP_NUMBER}</p>
-          <p class="text-[9px] text-gray-500">${orderData.date}</p>
-        </div>
-        <div class="mb-2 text-[11px] leading-tight">
-          <p><strong>Grahak:</strong> ${orderData.name}</p>
-          ${orderData.father ? `<p><strong>Pita:</strong> ${orderData.father}</p>` : ''}
-          <p><strong>Order Type:</strong> ${orderData.mode === 'pickup' ? 'Dukan se Pick-up' : 'Home Delivery'}</p>
-          <p><strong>Payment:</strong> ${orderData.payment}</p>
-          ${orderData.mode === 'delivery' ? `<p><strong>Pata:</strong> ${orderData.tola || ''}, ${orderData.landmark || ''}</p>` : ''}
-        </div>
-        <div class="border-t border-b border-gray-300 py-1 mb-2">
-          <table class="w-full text-[10px] text-left">
-            <thead>
-              <tr class="border-b">
-                <th class="py-0.5">Saman</th>
-                <th class="text-center">Qty</th>
-                <th class="text-right">Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${orderData.items.map(item => `
-                <tr>
-                  <td class="py-0.5">${item.name} (${item.unit})</td>
-                  <td class="text-center">${item.qty}</td>
-                  <td class="text-right">₹${item.total}</td>
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        </div>
-        <div class="text-[11px] leading-tight space-y-0.5 text-right font-bold">
-          <p>Saman Bill: ₹${orderData.itemsPrice}</p>
-          <p>Delivery: ${orderData.deliveryCharge === 0 ? 'FREE' : '₹' + orderData.deliveryCharge}</p>
-          <p class="text-xs text-purple-900 border-t pt-1">Total Bill: ₹${orderData.finalTotal}</p>
-        </div>
-        <p class="text-center text-[9px] text-gray-500 mt-3">Dhanyawad! Fir Padharein. 🙏</p>
-      `;
-      document.getElementById("receiptModal").classList.remove("hidden");
-    }
-
-    function closeReceiptModal() {
-      document.getElementById("receiptModal").classList.add("hidden");
-    }
-
-    async function sendOrder() {
-      if (!isShopOpen) {
-        alert("Dukan abhi band hai. Subah 08:00 se Raat 08:00 ke beech order karein.");
-        return;
-      }
-
-      const name = document.getElementById("custName").value.trim();
-      const father = document.getElementById("custFather").value.trim();
-      const payment = document.getElementById("custPayment").value;
-      const tola = document.getElementById("custTola").value.trim();
-      const landmark = document.getElementById("custLandmark").value.trim();
-      
-      if (!name) {
-        alert("Apna naam zaroor likhein!");
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        return;
-      }
-
-      if (orderMode === "delivery" && (!tola || !landmark)) {
-        alert("Delivery ke liye tola aur ghar ki pehchan zaroor likhein!");
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        return;
-      }
-
-      const { totalUnits, itemsPrice, itemsList } = getCartDetails();
-
-      if (itemsList.length === 0) {
-        alert("Kam se kam ek saman add karein!");
-        return;
-      }
-
-      const isFree = itemsPrice >= FREE_DELIVERY_THRESHOLD;
-      const deliveryCharge = (orderMode === "delivery" && !isFree) ? DELIVERY_CHARGE : 0;
-      const finalTotal = itemsPrice + deliveryCharge;
-
-      const orderDataObj = {
-        name, father, payment, mode: orderMode, tola, landmark,
-        items: itemsList, itemsPrice, deliveryCharge, finalTotal,
-        date: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
-      };
-
-      const btnText = document.getElementById("btnText");
-      const originalText = btnText.innerText;
-      btnText.innerText = "⏳ Parchi Ban Rahi Hai...";
-
-      let itemsListText = "";
-      itemsList.forEach((item, index) => {
-        itemsListText += `${index + 1}. ${item.name} (${item.unit}) ➔ *[ ${item.qty} Piece ]* = ₹${item.total}\n`;
-      });
-
-      let orderModeText = "";
-      if (orderMode === "pickup") {
-        orderModeText = `📦 *Order Type:* Dukan se Lenge (Pick-up)\n`;
-      } else {
-        orderModeText = `🚚 *Order Type:* Ghar Par Delivery (15-60 Min)\n` +
-                        `🏡 *Tola:* ${tola}\n` +
-                        `📍 *Landmark:* ${landmark}\n`;
-        if (latitude && longitude) {
-          orderModeText += `🗺️ *Location:* https://maps.google.com/?q=${latitude},${longitude}\n`;
-        }
-      }
-
-      const orderText = `🧾 *CHAUHAN KIRANA STORE (PARCHI)*\n` +
-                        `📍 *Kutubpur, Bahadurpur Mau*\n` +
-                        `──────────────────\n` +
-                        `👤 *Grahak:* ${name}\n` +
-                        (father ? `👨‍🦳 *Pita:* ${father}\n` : '') +
-                        orderModeText +
-                        `💳 *Payment:* ${payment}\n` +
-                        `──────────────────\n` +
-                        `*Saman List:*\n` +
-                        itemsListText +
-                        `──────────────────\n` +
-                        `📦 *Total Packets:* ${totalUnits} Piece\n` +
-                        `🛍️ *Saman Bill:* ₹${itemsPrice}\n` +
-                        (orderMode === "delivery" ? `🚚 *Delivery Charge:* ${deliveryCharge === 0 ? 'FREE' : '₹' + deliveryCharge}\n` : '') +
-                        `💵 *Total Bill: ₹${finalTotal}*\n` +
-                        `📸 *(Parchi Photo download ho rahi hai)*`;
-
-      const captureDiv = document.getElementById("captureContent");
-      captureDiv.innerHTML = `
-        <div style="border: 2px solid #1f2937; border-radius: 8px; padding: 16px; background-color: #ffffff;">
-          <div style="text-align: center; border-bottom: 2px dashed #4b5563; padding-bottom: 10px; margin-bottom: 10px;">
-            <h2 style="font-size: 18px; font-weight: 800; color: #111827; margin: 0; text-transform: uppercase;">CHAUHAN KIRANA STORE</h2>
-            <p style="font-size: 12px; font-weight: 600; color: #374151; margin: 2px 0;">Kutubpur, Bahadurpur (Mau)</p>
-            <p style="font-size: 12px; font-weight: 600; color: #374151; margin: 2px 0;">Mob: ${SHOP_WHATSAPP_NUMBER}</p>
-            <p style="font-size: 11px; color: #6b7280; margin-top: 4px;">${orderDataObj.date}</p>
-          </div>
-          
-          <div style="font-size: 12px; line-height: 1.5; color: #1f2937; margin-bottom: 12px; background: #f9fafb; padding: 8px; border-radius: 6px;">
-            <div><strong>Customer:</strong> ${orderDataObj.name}</div>
-            ${orderDataObj.father ? `<div><strong>Pita/Pati:</strong> ${orderDataObj.father}</div>` : ''}
-            <div><strong>Order Type:</strong> ${orderDataObj.mode === 'pickup' ? '🛍️ Dukan Se (Pick-up)' : '🚚 Ghar Par Delivery'}</div>
-            <div><strong>Payment:</strong> ${orderDataObj.payment}</div>
-            ${orderDataObj.mode === 'delivery' ? `<div><strong>Pata:</strong> ${orderDataObj.tola || ''}, ${orderDataObj.landmark || ''}</div>` : ''}
-          </div>
-
-          <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 10px;">
-            <thead>
-              <tr style="border-top: 1.5px solid #111827; border-bottom: 1.5px solid #111827; background-color: #f3f4f6;">
-                <th style="text-align: left; padding: 6px 4px; font-weight: 700;">Saman</th>
-                <th style="text-align: center; padding: 6px 4px; font-weight: 700;">Qty</th>
-                <th style="text-align: right; padding: 6px 4px; font-weight: 700;">Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${orderDataObj.items.map(item => `
-                <tr style="border-bottom: 1px dashed #e5e7eb;">
-                  <td style="padding: 6px 4px; font-weight: 500; color: #111827;">${item.name} <span style="font-size: 10px; color: #6b7280;">(${item.unit})</span></td>
-                  <td style="text-align: center; padding: 6px 4px; font-weight: 700; color: #111827;">${item.qty}</td>
-                  <td style="text-align: right; padding: 6px 4px; font-weight: 700; color: #111827;">₹${item.total}</td>
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-
-          <div style="border-top: 1.5px solid #111827; padding-top: 8px; font-size: 13px; line-height: 1.6; text-align: right; color: #111827;">
-            <div>Saman Bill: <strong>₹${orderDataObj.itemsPrice}</strong></div>
-            <div>Delivery Fee: <strong>${orderDataObj.deliveryCharge === 0 ? 'FREE' : '₹' + orderDataObj.deliveryCharge}</strong></div>
-            <div style="font-size: 16px; font-weight: 900; color: #047857; margin-top: 4px; border-top: 2px solid #111827; padding-top: 6px;">
-              TOTAL BILL: ₹${orderDataObj.finalTotal}
-            </div>
-          </div>
-
-          <div style="text-align: center; font-size: 11px; margin-top: 14px; color: #4b5563; font-weight: 600;">
-            ❤️ Dhanyawad! Fir Padharein. 🙏
-          </div>
-        </div>
-      `;
-
-      try {
-        const captureElement = document.getElementById("receiptContainer");
-        const canvas = await html2canvas(captureElement, { scale: 2.5, useCORS: true, backgroundColor: "#ffffff" });
-
-        canvas.toBlob(async (blob) => {
-          btnText.innerText = originalText;
-          const imageFile = new File([blob], `Parchi_${name.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
-
-          if (navigator.canShare && navigator.canShare({ files: [imageFile] })) {
-            try {
-              await navigator.share({ files: [imageFile], title: 'Chauhan Kirana Parchi', text: orderText });
-              showReceipt(orderDataObj);
-              return;
-            } catch (err) {}
-          }
-
-          const downloadUrl = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = downloadUrl;
-          link.download = `Chauhan_Kirana_Parchi.png`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-
-          showReceipt(orderDataObj);
-          openDirectWhatsApp(SHOP_WHATSAPP_NUMBER, orderText);
-        }, 'image/png');
-
-      } catch (e) {
-        btnText.innerText = originalText;
-        showReceipt(orderDataObj);
-        openDirectWhatsApp(SHOP_WHATSAPP_NUMBER, orderText);
-      }
-    }
-
-    window.onload = function() {
-      checkShopTiming();
-      filterAndRender();
-      syncFromGoogleSheets();
-      setInterval(checkShopTiming, 60000);
-    };
-  </script>
+  }catch(e){console.error(e);message.textContent="тЭМ "+e.message;message.className="text-sm mt-2 text-red-700";}
+  finally{btn.disabled=false;btn.textContent="ЁЯТ╛ Save Product";}
+}
+async function deleteProduct(id){if(!confirm("рдЗрд╕ product рдХреЛ delete рдХрд░реЗрдВ?"))return;try{if(apiConfigured())await api("deleteProduct",{id},adminPinValue);else products=products.filter(p=>String(p.id)!==String(id));localStorage.setItem("chauhanDemoProducts",JSON.stringify(products));await loadProducts();document.getElementById("adminMessage").textContent="Product delete рд╣реЛ рдЧрдпрд╛ред";}catch(e){alert("Delete failed: "+e.message);}}
+loadProducts();
+</script>
 </body>
 </html>
