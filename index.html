@@ -63,7 +63,7 @@
     
     <div class="text-[10px] text-purple-200 mt-2 flex justify-between items-center bg-purple-950/60 px-2 py-1 rounded">
       <span>⏰ Dukan Time: 08:00 AM - 08:00 PM</span>
-      <span>⚡ Delivery: 15-60 Min</span>
+      <span id="syncIndicator" class="text-emerald-300 font-bold">🟢 Live Google Sheet</span>
     </div>
 
     <!-- Search Bar with Mic -->
@@ -112,13 +112,11 @@
       </button>
     </div>
 
-    <!-- Customer Details -->
     <div class="grid grid-cols-2 gap-2 mb-2">
       <input id="custName" type="text" placeholder="Aapka Naam (नाम) *" class="w-full border p-2 rounded-lg text-xs focus:outline-purple-600">
       <input id="custFather" type="text" placeholder="Pita/Pati Ka Naam (पिता का नाम)" class="w-full border p-2 rounded-lg text-xs focus:outline-purple-600">
     </div>
 
-    <!-- Payment Choice -->
     <div class="mb-2">
       <label class="block text-[11px] font-bold text-gray-700 mb-1">💰 Payment Method (भुगतान का तरीका):</label>
       <select id="custPayment" class="w-full border p-2 rounded-lg text-xs bg-gray-50 font-medium focus:outline-purple-600">
@@ -128,7 +126,6 @@
       </select>
     </div>
 
-    <!-- Delivery Address -->
     <div id="deliveryFields" class="hidden">
       <input id="custTola" type="text" placeholder="Tola / Mohalla (जैसे: Chauhan Basti, Purab Tola) *" class="w-full border p-2 rounded-lg mb-2 text-xs focus:outline-purple-600">
       <textarea id="custLandmark" rows="2" placeholder="🏠 Ghar ki Pehchan (Landmark) - Mandir ke paas, Transformer ke samne *" class="w-full border p-2 rounded-lg text-xs focus:outline-purple-600"></textarea>
@@ -160,7 +157,7 @@
     <div id="product-list" class="grid grid-cols-2 gap-3"></div>
   </div>
 
-  <!-- Sticky Bottom Cart Bar (Kirana) -->
+  <!-- Sticky Bottom Cart Bar -->
   <div id="cart-bar" class="fixed left-3 right-3 bg-white p-3 shadow-2xl rounded-2xl border-2 border-green-600 hidden">
     <div class="flex justify-between items-center max-w-md mx-auto">
       <div>
@@ -173,7 +170,7 @@
     </div>
   </div>
 
-  <!-- Receipt Container for Image Generation -->
+  <!-- Hidden Container for Receipt Capture -->
   <div id="receiptContainer" style="position: absolute; left: -9999px; top: 0; width: 380px; background-color: #ffffff; padding: 24px 20px; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
     <div id="captureContent" style="width: 100%; box-sizing: border-box;"></div>
   </div>
@@ -193,10 +190,9 @@
     </div>
   </div>
 
-  <!-- ================= RAMLAKHAN TENT HOUSE DYNAMIC PRE-BOOKING MODAL ================= -->
+  <!-- RAMLAKHAN TENT HOUSE DYNAMIC PRE-BOOKING MODAL -->
   <div id="tentModal" class="fixed inset-0 bg-black/70 z-[10002] hidden flex items-center justify-center p-3">
     <div class="bg-white w-full max-w-lg rounded-2xl p-4 max-h-[92vh] overflow-y-auto border-2 border-amber-500 shadow-2xl">
-      <!-- Modal Header -->
       <div class="flex justify-between items-start border-b border-amber-200 pb-2.5 mb-3 bg-amber-50 -mx-4 -mt-4 p-4 rounded-t-2xl">
         <div>
           <h3 class="font-extrabold text-base text-amber-950 flex items-center gap-1.5">
@@ -207,7 +203,6 @@
         <button onclick="closeTentModal()" class="text-gray-500 hover:text-red-600 text-2xl font-black leading-none">&times;</button>
       </div>
 
-      <!-- Function Date & Days -->
       <div class="grid grid-cols-2 gap-2 mb-3 bg-orange-50/70 p-2.5 rounded-xl border border-orange-200">
         <div>
           <label class="block text-[11px] font-bold text-gray-700 mb-1">📅 Function Ki Tareekh *:</label>
@@ -225,7 +220,6 @@
         </div>
       </div>
 
-      <!-- Tent Items List with Rates & Quantity -->
       <div class="mb-3">
         <div class="flex justify-between items-center mb-1.5">
           <label class="block text-xs font-bold text-gray-800">📦 Saman & Rate List (सामान और किराया चुनें):</label>
@@ -234,20 +228,17 @@
         <div id="tentItemsContainer" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar pr-1"></div>
       </div>
 
-      <!-- Customer Details -->
       <div class="grid grid-cols-2 gap-2 mb-2">
         <input id="tentCustName" type="text" placeholder="Aapka Naam (नाम) *" class="w-full border p-2 rounded-lg text-xs focus:outline-amber-600">
         <input id="tentCustFather" type="text" placeholder="Pita Ka Naam (पिता का नाम)" class="w-full border p-2 rounded-lg text-xs focus:outline-amber-600">
       </div>
 
-      <!-- Full Address Box -->
       <div class="mb-2">
         <label class="block text-[11px] font-bold text-gray-700 mb-1">📍 Full Address (कार्यक्रम का पूरा पता) *:</label>
         <input id="tentVillage" type="text" placeholder="Gaon / Tola (जैसे: Kutubpur, Chauhan Tola) *" class="w-full border p-2 rounded-lg mb-1.5 text-xs focus:outline-amber-600">
         <textarea id="tentLandmark" rows="2" placeholder="🏠 Ghar / Stage ki Pehchan (Landmark, Mandir, Transformer) *" class="w-full border p-2 rounded-lg text-xs focus:outline-amber-600"></textarea>
       </div>
 
-      <!-- Advance Fee & Summary Box -->
       <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 mb-3 space-y-2">
         <div class="flex justify-between items-center text-xs font-bold text-amber-950 border-b border-amber-200 pb-1.5">
           <span>Est. Total Kiraya (अनुमानित किराया):</span>
@@ -271,14 +262,13 @@
         <p class="text-[10px] text-amber-800 font-medium">💡 Baaki rashi event wale din saman setup hone par li jayegi.</p>
       </div>
 
-      <!-- Submit Pre-Booking Button -->
       <button type="button" onclick="sendTentBooking()" class="w-full bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-700 hover:to-red-700 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-2">
         <span id="tentBtnText">Pre-Booking WhatsApp Par Bhejein</span> 🚀
       </button>
     </div>
   </div>
 
-  <!-- ================= ADMIN PANEL (KIRANA + TENT HOUSE EDITING) ================= -->
+  <!-- ADMIN PANEL -->
   <div id="adminModal" class="fixed inset-0 bg-black/60 z-[10000] hidden flex items-center justify-center p-3">
     <div class="bg-white w-full max-w-lg rounded-2xl p-4 max-h-[90vh] overflow-y-auto">
       <div id="adminAuthDiv">
@@ -286,7 +276,7 @@
           <h3 class="font-bold text-base text-purple-900">🔒 Dukandar Login (दुकानदार लॉगिन)</h3>
           <button onclick="closeAdminModal()" class="text-gray-400 text-2xl font-bold">&times;</button>
         </div>
-        <p class="text-xs text-gray-500 mb-2">Apna PIN dalein (Default: 1234):</p>
+        <p class="text-xs text-gray-500 mb-2">Apna PIN dalein (Default: 2005):</p>
         <input id="adminPinInput" type="password" maxlength="6" placeholder="PIN" class="w-full border p-2.5 rounded-lg text-center text-xl font-bold tracking-widest mb-3 focus:outline-purple-600">
         <button onclick="verifyAdminPin()" class="w-full bg-purple-700 text-white py-2.5 rounded-lg font-bold text-xs">Login</button>
       </div>
@@ -297,7 +287,6 @@
           <button onclick="closeAdminModal()" class="text-gray-500 text-2xl font-bold">&times;</button>
         </div>
 
-        <!-- Admin Tab Switching -->
         <div class="grid grid-cols-2 gap-2 mb-3">
           <button id="adminTabKiranaBtn" onclick="switchAdminTab('kirana')" class="py-1.5 px-3 rounded-lg text-xs font-bold bg-purple-800 text-white shadow-sm">
             🛒 Kirana Store
@@ -307,7 +296,6 @@
           </button>
         </div>
 
-        <!-- PIN Change Collapsible -->
         <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200 mb-3">
           <div class="flex justify-between items-center cursor-pointer" onclick="togglePinChangeBox()">
             <span class="text-xs font-bold text-amber-900">🔑 Apna PIN Badlein (पिन बदलें)</span>
@@ -321,7 +309,7 @@
           </div>
         </div>
 
-        <!-- ============ KIRANA ADMIN SECTION ============ -->
+        <!-- KIRANA ADMIN -->
         <div id="adminKiranaSection">
           <div class="bg-purple-50 p-3 rounded-xl border border-purple-200 mb-4">
             <h4 class="font-bold text-xs text-purple-900 mb-2">➕ Naya Kirana Saman Jodein:</h4>
@@ -346,7 +334,7 @@
               <label class="block text-[10px] font-bold text-gray-700 mb-1">📷 Photo Kheenchein / Gallery se chunein:</label>
               <input type="file" id="newProdPhotoFile" accept="image/*" class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white">
             </div>
-            <button onclick="addNewProductFromAdmin()" class="w-full bg-green-600 text-white font-bold py-2 rounded-lg text-xs shadow">
+            <button id="addProdBtn" onclick="addNewProductFromAdmin()" class="w-full bg-green-600 text-white font-bold py-2 rounded-lg text-xs shadow">
               ✅ Saman Save Karein
             </button>
           </div>
@@ -357,11 +345,11 @@
           </div>
         </div>
 
-        <!-- ============ TENT ADMIN SECTION (EDIT/ADD TENT ITEMS) ============ -->
+        <!-- TENT ADMIN -->
         <div id="adminTentSection" class="hidden">
           <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 mb-4">
             <h4 class="font-bold text-xs text-amber-950 mb-2">➕ Naya Tent / Sadhi Saman Jodein:</h4>
-            <input id="newTentName" type="text" placeholder="Saman ka Naam (Jaise: Cooler / VIP Sofa)" class="w-full border p-2 rounded mb-2 text-xs bg-white">
+            <input id="newTentName" type="text" placeholder="Saman ka Naam (Jaise: VIP Sofa)" class="w-full border p-2 rounded mb-2 text-xs bg-white">
             <div class="grid grid-cols-2 gap-2 mb-2">
               <input id="newTentPrice" type="number" placeholder="Per Day Rent (₹)" class="border p-2 rounded text-xs bg-white">
               <input id="newTentUnit" type="text" placeholder="Unit (Set, Piece, Pandal)" class="border p-2 rounded text-xs bg-white">
@@ -385,81 +373,81 @@
     const SHOP_WHATSAPP_NUMBER = "918595861207";
     const FREE_DELIVERY_THRESHOLD = 150;
     const DELIVERY_CHARGE = 10;
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1t8QfEirXN8frOZ20pC6TjowpAxINH_HcwGVQe2_j14ipkRxM6_GTOigXSFJHJZNMJg/exec";
 
-    let currentAdminPin = localStorage.getItem("chauhan_store_pin") || "1234";
+    let currentAdminPin = localStorage.getItem("chauhan_store_pin") || "2005";
     let orderMode = "pickup";
     let isShopOpen = true;
 
-    // --- KIRANA PRODUCTS DATA ---
     const initialProducts = [
-      { 
-        id: 1, category: "staples", isNew: false, inStock: true, stockQty: 10, 
-        name: "Aashirvaad Aata (आशीर्वाद आटा)",
-        variants: [{ unit: "5 Kg", price: 240 }, { unit: "10 Kg", price: 470 }],
-        imgUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🌾" 
-      },
-      { 
-        id: 2, category: "staples", isNew: false, inStock: true, stockQty: 8, 
-        name: "Basmati Chawal (बासमती चावल)",
-        variants: [{ unit: "1 Kg", price: 80 }, { unit: "5 Kg", price: 380 }],
-        imgUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🍚" 
-      },
-      { 
-        id: 6, category: "oil-spices", isNew: false, inStock: true, stockQty: 12, 
-        name: "Fortune Sarson Tel (सरसों तेल)",
-        variants: [{ unit: "500 ml", price: 75 }, { unit: "1 Litre", price: 145 }],
-        imgUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🛢️" 
-      },
-      { 
-        id: 4, category: "staples", isNew: false, inStock: true, stockQty: 20, 
-        name: "Chini / Sugar (चीनी)",
-        variants: [{ unit: "1 Kg", price: 44 }, { unit: "5 Kg", price: 215 }],
-        imgUrl: "https://images.unsplash.com/photo-1622484217112-9844fdf56f91?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🥣" 
-      },
-      { 
-        id: 101, category: "snacks", isNew: true, inStock: true, stockQty: 15, 
-        name: "Kurkure Solid Masti (कुरकुरे)",
-        variants: [{ unit: "Pack", price: 20 }],
-        imgUrl: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🌽" 
-      },
-      { 
-        id: 102, category: "snacks", isNew: true, inStock: true, stockQty: 24, 
-        name: "Sting Energy Drink (स्टिंग)",
-        variants: [{ unit: "250ml", price: 20 }],
-        imgUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "⚡" 
-      },
-      { 
-        id: 12, category: "snacks", isNew: false, inStock: true, stockQty: 20, 
-        name: "Maggi Noodles (मैगी 4 पैक)",
-        variants: [{ unit: "Pack of 4", price: 56 }],
-        imgUrl: "https://images.unsplash.com/photo-1612927601601-6638404737ce?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🍜" 
-      },
-      { 
-        id: 19, category: "cleaning", isNew: false, inStock: true, stockQty: 6, 
-        name: "Surf Excel Powder (सर्फ एक्सेल)",
-        variants: [{ unit: "1 Kg", price: 130 }, { unit: "2 Kg", price: 250 }],
-        imgUrl: "https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🧺" 
-      }
+      { id: 1, category: "staples", isNew: false, inStock: true, stockQty: 10, name: "Aashirvaad Aata (आशीर्वाद आटा 5kg)", variants: [{ unit: "5 Kg", price: 240 }], imgUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🌾" },
+      { id: 2, category: "staples", isNew: false, inStock: true, stockQty: 8, name: "Basmati Chawal (बासमती चावल 1kg)", variants: [{ unit: "1 Kg", price: 80 }], imgUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🍚" },
+      { id: 3, category: "oil-spices", isNew: false, inStock: true, stockQty: 12, name: "Fortune Sarson Tel (सरसों तेल 1L)", variants: [{ unit: "1 Litre", price: 145 }], imgUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🛢️" },
+      { id: 4, category: "staples", isNew: false, inStock: true, stockQty: 20, name: "Chini / Sugar (चीनी 1kg)", variants: [{ unit: "1 Kg", price: 44 }], imgUrl: "https://images.unsplash.com/photo-1622484217112-9844fdf56f91?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🥣" },
+      { id: 5, category: "snacks", isNew: true, inStock: true, stockQty: 15, name: "Kurkure Solid Masti (कुरकुरे)", variants: [{ unit: "Pack", price: 20 }], imgUrl: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🌽" },
+      { id: 6, category: "snacks", isNew: true, inStock: true, stockQty: 24, name: "Sting Energy Drink (स्टिंग)", variants: [{ unit: "250ml", price: 20 }], imgUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "⚡" },
+      { id: 7, category: "snacks", isNew: false, inStock: true, stockQty: 20, name: "Maggi Noodles (मैगी 4 पैक)", variants: [{ unit: "Pack of 4", price: 56 }], imgUrl: "https://images.unsplash.com/photo-1612927601601-6638404737ce?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🍜" },
+      { id: 8, category: "cleaning", isNew: false, inStock: true, stockQty: 6, name: "Surf Excel Powder (सर्फ एक्सेल 1kg)", variants: [{ unit: "1 Kg", price: 130 }], imgUrl: "https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?w=200&auto=format&fit=crop&q=60", fallbackEmoji: "🧺" }
     ];
 
-    let products = JSON.parse(localStorage.getItem("chauhan_kirana_products_v5")) || initialProducts;
-    function saveProductsToStorage() {
-      localStorage.setItem("chauhan_kirana_products_v5", JSON.stringify(products));
-    }
-
-    // --- RAMLAKHAN TENT HOUSE ITEMS DATA ---
     const initialTentItems = [
       { id: 101, name: "Tent & Pandal Setup (टेंट पंडाल)", price: 5000, unit: "Full Setup", available: true, icon: "🎪" },
-      { id: 102, name: "DJ Sound & Speaker Setup (डीजे साउंड)", price: 2500, unit: "Per Day", available: true, icon: "🔊" },
-      { id: 103, name: "Halogen & LED Lighting (लाइटिंग डेकोरेशन)", price: 800, unit: "Set", available: true, icon: "💡" },
+      { id: 102, name: "DJ Sound & Speaker (डीजे साउंड)", price: 2500, unit: "Per Day", available: true, icon: "🔊" },
+      { id: 103, name: "Halogen & LED Lighting (लाइटिंग)", price: 800, unit: "Set", available: true, icon: "💡" },
       { id: 104, name: "Silent Generator (जनरेटर सेट)", price: 1500, unit: "Per Day", available: true, icon: "⚡" },
-      { id: 105, name: "Sadhi Bartan Set (शादी खाना बर्तन सेट)", price: 2000, unit: "Full Set", available: true, icon: "🍽️" },
-      { id: 106, name: "Jhumar, Stage & Gate Entry (झूमर/स्टेज गेट)", price: 1800, unit: "Set", available: true, icon: "✨" }
+      { id: 105, name: "Sadhi Bartan Set (शादी बर्तन)", price: 2000, unit: "Full Set", available: true, icon: "🍽️" },
+      { id: 106, name: "Jhumar, Stage & Gate (झूमर गेट)", price: 1800, unit: "Set", available: true, icon: "✨" }
     ];
 
-    let tentItems = JSON.parse(localStorage.getItem("ramlakhan_tent_items_v1")) || initialTentItems;
+    let products = JSON.parse(localStorage.getItem("chauhan_kirana_products_v7")) || initialProducts;
+    let tentItems = JSON.parse(localStorage.getItem("ramlakhan_tent_items_v3")) || initialTentItems;
+
+    function saveProductsToStorage() {
+      localStorage.setItem("chauhan_kirana_products_v7", JSON.stringify(products));
+    }
     function saveTentItemsToStorage() {
-      localStorage.setItem("ramlakhan_tent_items_v1", JSON.stringify(tentItems));
+      localStorage.setItem("ramlakhan_tent_items_v3", JSON.stringify(tentItems));
+    }
+
+    // Google Sheets Sync
+    async function syncFromGoogleSheets() {
+      if (!GOOGLE_SCRIPT_URL) return;
+      try {
+        const resK = await fetch(`${GOOGLE_SCRIPT_URL}?sheet=Kirana_Items`);
+        const dataK = await resK.json();
+        if (Array.isArray(dataK) && dataK.length > 0) {
+          products = dataK.map(r => ({
+            id: Number(r.id) || Date.now(),
+            category: r.category || "staples",
+            isNew: r.isNew === true || r.isNew === "TRUE" || r.isNew === "true",
+            inStock: r.inStock === undefined ? true : (r.inStock === true || r.inStock === "TRUE" || r.inStock === "true"),
+            stockQty: Number(r.stockQty) || 10,
+            name: r.name,
+            variants: [{ unit: r.unit || "Pack", price: Number(r.price) || 0 }],
+            imgUrl: r.imgUrl || "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&auto=format&fit=crop&q=60",
+            fallbackEmoji: "🛒"
+          }));
+          saveProductsToStorage();
+          filterAndRender();
+        }
+
+        const resT = await fetch(`${GOOGLE_SCRIPT_URL}?sheet=Tent_Items`);
+        const dataT = await resT.json();
+        if (Array.isArray(dataT) && dataT.length > 0) {
+          tentItems = dataT.map(r => ({
+            id: Number(r.id) || Date.now(),
+            name: r.name,
+            price: Number(r.price) || 0,
+            unit: r.unit || "Set",
+            available: r.available === undefined ? true : (r.available === true || r.available === "TRUE" || r.available === "true"),
+            icon: r.icon || "🎪"
+          }));
+          saveTentItemsToStorage();
+          renderTentItemsList();
+        }
+      } catch (err) {
+        console.log("Sheet sync error:", err);
+      }
     }
 
     let tentSelectedQty = {};
@@ -492,7 +480,14 @@
       }
     }
 
-    // --- RAMLAKHAN TENT FUNCTIONS ---
+    // Direct WhatsApp Opener Utility
+    function openDirectWhatsApp(phone, text) {
+      const encoded = encodeURIComponent(text);
+      const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`;
+      window.location.href = url;
+    }
+
+    // --- TENT MODAL LOGIC ---
     function openTentModal() {
       renderTentItemsList();
       calculateTentTotal();
@@ -548,9 +543,7 @@
       let totalPerDay = 0;
       for (let id in tentSelectedQty) {
         const item = tentItems.find(x => x.id == id);
-        if (item) {
-          totalPerDay += item.price * tentSelectedQty[id];
-        }
+        if (item) totalPerDay += item.price * tentSelectedQty[id];
       }
       const totalAmount = totalPerDay * days;
       document.getElementById("tentEstTotal").innerText = totalAmount;
@@ -586,11 +579,11 @@
       }
 
       if (selectedList.length === 0) {
-        alert("Kripya kam se kam ek saman (Tent, DJ, Light, Bartan) zaroor jodein!");
+        alert("Kripya kam se kam ek saman zaroor jodein!");
         return;
       }
       if (!custName || !village || !landmark) {
-        alert("Apna naam aur pura pata (Gaon/Tola aur Landmark) zaroor bharein!");
+        alert("Apna naam aur pura pata zaroor bharein!");
         return;
       }
 
@@ -622,15 +615,14 @@
                          `💰 *Advance Rashi:* ₹${advanceAmt || '0'}\n` +
                          `💳 *Payment Mode:* ${advanceMode}\n` +
                          `──────────────────\n` +
-                         `📸 *(Booking Parchi photo sath me share ho rahi hai)*`;
+                         `📸 *(Booking Parchi photo download ho rahi hai)*`;
 
-      // Build Tent Image Slip
       const captureDiv = document.getElementById("captureContent");
       captureDiv.innerHTML = `
         <div style="border: 2px solid #b45309; border-radius: 8px; padding: 16px; background-color: #ffffff;">
           <div style="text-align: center; border-bottom: 2px dashed #b45309; padding-bottom: 10px; margin-bottom: 10px;">
             <h2 style="font-size: 18px; font-weight: 800; color: #92400e; margin: 0; text-transform: uppercase;">RAMLAKHAN TENT HOUSE</h2>
-            <p style="font-size: 12px; font-weight: 600; color: #374151; margin: 2px 0;">Kutubpur, Bahadurpur (Mau) | Mob: 8595861207</p>
+            <p style="font-size: 12px; font-weight: 600; color: #374151; margin: 2px 0;">Kutubpur, Bahadurpur (Mau) | Mob: ${SHOP_WHATSAPP_NUMBER}</p>
             <p style="font-size: 11px; color: #b45309; font-weight: bold; margin-top: 4px;">PRE-BOOKING RECEIPT</p>
           </div>
           
@@ -677,14 +669,7 @@
 
       try {
         const captureElement = document.getElementById("receiptContainer");
-        const canvas = await html2canvas(captureElement, {
-          scale: 2.5,
-          useCORS: true,
-          backgroundColor: "#ffffff",
-          windowWidth: 1000,
-          scrollX: 0,
-          scrollY: 0
-        });
+        const canvas = await html2canvas(captureElement, { scale: 2.5, useCORS: true, backgroundColor: "#ffffff" });
 
         canvas.toBlob(async (blob) => {
           tentBtnText.innerText = originalText;
@@ -692,16 +677,10 @@
 
           if (navigator.canShare && navigator.canShare({ files: [imageFile] })) {
             try {
-              await navigator.share({
-                files: [imageFile],
-                title: 'Ramlakhan Tent Booking Parchi',
-                text: bookingMsg
-              });
+              await navigator.share({ files: [imageFile], title: 'Ramlakhan Tent Booking Parchi', text: bookingMsg });
               closeTentModal();
               return;
-            } catch (err) {
-              console.log("Share cancelled:", err);
-            }
+            } catch (err) {}
           }
 
           const downloadUrl = URL.createObjectURL(blob);
@@ -712,21 +691,60 @@
           link.click();
           document.body.removeChild(link);
 
-          const waUrl = `https://wa.me/${SHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(bookingMsg)}`;
-          window.open(waUrl, "_blank");
           closeTentModal();
+          openDirectWhatsApp(SHOP_WHATSAPP_NUMBER, bookingMsg);
         }, 'image/png');
 
       } catch (e) {
-        console.error("Tent image error:", e);
         tentBtnText.innerText = originalText;
-        const waUrl = `https://wa.me/${SHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(bookingMsg)}`;
-        window.open(waUrl, "_blank");
         closeTentModal();
+        openDirectWhatsApp(SHOP_WHATSAPP_NUMBER, bookingMsg);
       }
     }
 
-    // --- ADMIN TABS & MANAGEMENT ---
+    // --- ADMIN LOGIC WITH PIN 2005 ---
+    function openAdminModal() {
+      document.getElementById("adminModal").classList.remove("hidden");
+      document.getElementById("adminAuthDiv").classList.remove("hidden");
+      document.getElementById("adminContentDiv").classList.add("hidden");
+      document.getElementById("adminPinInput").value = "";
+    }
+
+    function closeAdminModal() {
+      document.getElementById("adminModal").classList.add("hidden");
+    }
+
+    function verifyAdminPin() {
+      const pin = document.getElementById("adminPinInput").value.trim();
+      if (pin === currentAdminPin) {
+        document.getElementById("adminAuthDiv").classList.add("hidden");
+        document.getElementById("adminContentDiv").classList.remove("hidden");
+        switchAdminTab('kirana');
+      } else {
+        alert("Galat PIN! Sahi PIN dalein (2005).");
+      }
+    }
+
+    function togglePinChangeBox() {
+      const box = document.getElementById("pinChangeBox");
+      const icon = document.getElementById("pinToggleIcon");
+      const isHidden = box.classList.toggle("hidden");
+      icon.innerText = isHidden ? "▼ Kholein" : "▲ Band Karein";
+    }
+
+    function updateAdminPin() {
+      const newPin = document.getElementById("newPinInput").value.trim();
+      if (newPin.length < 4) {
+        alert("PIN kam se kam 4 number ka hona chahiye!");
+        return;
+      }
+      currentAdminPin = newPin;
+      localStorage.setItem("chauhan_store_pin", newPin);
+      document.getElementById("newPinInput").value = "";
+      togglePinChangeBox();
+      alert("✅ PIN badal gaya!");
+    }
+
     function switchAdminTab(tab) {
       const kiranaSec = document.getElementById("adminKiranaSection");
       const tentSec = document.getElementById("adminTentSection");
@@ -746,6 +764,138 @@
         kiranaBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-purple-100";
         renderAdminTentItemList();
       }
+    }
+
+    function renderAdminStockList() {
+      const container = document.getElementById("adminStockList");
+      container.innerHTML = products.map(p => `
+        <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg border text-xs">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">${p.fallbackEmoji || '🛒'}</span>
+            <div>
+              <p class="font-bold text-gray-800">${p.name}</p>
+              <p class="text-gray-500">₹${p.variants[0].price} | Stock: <span class="font-bold text-purple-700">${p.stockQty || 0}</span></p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="toggleProductStock(${p.id})" class="px-2 py-1 rounded font-bold text-[10px] ${p.inStock ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-red-100 text-red-600 border border-red-300'}">
+              ${p.inStock ? 'In Stock' : 'Out of Stock'}
+            </button>
+            <button onclick="deleteProduct(${p.id})" class="text-red-500 font-bold px-1.5 py-1 text-sm">&times;</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function toggleProductStock(id) {
+      const p = products.find(x => x.id === id);
+      if (p) {
+        p.inStock = !p.inStock;
+        saveProductsToStorage();
+        renderAdminStockList();
+        filterAndRender();
+
+        if (GOOGLE_SCRIPT_URL) {
+          try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+              method: 'POST',
+              body: JSON.stringify({
+                pin: currentAdminPin,
+                sheet: "Kirana_Items",
+                action: "updateItem",
+                id: p.id,
+                inStock: p.inStock
+              })
+            });
+          } catch(e) {}
+        }
+      }
+    }
+
+    function deleteProduct(id) {
+      if (confirm("Kya aap is saman ko hatana chahte hain?")) {
+        products = products.filter(x => x.id !== id);
+        saveProductsToStorage();
+        renderAdminStockList();
+        filterAndRender();
+      }
+    }
+
+    async function addNewProductFromAdmin() {
+      const name = document.getElementById("newProdName").value.trim();
+      const price = parseFloat(document.getElementById("newProdPrice").value);
+      const stockQty = parseInt(document.getElementById("newProdStock").value) || 10;
+      const category = document.getElementById("newProdCategory").value;
+      const isNew = document.getElementById("newProdIsNew").checked;
+      const fileInput = document.getElementById("newProdPhotoFile");
+      const addBtn = document.getElementById("addProdBtn");
+
+      if (!name || isNaN(price) || price <= 0) {
+        alert("Saman ka naam aur sahi daam bharein!");
+        return;
+      }
+
+      addBtn.innerText = "⏳ Upload Ho Raha Hai...";
+      addBtn.disabled = true;
+
+      let imageBase64 = null;
+      if (fileInput.files && fileInput.files[0]) {
+        imageBase64 = await new Promise(resolve => {
+          const reader = new FileReader();
+          reader.onload = e => resolve(e.target.result);
+          reader.readAsDataURL(fileInput.files[0]);
+        });
+      }
+
+      const newId = Date.now();
+      const newProduct = {
+        id: newId,
+        name: name,
+        category: category,
+        isNew: isNew,
+        inStock: stockQty > 0,
+        stockQty: stockQty,
+        variants: [{ unit: "Standard Pack", price: price }],
+        imgUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&auto=format&fit=crop&q=60",
+        fallbackEmoji: "🛒"
+      };
+
+      products.unshift(newProduct);
+      saveProductsToStorage();
+      renderAdminStockList();
+      filterAndRender();
+
+      if (GOOGLE_SCRIPT_URL) {
+        try {
+          const res = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+              pin: currentAdminPin,
+              sheet: "Kirana_Items",
+              action: "addItem",
+              imageColIndex: 5,
+              imageBase64: imageBase64,
+              rowData: [newId, category, name, price, "Standard Pack", "", stockQty > 0, isNew]
+            })
+          });
+          const result = await res.json();
+          if (result && result.imageUrl) {
+            newProduct.imgUrl = result.imageUrl;
+            saveProductsToStorage();
+            filterAndRender();
+          }
+        } catch (e) {
+          console.log("Sheet add error:", e);
+        }
+      }
+
+      addBtn.innerText = "✅ Saman Save Karein";
+      addBtn.disabled = false;
+      document.getElementById("newProdName").value = "";
+      document.getElementById("newProdPrice").value = "";
+      document.getElementById("newProdStock").value = "";
+      document.getElementById("newProdPhotoFile").value = "";
+      alert("✅ Naya saman jud gaya aur Google Sheet me update ho gaya!");
     }
 
     function renderAdminTentItemList() {
@@ -770,21 +920,51 @@
       `).join("");
     }
 
-    function editTentItemField(id, field, value) {
+    async function editTentItemField(id, field, value) {
       const item = tentItems.find(x => x.id === id);
       if (item) {
         if (field === 'price') item.price = parseFloat(value) || 0;
         if (field === 'name') item.name = value.trim();
         saveTentItemsToStorage();
+
+        if (GOOGLE_SCRIPT_URL) {
+          try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+              method: 'POST',
+              body: JSON.stringify({
+                pin: currentAdminPin,
+                sheet: "Tent_Items",
+                action: "updateItem",
+                id: item.id,
+                price: item.price
+              })
+            });
+          } catch(e) {}
+        }
       }
     }
 
-    function toggleTentItemAvailability(id) {
+    async function toggleTentItemAvailability(id) {
       const item = tentItems.find(x => x.id === id);
       if (item) {
         item.available = !item.available;
         saveTentItemsToStorage();
         renderAdminTentItemList();
+
+        if (GOOGLE_SCRIPT_URL) {
+          try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+              method: 'POST',
+              body: JSON.stringify({
+                pin: currentAdminPin,
+                sheet: "Tent_Items",
+                action: "updateItem",
+                id: item.id,
+                inStock: item.available
+              })
+            });
+          } catch(e) {}
+        }
       }
     }
 
@@ -796,7 +976,7 @@
       }
     }
 
-    function addNewTentItemFromAdmin() {
+    async function addNewTentItemFromAdmin() {
       const name = document.getElementById("newTentName").value.trim();
       const price = parseFloat(document.getElementById("newTentPrice").value);
       const unit = document.getElementById("newTentUnit").value.trim() || "Set";
@@ -819,13 +999,27 @@
       saveTentItemsToStorage();
       renderAdminTentItemList();
 
+      if (GOOGLE_SCRIPT_URL) {
+        try {
+          await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+              pin: currentAdminPin,
+              sheet: "Tent_Items",
+              action: "addItem",
+              rowData: [newItem.id, name, price, unit, "🎪", true]
+            })
+          });
+        } catch(e) {}
+      }
+
       document.getElementById("newTentName").value = "";
       document.getElementById("newTentPrice").value = "";
       document.getElementById("newTentUnit").value = "";
       alert("✅ Naya tent saman jud gaya!");
     }
 
-    // --- KIRANA FUNCTIONS ---
+    // --- STANDARD KIRANA UI ---
     function setOrderMode(mode) {
       orderMode = mode;
       const pickupBtn = document.getElementById("mode-pickup");
@@ -1108,7 +1302,7 @@
       receiptDiv.innerHTML = `
         <div class="text-center pb-2 border-b border-gray-400 mb-2">
           <h2 class="text-sm font-bold">CHAUHAN KIRANA STORE</h2>
-          <p class="text-[10px]">Kutubpur, Bahadurpur Mau | Mob: 8595861207</p>
+          <p class="text-[10px]">Kutubpur, Bahadurpur Mau | Mob: ${SHOP_WHATSAPP_NUMBER}</p>
           <p class="text-[9px] text-gray-500">${orderData.date}</p>
         </div>
         <div class="mb-2 text-[11px] leading-tight">
@@ -1229,7 +1423,7 @@
                         `🛍️ *Saman Bill:* ₹${itemsPrice}\n` +
                         (orderMode === "delivery" ? `🚚 *Delivery Charge:* ${deliveryCharge === 0 ? 'FREE' : '₹' + deliveryCharge}\n` : '') +
                         `💵 *Total Bill: ₹${finalTotal}*\n` +
-                        `📸 *(Parchi Photo sath me share ho rahi hai)*`;
+                        `📸 *(Parchi Photo download ho rahi hai)*`;
 
       const captureDiv = document.getElementById("captureContent");
       captureDiv.innerHTML = `
@@ -1237,7 +1431,7 @@
           <div style="text-align: center; border-bottom: 2px dashed #4b5563; padding-bottom: 10px; margin-bottom: 10px;">
             <h2 style="font-size: 18px; font-weight: 800; color: #111827; margin: 0; text-transform: uppercase;">CHAUHAN KIRANA STORE</h2>
             <p style="font-size: 12px; font-weight: 600; color: #374151; margin: 2px 0;">Kutubpur, Bahadurpur (Mau)</p>
-            <p style="font-size: 12px; font-weight: 600; color: #374151; margin: 2px 0;">Mob: 8595861207</p>
+            <p style="font-size: 12px; font-weight: 600; color: #374151; margin: 2px 0;">Mob: ${SHOP_WHATSAPP_NUMBER}</p>
             <p style="font-size: 11px; color: #6b7280; margin-top: 4px;">${orderDataObj.date}</p>
           </div>
           
@@ -1284,14 +1478,7 @@
 
       try {
         const captureElement = document.getElementById("receiptContainer");
-        const canvas = await html2canvas(captureElement, {
-          scale: 2.5,
-          useCORS: true,
-          backgroundColor: "#ffffff",
-          windowWidth: 1000,
-          scrollX: 0,
-          scrollY: 0
-        });
+        const canvas = await html2canvas(captureElement, { scale: 2.5, useCORS: true, backgroundColor: "#ffffff" });
 
         canvas.toBlob(async (blob) => {
           btnText.innerText = originalText;
@@ -1299,16 +1486,10 @@
 
           if (navigator.canShare && navigator.canShare({ files: [imageFile] })) {
             try {
-              await navigator.share({
-                files: [imageFile],
-                title: 'Chauhan Kirana Parchi',
-                text: orderText
-              });
+              await navigator.share({ files: [imageFile], title: 'Chauhan Kirana Parchi', text: orderText });
               showReceipt(orderDataObj);
               return;
-            } catch (err) {
-              console.log("Share cancelled:", err);
-            }
+            } catch (err) {}
           }
 
           const downloadUrl = URL.createObjectURL(blob);
@@ -1319,154 +1500,21 @@
           link.click();
           document.body.removeChild(link);
 
-          const waUrl = `https://wa.me/${SHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`;
-          window.open(waUrl, "_blank");
           showReceipt(orderDataObj);
+          openDirectWhatsApp(SHOP_WHATSAPP_NUMBER, orderText);
         }, 'image/png');
 
       } catch (e) {
-        console.error("Image generation error:", e);
         btnText.innerText = originalText;
-        const waUrl = `https://wa.me/${SHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`;
-        window.open(waUrl, "_blank");
         showReceipt(orderDataObj);
-      }
-    }
-
-    // --- GENERAL ADMIN & PIN ---
-    function openAdminModal() {
-      document.getElementById("adminModal").classList.remove("hidden");
-      document.getElementById("adminAuthDiv").classList.remove("hidden");
-      document.getElementById("adminContentDiv").classList.add("hidden");
-      document.getElementById("adminPinInput").value = "";
-    }
-
-    function closeAdminModal() {
-      document.getElementById("adminModal").classList.add("hidden");
-    }
-
-    function verifyAdminPin() {
-      const pin = document.getElementById("adminPinInput").value.trim();
-      if (pin === currentAdminPin) {
-        document.getElementById("adminAuthDiv").classList.add("hidden");
-        document.getElementById("adminContentDiv").classList.remove("hidden");
-        switchAdminTab('kirana');
-      } else {
-        alert("Galat PIN!");
-      }
-    }
-
-    function togglePinChangeBox() {
-      const box = document.getElementById("pinChangeBox");
-      const icon = document.getElementById("pinToggleIcon");
-      const isHidden = box.classList.toggle("hidden");
-      icon.innerText = isHidden ? "▼ Kholein" : "▲ Band Karein";
-    }
-
-    function updateAdminPin() {
-      const newPin = document.getElementById("newPinInput").value.trim();
-      if (newPin.length < 4) {
-        alert("PIN kam se kam 4 number ka hona chahiye!");
-        return;
-      }
-      currentAdminPin = newPin;
-      localStorage.setItem("chauhan_store_pin", newPin);
-      document.getElementById("newPinInput").value = "";
-      togglePinChangeBox();
-      alert("✅ PIN badal gaya!");
-    }
-
-    function renderAdminStockList() {
-      const container = document.getElementById("adminStockList");
-      container.innerHTML = products.map(p => `
-        <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg border text-xs">
-          <div class="flex items-center gap-2">
-            <img src="${p.imgUrl}" class="w-9 h-9 object-cover rounded" onerror="this.onerror=null; this.src='https://placehold.co/40x40?text=Item';">
-            <div>
-              <p class="font-bold text-gray-800">${p.name}</p>
-              <p class="text-gray-500">₹${p.variants[0].price} | Stock: <span class="font-bold text-purple-700">${p.stockQty || 0}</span></p>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button onclick="toggleProductStock(${p.id})" class="px-2 py-1 rounded font-bold text-[10px] ${p.inStock ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-red-100 text-red-600 border border-red-300'}">
-              ${p.inStock ? 'In Stock' : 'Out of Stock'}
-            </button>
-            <button onclick="deleteProduct(${p.id})" class="text-red-500 font-bold px-1.5 py-1 text-sm">&times;</button>
-          </div>
-        </div>
-      `).join("");
-    }
-
-    function toggleProductStock(id) {
-      const p = products.find(x => x.id === id);
-      if (p) {
-        p.inStock = !p.inStock;
-        saveProductsToStorage();
-        renderAdminStockList();
-        filterAndRender();
-      }
-    }
-
-    function deleteProduct(id) {
-      if (confirm("Kya aap is saman ko hatana chahte hain?")) {
-        products = products.filter(x => x.id !== id);
-        saveProductsToStorage();
-        renderAdminStockList();
-        filterAndRender();
-      }
-    }
-
-    function addNewProductFromAdmin() {
-      const name = document.getElementById("newProdName").value.trim();
-      const price = parseFloat(document.getElementById("newProdPrice").value);
-      const stockQty = parseInt(document.getElementById("newProdStock").value) || 10;
-      const category = document.getElementById("newProdCategory").value;
-      const isNew = document.getElementById("newProdIsNew").checked;
-      const fileInput = document.getElementById("newProdPhotoFile");
-
-      if (!name || isNaN(price) || price <= 0) {
-        alert("Saman ka naam aur sahi daam bharein!");
-        return;
-      }
-
-      function pushProduct(imageUrl) {
-        const newId = Date.now();
-        const newProduct = {
-          id: newId,
-          name: name,
-          category: category,
-          isNew: isNew,
-          inStock: stockQty > 0,
-          stockQty: stockQty,
-          variants: [{ unit: "Standard Pack", price: price }],
-          imgUrl: imageUrl || "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&auto=format&fit=crop&q=60",
-          fallbackEmoji: "🛒"
-        };
-
-        products.unshift(newProduct);
-        saveProductsToStorage();
-        renderAdminStockList();
-        filterAndRender();
-
-        document.getElementById("newProdName").value = "";
-        document.getElementById("newProdPrice").value = "";
-        document.getElementById("newProdStock").value = "";
-        document.getElementById("newProdPhotoFile").value = "";
-        alert("✅ Naya saman jud gaya!");
-      }
-
-      if (fileInput.files && fileInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => pushProduct(e.target.result);
-        reader.readAsDataURL(fileInput.files[0]);
-      } else {
-        pushProduct(null);
+        openDirectWhatsApp(SHOP_WHATSAPP_NUMBER, orderText);
       }
     }
 
     window.onload = function() {
       checkShopTiming();
       filterAndRender();
+      syncFromGoogleSheets();
       setInterval(checkShopTiming, 60000);
     };
   </script>
