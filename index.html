@@ -276,7 +276,7 @@
           <h3 class="font-bold text-base text-purple-900">🔒 Dukandar Login (दुकानदार लॉगिन)</h3>
           <button onclick="closeAdminModal()" class="text-gray-400 text-2xl font-bold">&times;</button>
         </div>
-        <p class="text-xs text-gray-500 mb-2">Apna PIN dalein (Default: 2005):</p>
+        <p class="text-xs text-gray-500 mb-2">Apna PIN dalein (Default: 1234):</p>
         <input id="adminPinInput" type="password" maxlength="6" placeholder="PIN" class="w-full border p-2.5 rounded-lg text-center text-xl font-bold tracking-widest mb-3 focus:outline-purple-600">
         <button onclick="verifyAdminPin()" class="w-full bg-purple-700 text-white py-2.5 rounded-lg font-bold text-xs">Login</button>
       </div>
@@ -375,7 +375,7 @@
     const DELIVERY_CHARGE = 10;
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1t8QfEirXN8frOZ20pC6TjowpAxINH_HcwGVQe2_j14ipkRxM6_GTOigXSFJHJZNMJg/exec";
 
-    let currentAdminPin = localStorage.getItem("chauhan_store_pin") || "2005";
+    let currentAdminPin = localStorage.getItem("chauhan_store_pin") || "2006";
     let orderMode = "pickup";
     let isShopOpen = true;
 
