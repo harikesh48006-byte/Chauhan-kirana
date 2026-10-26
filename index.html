@@ -50,13 +50,13 @@
 
     <!-- Ramlakhan Tent House Banner / Button -->
     <div class="mt-2.5">
-      <button onclick="openTentModal()" class="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-600 hover:from-amber-600 hover:to-red-700 text-white font-black py-2 px-3 rounded-xl shadow-md flex items-center justify-between text-xs border border-yellow-200 active:scale-95 transition-all">
+      <button onclick="openTentModal()" class="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-600 hover:from-amber-600 hover:to-red-700 text-white font-black py-2.5 px-3 rounded-xl shadow-md flex items-center justify-between text-xs border border-yellow-200 active:scale-95 transition-all">
         <span class="flex items-center gap-1.5">
           <span class="text-base animate-bounce">🎪</span>
           <span>Ramlakhan Tent House (रामलखन टेंट हाउस)</span>
         </span>
-        <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider font-extrabold flex items-center gap-1">
-          Pre-Booking ➔
+        <span class="bg-white/20 text-white text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider font-extrabold flex items-center gap-1">
+          Rates & Booking ➔
         </span>
       </button>
     </div>
@@ -69,7 +69,7 @@
     <!-- Search Bar with Mic -->
     <div class="mt-2.5 flex items-center gap-2">
       <div class="relative flex-1">
-        <input id="searchBox" oninput="filterAndRender()" type="text" placeholder="🔍 Saman khojein / सामान खोजें (Aata, Tel, Sabun)..." class="w-full p-2 pr-9 rounded-lg text-gray-800 text-xs focus:outline-none shadow-inner bg-white">
+        <input id="searchBox" oninput="filterAndRender()" type="text" placeholder="🔍 Saman khojein (Aata, Tel, Sabun)..." class="w-full p-2 pr-9 rounded-lg text-gray-800 text-xs focus:outline-none shadow-inner bg-white">
         <button type="button" onclick="startVoiceSearch()" id="voiceBtn" class="absolute right-1.5 top-1.5 text-purple-800 bg-purple-100 p-1 rounded-full text-xs" title="बोलकर खोजें">
           🎙️
         </button>
@@ -92,7 +92,7 @@
     <span class="bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-black mr-2 shrink-0">OFFER</span>
     <div class="w-full overflow-hidden whitespace-nowrap">
       <span class="animate-marquee">
-        🔥 Kutubpur aur Bahadurpur me ₹150+ par Free Delivery ⚡ Shaadi aur Party ke liye Ramlakhan Tent House se DJ, Generator, Bartan aur Light ki pre-booking shuru hai! 🎪
+        🔥 Kutubpur aur Bahadurpur me ₹150+ par Free Delivery ⚡ Shaadi aur Party ke liye Ramlakhan Tent House se DJ, Generator, Bartan aur Light ki booking shuru hai! 🎪
       </span>
     </div>
   </div>
@@ -160,7 +160,7 @@
     <div id="product-list" class="grid grid-cols-2 gap-3"></div>
   </div>
 
-  <!-- Sticky Bottom Cart Bar -->
+  <!-- Sticky Bottom Cart Bar (Kirana) -->
   <div id="cart-bar" class="fixed left-3 right-3 bg-white p-3 shadow-2xl rounded-2xl border-2 border-green-600 hidden">
     <div class="flex justify-between items-center max-w-md mx-auto">
       <div>
@@ -193,85 +193,74 @@
     </div>
   </div>
 
-  <!-- RAMLAKHAN TENT HOUSE PRE-BOOKING MODAL -->
+  <!-- ================= RAMLAKHAN TENT HOUSE DYNAMIC PRE-BOOKING MODAL ================= -->
   <div id="tentModal" class="fixed inset-0 bg-black/70 z-[10002] hidden flex items-center justify-center p-3">
-    <div class="bg-white w-full max-w-md rounded-2xl p-4 max-h-[92vh] overflow-y-auto border-2 border-amber-500 shadow-2xl">
+    <div class="bg-white w-full max-w-lg rounded-2xl p-4 max-h-[92vh] overflow-y-auto border-2 border-amber-500 shadow-2xl">
+      <!-- Modal Header -->
       <div class="flex justify-between items-start border-b border-amber-200 pb-2.5 mb-3 bg-amber-50 -mx-4 -mt-4 p-4 rounded-t-2xl">
         <div>
           <h3 class="font-extrabold text-base text-amber-950 flex items-center gap-1.5">
             <span>🎪</span> रामलखन टेंट हाउस
           </h3>
-          <p class="text-[11px] text-amber-800 font-bold">Kutubpur, Bahadurpur Mau | Pre-Booking Panel</p>
+          <p class="text-[11px] text-amber-800 font-bold">Kutubpur, Bahadurpur Mau | Pre-Booking & Rates</p>
         </div>
         <button onclick="closeTentModal()" class="text-gray-500 hover:text-red-600 text-2xl font-black leading-none">&times;</button>
       </div>
 
-      <div class="mb-3">
-        <label class="block text-xs font-bold text-gray-800 mb-1.5">📦 Kya-kya Saman Chahiye? (सामान चुनें):</label>
-        <div class="grid grid-cols-2 gap-2 text-xs">
-          <label class="flex items-center gap-2 p-2 border rounded-lg bg-gray-50 hover:bg-amber-50 cursor-pointer">
-            <input type="checkbox" name="tentItems" value="Tent & Pandal Setup (टेंट पंडाल)" class="w-4 h-4 text-amber-600 rounded">
-            <span>🎪 Tent Setup</span>
-          </label>
-          <label class="flex items-center gap-2 p-2 border rounded-lg bg-gray-50 hover:bg-amber-50 cursor-pointer">
-            <input type="checkbox" name="tentItems" value="DJ Sound & Speaker (डीजे साउंड)" class="w-4 h-4 text-amber-600 rounded">
-            <span>🔊 DJ Sound</span>
-          </label>
-          <label class="flex items-center gap-2 p-2 border rounded-lg bg-gray-50 hover:bg-amber-50 cursor-pointer">
-            <input type="checkbox" name="tentItems" value="Halogen & LED Lighting (लाइटिंग)" class="w-4 h-4 text-amber-600 rounded">
-            <span>💡 Light Decoration</span>
-          </label>
-          <label class="flex items-center gap-2 p-2 border rounded-lg bg-gray-50 hover:bg-amber-50 cursor-pointer">
-            <input type="checkbox" name="tentItems" value="Silent Generator Set (जनरेटर)" class="w-4 h-4 text-amber-600 rounded">
-            <span>⚡ Generator Set</span>
-          </label>
-          <label class="flex items-center gap-2 p-2 border rounded-lg bg-gray-50 hover:bg-amber-50 cursor-pointer">
-            <input type="checkbox" name="tentItems" value="Sadhi Wale Khana Bartan Set (शादी बर्तन)" class="w-4 h-4 text-amber-600 rounded">
-            <span>🍽️ Khana Bartan</span>
-          </label>
-          <label class="flex items-center gap-2 p-2 border rounded-lg bg-gray-50 hover:bg-amber-50 cursor-pointer">
-            <input type="checkbox" name="tentItems" value="Jhumar, Stage & Gate Setup (झूमर/गेट)" class="w-4 h-4 text-amber-600 rounded">
-            <span>✨ Jhumar & Gate</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-2 mb-2">
+      <!-- Function Date & Days -->
+      <div class="grid grid-cols-2 gap-2 mb-3 bg-orange-50/70 p-2.5 rounded-xl border border-orange-200">
         <div>
-          <label class="block text-[11px] font-bold text-gray-700 mb-1">📅 Function Ki Tareekh:</label>
-          <input id="tentDate" type="date" class="w-full border p-2 rounded-lg text-xs focus:outline-amber-600 font-semibold bg-gray-50">
+          <label class="block text-[11px] font-bold text-gray-700 mb-1">📅 Function Ki Tareekh *:</label>
+          <input id="tentDate" type="date" class="w-full border p-1.5 rounded-lg text-xs focus:outline-amber-600 font-semibold bg-white">
         </div>
         <div>
           <label class="block text-[11px] font-bold text-gray-700 mb-1">⏳ Kitne Din Chahiye:</label>
-          <select id="tentDays" class="w-full border p-2 rounded-lg text-xs focus:outline-amber-600 font-semibold bg-gray-50">
-            <option value="1 Din (1 Day)">1 Din</option>
-            <option value="2 Din (2 Days)">2 Din</option>
-            <option value="3 Din (3 Days)">3 Din</option>
-            <option value="4+ Din (Multiple Days)">4+ Din</option>
+          <select id="tentDays" onchange="calculateTentTotal()" class="w-full border p-1.5 rounded-lg text-xs focus:outline-amber-600 font-semibold bg-white">
+            <option value="1">1 Din (1 Day)</option>
+            <option value="2">2 Din (2 Days)</option>
+            <option value="3">3 Din (3 Days)</option>
+            <option value="4">4 Din (4 Days)</option>
+            <option value="5">5 Din (5 Days)</option>
           </select>
         </div>
       </div>
 
+      <!-- Tent Items List with Rates & Quantity -->
+      <div class="mb-3">
+        <div class="flex justify-between items-center mb-1.5">
+          <label class="block text-xs font-bold text-gray-800">📦 Saman & Rate List (सामान और किराया चुनें):</label>
+          <span class="text-[10px] text-amber-700 font-bold">Per Day Rate</span>
+        </div>
+        <div id="tentItemsContainer" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar pr-1"></div>
+      </div>
+
+      <!-- Customer Details -->
       <div class="grid grid-cols-2 gap-2 mb-2">
         <input id="tentCustName" type="text" placeholder="Aapka Naam (नाम) *" class="w-full border p-2 rounded-lg text-xs focus:outline-amber-600">
         <input id="tentCustFather" type="text" placeholder="Pita Ka Naam (पिता का नाम)" class="w-full border p-2 rounded-lg text-xs focus:outline-amber-600">
       </div>
 
+      <!-- Full Address Box -->
       <div class="mb-2">
         <label class="block text-[11px] font-bold text-gray-700 mb-1">📍 Full Address (कार्यक्रम का पूरा पता) *:</label>
         <input id="tentVillage" type="text" placeholder="Gaon / Tola (जैसे: Kutubpur, Chauhan Tola) *" class="w-full border p-2 rounded-lg mb-1.5 text-xs focus:outline-amber-600">
-        <textarea id="tentLandmark" rows="2" placeholder="🏠 Ghar / Stage ki Pehchan (Landmark, Road, Mandir) *" class="w-full border p-2 rounded-lg text-xs focus:outline-amber-600"></textarea>
+        <textarea id="tentLandmark" rows="2" placeholder="🏠 Ghar / Stage ki Pehchan (Landmark, Mandir, Transformer) *" class="w-full border p-2 rounded-lg text-xs focus:outline-amber-600"></textarea>
       </div>
 
-      <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200 mb-3">
-        <label class="block text-xs font-bold text-amber-950 mb-1">💰 Advance Fee (अग्रिम राशि):</label>
-        <div class="grid grid-cols-2 gap-2 mb-2">
+      <!-- Advance Fee & Summary Box -->
+      <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 mb-3 space-y-2">
+        <div class="flex justify-between items-center text-xs font-bold text-amber-950 border-b border-amber-200 pb-1.5">
+          <span>Est. Total Kiraya (अनुमानित किराया):</span>
+          <span class="text-sm text-green-700 font-black">₹<span id="tentEstTotal">0</span></span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-1">
           <div>
-            <span class="text-[10px] text-gray-500 font-medium">Advance Rashi (₹):</span>
-            <input id="tentAdvanceAmt" type="number" value="1000" placeholder="Advance Rashi ₹" class="w-full border p-1.5 rounded text-xs bg-white font-bold text-green-700 focus:outline-amber-600">
+            <span class="text-[10px] text-gray-600 font-bold block mb-1">Advance Rashi (₹) *:</span>
+            <input id="tentAdvanceAmt" type="number" value="1000" placeholder="Advance ₹" class="w-full border p-1.5 rounded text-xs bg-white font-bold text-green-700 focus:outline-amber-600">
           </div>
           <div>
-            <span class="text-[10px] text-gray-500 font-medium">Payment Mode:</span>
+            <span class="text-[10px] text-gray-600 font-bold block mb-1">Payment Method:</span>
             <select id="tentAdvanceMode" class="w-full border p-1.5 rounded text-xs bg-white font-semibold focus:outline-amber-600">
               <option value="Online UPI (GooglePay/PhonePe)">📱 Online UPI</option>
               <option value="Cash Diya (नकद)">💵 Cash Diya</option>
@@ -279,18 +268,19 @@
             </select>
           </div>
         </div>
-        <p class="text-[10px] text-amber-800 font-medium">💡 Baaki payment event ke din set hone par li jayegi.</p>
+        <p class="text-[10px] text-amber-800 font-medium">💡 Baaki rashi event wale din saman setup hone par li jayegi.</p>
       </div>
 
+      <!-- Submit Pre-Booking Button -->
       <button type="button" onclick="sendTentBooking()" class="w-full bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-700 hover:to-red-700 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-2">
-        <span>Pre-Booking WhatsApp Par Bhejein</span> 🚀
+        <span id="tentBtnText">Pre-Booking WhatsApp Par Bhejein</span> 🚀
       </button>
     </div>
   </div>
 
-  <!-- Admin Modal -->
+  <!-- ================= ADMIN PANEL (KIRANA + TENT HOUSE EDITING) ================= -->
   <div id="adminModal" class="fixed inset-0 bg-black/60 z-[10000] hidden flex items-center justify-center p-3">
-    <div class="bg-white w-full max-w-md rounded-2xl p-4 max-h-[90vh] overflow-y-auto">
+    <div class="bg-white w-full max-w-lg rounded-2xl p-4 max-h-[90vh] overflow-y-auto">
       <div id="adminAuthDiv">
         <div class="flex justify-between items-center mb-3">
           <h3 class="font-bold text-base text-purple-900">🔒 Dukandar Login (दुकानदार लॉगिन)</h3>
@@ -303,10 +293,21 @@
 
       <div id="adminContentDiv" class="hidden">
         <div class="flex justify-between items-center border-b pb-2 mb-3">
-          <h3 class="font-bold text-sm text-gray-800">⚙️ Saman aur Settings</h3>
+          <h3 class="font-bold text-sm text-gray-800">⚙️ Dukan & Tent Management</h3>
           <button onclick="closeAdminModal()" class="text-gray-500 text-2xl font-bold">&times;</button>
         </div>
 
+        <!-- Admin Tab Switching -->
+        <div class="grid grid-cols-2 gap-2 mb-3">
+          <button id="adminTabKiranaBtn" onclick="switchAdminTab('kirana')" class="py-1.5 px-3 rounded-lg text-xs font-bold bg-purple-800 text-white shadow-sm">
+            🛒 Kirana Store
+          </button>
+          <button id="adminTabTentBtn" onclick="switchAdminTab('tent')" class="py-1.5 px-3 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-amber-100">
+            🎪 Ramlakhan Tent House
+          </button>
+        </div>
+
+        <!-- PIN Change Collapsible -->
         <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200 mb-3">
           <div class="flex justify-between items-center cursor-pointer" onclick="togglePinChangeBox()">
             <span class="text-xs font-bold text-amber-900">🔑 Apna PIN Badlein (पिन बदलें)</span>
@@ -320,38 +321,62 @@
           </div>
         </div>
 
-        <div class="bg-purple-50 p-3 rounded-xl border border-purple-200 mb-4">
-          <h4 class="font-bold text-xs text-purple-900 mb-2">➕ Naya Saman Jodein (Camera / Gallery):</h4>
-          <input id="newProdName" type="text" placeholder="Saman ka Naam (Jaise: Haldiram Bhujia)" class="w-full border p-2 rounded mb-2 text-xs bg-white">
-          <div class="grid grid-cols-2 gap-2 mb-2">
-            <input id="newProdPrice" type="number" placeholder="Price (₹)" class="border p-2 rounded text-xs bg-white">
-            <input id="newProdStock" type="number" placeholder="Stock Qty (Pcs)" class="border p-2 rounded text-xs bg-white">
+        <!-- ============ KIRANA ADMIN SECTION ============ -->
+        <div id="adminKiranaSection">
+          <div class="bg-purple-50 p-3 rounded-xl border border-purple-200 mb-4">
+            <h4 class="font-bold text-xs text-purple-900 mb-2">➕ Naya Kirana Saman Jodein:</h4>
+            <input id="newProdName" type="text" placeholder="Saman ka Naam (Jaise: Haldiram Bhujia)" class="w-full border p-2 rounded mb-2 text-xs bg-white">
+            <div class="grid grid-cols-2 gap-2 mb-2">
+              <input id="newProdPrice" type="number" placeholder="Price (₹)" class="border p-2 rounded text-xs bg-white">
+              <input id="newProdStock" type="number" placeholder="Stock Qty (Pcs)" class="border p-2 rounded text-xs bg-white">
+            </div>
+            <div class="grid grid-cols-2 gap-2 mb-2">
+              <select id="newProdCategory" class="border p-2 rounded text-xs bg-white">
+                <option value="staples">Aata, Chawal & Daal</option>
+                <option value="oil-spices">Tel & Masale</option>
+                <option value="snacks">Biscuits & Drinks</option>
+                <option value="cleaning">Sabun & Surf</option>
+              </select>
+              <label class="flex items-center text-xs font-semibold text-gray-700 gap-1 bg-white p-1 rounded border">
+                <input type="checkbox" id="newProdIsNew" class="w-4 h-4">
+                <span>✨ Naya Saman?</span>
+              </label>
+            </div>
+            <div class="mb-2">
+              <label class="block text-[10px] font-bold text-gray-700 mb-1">📷 Photo Kheenchein / Gallery se chunein:</label>
+              <input type="file" id="newProdPhotoFile" accept="image/*" class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white">
+            </div>
+            <button onclick="addNewProductFromAdmin()" class="w-full bg-green-600 text-white font-bold py-2 rounded-lg text-xs shadow">
+              ✅ Saman Save Karein
+            </button>
           </div>
-          <div class="grid grid-cols-2 gap-2 mb-2">
-            <select id="newProdCategory" class="border p-2 rounded text-xs bg-white">
-              <option value="staples">Aata, Chawal & Daal</option>
-              <option value="oil-spices">Tel & Masale</option>
-              <option value="snacks">Biscuits & Drinks</option>
-              <option value="cleaning">Sabun & Surf</option>
-            </select>
-            <label class="flex items-center text-xs font-semibold text-gray-700 gap-1 bg-white p-1 rounded border">
-              <input type="checkbox" id="newProdIsNew" class="w-4 h-4">
-              <span>✨ Naya Saman?</span>
-            </label>
+
+          <div>
+            <h4 class="font-bold text-xs text-gray-800 mb-2">📦 Kirana Stock Status:</h4>
+            <div id="adminStockList" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar"></div>
           </div>
-          <div class="mb-2">
-            <label class="block text-[10px] font-bold text-gray-700 mb-1">📷 Photo Kheenchein / Gallery se chunein:</label>
-            <input type="file" id="newProdPhotoFile" accept="image/*" class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white">
-          </div>
-          <button onclick="addNewProductFromAdmin()" class="w-full bg-green-600 text-white font-bold py-2 rounded-lg text-xs shadow">
-            ✅ Saman Save Karein
-          </button>
         </div>
 
-        <div>
-          <h4 class="font-bold text-xs text-gray-800 mb-2">📦 Stock Status:</h4>
-          <div id="adminStockList" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar"></div>
+        <!-- ============ TENT ADMIN SECTION (EDIT/ADD TENT ITEMS) ============ -->
+        <div id="adminTentSection" class="hidden">
+          <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 mb-4">
+            <h4 class="font-bold text-xs text-amber-950 mb-2">➕ Naya Tent / Sadhi Saman Jodein:</h4>
+            <input id="newTentName" type="text" placeholder="Saman ka Naam (Jaise: Cooler / VIP Sofa)" class="w-full border p-2 rounded mb-2 text-xs bg-white">
+            <div class="grid grid-cols-2 gap-2 mb-2">
+              <input id="newTentPrice" type="number" placeholder="Per Day Rent (₹)" class="border p-2 rounded text-xs bg-white">
+              <input id="newTentUnit" type="text" placeholder="Unit (Set, Piece, Pandal)" class="border p-2 rounded text-xs bg-white">
+            </div>
+            <button onclick="addNewTentItemFromAdmin()" class="w-full bg-amber-600 text-white font-bold py-2 rounded-lg text-xs shadow">
+              ✅ Tent Saman Save Karein
+            </button>
+          </div>
+
+          <div>
+            <h4 class="font-bold text-xs text-gray-800 mb-2">🎪 Ramlakhan Tent Rate & Edit Panel:</h4>
+            <div id="adminTentItemList" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar"></div>
+          </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -365,6 +390,7 @@
     let orderMode = "pickup";
     let isShopOpen = true;
 
+    // --- KIRANA PRODUCTS DATA ---
     const initialProducts = [
       { 
         id: 1, category: "staples", isNew: false, inStock: true, stockQty: 10, 
@@ -417,11 +443,26 @@
     ];
 
     let products = JSON.parse(localStorage.getItem("chauhan_kirana_products_v5")) || initialProducts;
-
     function saveProductsToStorage() {
       localStorage.setItem("chauhan_kirana_products_v5", JSON.stringify(products));
     }
 
+    // --- RAMLAKHAN TENT HOUSE ITEMS DATA ---
+    const initialTentItems = [
+      { id: 101, name: "Tent & Pandal Setup (टेंट पंडाल)", price: 5000, unit: "Full Setup", available: true, icon: "🎪" },
+      { id: 102, name: "DJ Sound & Speaker Setup (डीजे साउंड)", price: 2500, unit: "Per Day", available: true, icon: "🔊" },
+      { id: 103, name: "Halogen & LED Lighting (लाइटिंग डेकोरेशन)", price: 800, unit: "Set", available: true, icon: "💡" },
+      { id: 104, name: "Silent Generator (जनरेटर सेट)", price: 1500, unit: "Per Day", available: true, icon: "⚡" },
+      { id: 105, name: "Sadhi Bartan Set (शादी खाना बर्तन सेट)", price: 2000, unit: "Full Set", available: true, icon: "🍽️" },
+      { id: 106, name: "Jhumar, Stage & Gate Entry (झूमर/स्टेज गेट)", price: 1800, unit: "Set", available: true, icon: "✨" }
+    ];
+
+    let tentItems = JSON.parse(localStorage.getItem("ramlakhan_tent_items_v1")) || initialTentItems;
+    function saveTentItemsToStorage() {
+      localStorage.setItem("ramlakhan_tent_items_v1", JSON.stringify(tentItems));
+    }
+
+    let tentSelectedQty = {};
     let selectedVariants = {};
     let cart = {};
     let latitude = null;
@@ -451,7 +492,10 @@
       }
     }
 
+    // --- RAMLAKHAN TENT FUNCTIONS ---
     function openTentModal() {
+      renderTentItemsList();
+      calculateTentTotal();
       document.getElementById("tentModal").classList.remove("hidden");
     }
 
@@ -459,10 +503,63 @@
       document.getElementById("tentModal").classList.add("hidden");
     }
 
-    function sendTentBooking() {
-      const selectedItems = Array.from(document.querySelectorAll('input[name="tentItems"]:checked')).map(el => el.value);
+    function renderTentItemsList() {
+      const container = document.getElementById("tentItemsContainer");
+      container.innerHTML = tentItems.map(item => {
+        const qty = tentSelectedQty[item.id] || 0;
+        return `
+          <div class="flex items-center justify-between p-2 rounded-xl border ${item.available ? 'bg-gray-50 border-gray-200' : 'bg-red-50/50 border-red-200 opacity-60'}">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">${item.icon || '🎪'}</span>
+              <div>
+                <p class="font-bold text-xs text-gray-800 leading-tight">${item.name}</p>
+                <p class="text-[11px] font-extrabold text-amber-700">₹${item.price} <span class="text-[9px] font-normal text-gray-500">/${item.unit}</span></p>
+              </div>
+            </div>
+            <div>
+              ${!item.available ? `
+                <span class="text-[10px] bg-red-600 text-white font-bold px-2 py-1 rounded">Booked / N/A</span>
+              ` : qty > 0 ? `
+                <div class="flex items-center gap-2 bg-amber-100 rounded-lg p-1 border border-amber-300">
+                  <button type="button" onclick="updateTentQty(${item.id}, -1)" class="w-6 h-6 bg-amber-600 text-white rounded font-black text-xs">-</button>
+                  <span class="text-xs font-black text-amber-950">${qty}</span>
+                  <button type="button" onclick="updateTentQty(${item.id}, 1)" class="w-6 h-6 bg-amber-600 text-white rounded font-black text-xs">+</button>
+                </div>
+              ` : `
+                <button type="button" onclick="updateTentQty(${item.id}, 1)" class="bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-bold text-xs px-3 py-1.5 rounded-lg shadow-xs">
+                  + Add
+                </button>
+              `}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function updateTentQty(id, change) {
+      tentSelectedQty[id] = (tentSelectedQty[id] || 0) + change;
+      if (tentSelectedQty[id] <= 0) delete tentSelectedQty[id];
+      renderTentItemsList();
+      calculateTentTotal();
+    }
+
+    function calculateTentTotal() {
+      const days = parseInt(document.getElementById("tentDays").value) || 1;
+      let totalPerDay = 0;
+      for (let id in tentSelectedQty) {
+        const item = tentItems.find(x => x.id == id);
+        if (item) {
+          totalPerDay += item.price * tentSelectedQty[id];
+        }
+      }
+      const totalAmount = totalPerDay * days;
+      document.getElementById("tentEstTotal").innerText = totalAmount;
+      return { totalAmount, days };
+    }
+
+    async function sendTentBooking() {
       const tentDate = document.getElementById("tentDate").value;
-      const tentDays = document.getElementById("tentDays").value;
+      const { totalAmount, days } = calculateTentTotal();
       const custName = document.getElementById("tentCustName").value.trim();
       const custFather = document.getElementById("tentCustFather").value.trim();
       const village = document.getElementById("tentVillage").value.trim();
@@ -470,12 +567,26 @@
       const advanceAmt = document.getElementById("tentAdvanceAmt").value.trim();
       const advanceMode = document.getElementById("tentAdvanceMode").value;
 
-      if (selectedItems.length === 0) {
-        alert("Kripya kam se kam ek saman (Tent, DJ, Light, Bartan) zaroor chunein!");
+      if (!tentDate) {
+        alert("Kripya program ki tareekh (Date) zaroor chunein!");
         return;
       }
-      if (!tentDate) {
-        alert("Function/Program ki tareekh (Date) zaroor chunein!");
+
+      let selectedList = [];
+      for (let id in tentSelectedQty) {
+        const item = tentItems.find(x => x.id == id);
+        if (item) {
+          selectedList.push({
+            name: item.name,
+            qty: tentSelectedQty[id],
+            unitPrice: item.price,
+            total: item.price * tentSelectedQty[id] * days
+          });
+        }
+      }
+
+      if (selectedList.length === 0) {
+        alert("Kripya kam se kam ek saman (Tent, DJ, Light, Bartan) zaroor jodein!");
         return;
       }
       if (!custName || !village || !landmark) {
@@ -483,33 +594,238 @@
         return;
       }
 
-      let itemsText = selectedItems.map((item, idx) => `  ${idx + 1}. ${item}`).join("\n");
+      const tentBtnText = document.getElementById("tentBtnText");
+      const originalText = tentBtnText.innerText;
+      tentBtnText.innerText = "⏳ Parchi Ban Rahi Hai...";
 
-      let bookingMsg = `🎪 *RAMLAKHAN TENT HOUSE (PRE-BOOKING)*\n` +
-                       `📍 *Kutubpur, Bahadurpur Mau*\n` +
-                       `──────────────────\n` +
-                       `👤 *Grahak Ka Naam:* ${custName}\n` +
-                       (custFather ? `👨‍🦳 *Pita Ka Naam:* ${custFather}\n` : '') +
-                       `📅 *Event Date:* ${tentDate}\n` +
-                       `⏳ *Avadhi (Duration):* ${tentDays}\n` +
-                       `──────────────────\n` +
-                       `🏡 *Pura Pata (Full Address):*\n` +
-                       `  • Gaon/Tola: ${village}\n` +
-                       `  • Landmark: ${landmark}\n` +
-                       `──────────────────\n` +
-                       `📦 *Saman Ki Demand:*\n` +
-                       itemsText + `\n` +
-                       `──────────────────\n` +
-                       `💰 *Advance Rashi:* ₹${advanceAmt || '0'}\n` +
-                       `💳 *Advance Payment Mode:* ${advanceMode}\n` +
-                       `──────────────────\n` +
-                       `💬 *Kripya booking confirm karein aur baaki rate details batayein!* 🙏`;
+      let itemsText = "";
+      selectedList.forEach((item, idx) => {
+        itemsText += `${idx + 1}. ${item.name} ➔ *[ ${item.qty} Piece ]* = ₹${item.total}\n`;
+      });
 
-      const url = `https://wa.me/${SHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(bookingMsg)}`;
-      window.open(url, "_blank");
-      closeTentModal();
+      const bookingMsg = `🎪 *RAMLAKHAN TENT HOUSE (PRE-BOOKING)*\n` +
+                         `📍 *Kutubpur, Bahadurpur Mau*\n` +
+                         `──────────────────\n` +
+                         `👤 *Grahak:* ${custName}\n` +
+                         (custFather ? `👨‍🦳 *Pita:* ${custFather}\n` : '') +
+                         `📅 *Event Date:* ${tentDate}\n` +
+                         `⏳ *Avadhi (Duration):* ${days} Din\n` +
+                         `──────────────────\n` +
+                         `🏡 *Pura Pata (Address):*\n` +
+                         `  • Gaon/Tola: ${village}\n` +
+                         `  • Landmark: ${landmark}\n` +
+                         `──────────────────\n` +
+                         `📦 *Saman & Rate Details:*\n` +
+                         itemsText +
+                         `──────────────────\n` +
+                         `💵 *Est. Total Kiraya:* ₹${totalAmount}\n` +
+                         `💰 *Advance Rashi:* ₹${advanceAmt || '0'}\n` +
+                         `💳 *Payment Mode:* ${advanceMode}\n` +
+                         `──────────────────\n` +
+                         `📸 *(Booking Parchi photo sath me share ho rahi hai)*`;
+
+      // Build Tent Image Slip
+      const captureDiv = document.getElementById("captureContent");
+      captureDiv.innerHTML = `
+        <div style="border: 2px solid #b45309; border-radius: 8px; padding: 16px; background-color: #ffffff;">
+          <div style="text-align: center; border-bottom: 2px dashed #b45309; padding-bottom: 10px; margin-bottom: 10px;">
+            <h2 style="font-size: 18px; font-weight: 800; color: #92400e; margin: 0; text-transform: uppercase;">RAMLAKHAN TENT HOUSE</h2>
+            <p style="font-size: 12px; font-weight: 600; color: #374151; margin: 2px 0;">Kutubpur, Bahadurpur (Mau) | Mob: 8595861207</p>
+            <p style="font-size: 11px; color: #b45309; font-weight: bold; margin-top: 4px;">PRE-BOOKING RECEIPT</p>
+          </div>
+          
+          <div style="font-size: 12px; line-height: 1.5; color: #1f2937; margin-bottom: 12px; background: #fffbeb; padding: 8px; border-radius: 6px; border: 1px solid #fde68a;">
+            <div><strong>Grahak:</strong> ${custName}</div>
+            ${custFather ? `<div><strong>Pita/Pati:</strong> ${custFather}</div>` : ''}
+            <div><strong>Event Date:</strong> ${tentDate} (${days} Din)</div>
+            <div><strong>Pata:</strong> ${village}, ${landmark}</div>
+            <div><strong>Advance Paid:</strong> ₹${advanceAmt || '0'} (${advanceMode})</div>
+          </div>
+
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 10px;">
+            <thead>
+              <tr style="border-top: 1.5px solid #b45309; border-bottom: 1.5px solid #b45309; background-color: #fef3c7;">
+                <th style="text-align: left; padding: 6px 4px; font-weight: 700;">Tent Saman</th>
+                <th style="text-align: center; padding: 6px 4px; font-weight: 700;">Qty</th>
+                <th style="text-align: right; padding: 6px 4px; font-weight: 700;">Kiraya</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${selectedList.map(item => `
+                <tr style="border-bottom: 1px dashed #e5e7eb;">
+                  <td style="padding: 6px 4px; font-weight: 500; color: #111827;">${item.name}</td>
+                  <td style="text-align: center; padding: 6px 4px; font-weight: 700; color: #111827;">${item.qty}</td>
+                  <td style="text-align: right; padding: 6px 4px; font-weight: 700; color: #111827;">₹${item.total}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+
+          <div style="border-top: 1.5px solid #b45309; padding-top: 8px; font-size: 13px; line-height: 1.6; text-align: right; color: #111827;">
+            <div>Est. Total: <strong>₹${totalAmount}</strong></div>
+            <div>Advance: <strong>₹${advanceAmt || '0'}</strong></div>
+            <div style="font-size: 15px; font-weight: 900; color: #b45309; margin-top: 4px; border-top: 2px solid #b45309; padding-top: 6px;">
+              Baqi Rashi: ₹${Math.max(0, totalAmount - (parseFloat(advanceAmt) || 0))}
+            </div>
+          </div>
+
+          <div style="text-align: center; font-size: 11px; margin-top: 14px; color: #4b5563; font-weight: 600;">
+            🎪 Ramlakhan Tent House Kutubpur | Dhanyawad! 🙏
+          </div>
+        </div>
+      `;
+
+      try {
+        const captureElement = document.getElementById("receiptContainer");
+        const canvas = await html2canvas(captureElement, {
+          scale: 2.5,
+          useCORS: true,
+          backgroundColor: "#ffffff",
+          windowWidth: 1000,
+          scrollX: 0,
+          scrollY: 0
+        });
+
+        canvas.toBlob(async (blob) => {
+          tentBtnText.innerText = originalText;
+          const imageFile = new File([blob], `TentBooking_${custName.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
+
+          if (navigator.canShare && navigator.canShare({ files: [imageFile] })) {
+            try {
+              await navigator.share({
+                files: [imageFile],
+                title: 'Ramlakhan Tent Booking Parchi',
+                text: bookingMsg
+              });
+              closeTentModal();
+              return;
+            } catch (err) {
+              console.log("Share cancelled:", err);
+            }
+          }
+
+          const downloadUrl = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = downloadUrl;
+          link.download = `TentBooking_Parchi.png`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          const waUrl = `https://wa.me/${SHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(bookingMsg)}`;
+          window.open(waUrl, "_blank");
+          closeTentModal();
+        }, 'image/png');
+
+      } catch (e) {
+        console.error("Tent image error:", e);
+        tentBtnText.innerText = originalText;
+        const waUrl = `https://wa.me/${SHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(bookingMsg)}`;
+        window.open(waUrl, "_blank");
+        closeTentModal();
+      }
     }
 
+    // --- ADMIN TABS & MANAGEMENT ---
+    function switchAdminTab(tab) {
+      const kiranaSec = document.getElementById("adminKiranaSection");
+      const tentSec = document.getElementById("adminTentSection");
+      const kiranaBtn = document.getElementById("adminTabKiranaBtn");
+      const tentBtn = document.getElementById("adminTabTentBtn");
+
+      if (tab === 'kirana') {
+        kiranaSec.classList.remove("hidden");
+        tentSec.classList.add("hidden");
+        kiranaBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-purple-800 text-white shadow-sm";
+        tentBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-amber-100";
+        renderAdminStockList();
+      } else {
+        kiranaSec.classList.add("hidden");
+        tentSec.classList.remove("hidden");
+        tentBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-amber-600 text-white shadow-sm";
+        kiranaBtn.className = "py-1.5 px-3 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-purple-100";
+        renderAdminTentItemList();
+      }
+    }
+
+    function renderAdminTentItemList() {
+      const container = document.getElementById("adminTentItemList");
+      container.innerHTML = tentItems.map(item => `
+        <div class="flex items-center justify-between p-2.5 bg-gray-50 rounded-xl border border-gray-200 text-xs">
+          <div class="flex-1 mr-2">
+            <input type="text" value="${item.name}" onchange="editTentItemField(${item.id}, 'name', this.value)" class="w-full font-bold text-gray-800 bg-white border border-gray-300 rounded px-1.5 py-0.5 text-xs mb-1">
+            <div class="flex items-center gap-2">
+              <span class="text-gray-500 text-[10px]">Rent ₹:</span>
+              <input type="number" value="${item.price}" onchange="editTentItemField(${item.id}, 'price', this.value)" class="w-20 font-extrabold text-amber-700 bg-white border border-gray-300 rounded px-1.5 py-0.5 text-xs">
+              <span class="text-gray-400 text-[10px]">/${item.unit}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="toggleTentItemAvailability(${item.id})" class="px-2 py-1 rounded font-bold text-[10px] ${item.available ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-red-100 text-red-600 border border-red-300'}">
+              ${item.available ? 'Available' : 'Booked'}
+            </button>
+            <button onclick="deleteTentItem(${item.id})" class="text-red-500 font-bold px-1.5 py-1 text-sm">&times;</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function editTentItemField(id, field, value) {
+      const item = tentItems.find(x => x.id === id);
+      if (item) {
+        if (field === 'price') item.price = parseFloat(value) || 0;
+        if (field === 'name') item.name = value.trim();
+        saveTentItemsToStorage();
+      }
+    }
+
+    function toggleTentItemAvailability(id) {
+      const item = tentItems.find(x => x.id === id);
+      if (item) {
+        item.available = !item.available;
+        saveTentItemsToStorage();
+        renderAdminTentItemList();
+      }
+    }
+
+    function deleteTentItem(id) {
+      if (confirm("Kya aap is tent saman ko hatana chahte hain?")) {
+        tentItems = tentItems.filter(x => x.id !== id);
+        saveTentItemsToStorage();
+        renderAdminTentItemList();
+      }
+    }
+
+    function addNewTentItemFromAdmin() {
+      const name = document.getElementById("newTentName").value.trim();
+      const price = parseFloat(document.getElementById("newTentPrice").value);
+      const unit = document.getElementById("newTentUnit").value.trim() || "Set";
+
+      if (!name || isNaN(price) || price <= 0) {
+        alert("Tent saman ka naam aur sahi rent bharein!");
+        return;
+      }
+
+      const newItem = {
+        id: Date.now(),
+        name: name,
+        price: price,
+        unit: unit,
+        available: true,
+        icon: "🎪"
+      };
+
+      tentItems.push(newItem);
+      saveTentItemsToStorage();
+      renderAdminTentItemList();
+
+      document.getElementById("newTentName").value = "";
+      document.getElementById("newTentPrice").value = "";
+      document.getElementById("newTentUnit").value = "";
+      alert("✅ Naya tent saman jud gaya!");
+    }
+
+    // --- KIRANA FUNCTIONS ---
     function setOrderMode(mode) {
       orderMode = mode;
       const pickupBtn = document.getElementById("mode-pickup");
@@ -610,7 +926,7 @@
                 </div>
               ` : `
                 <button type="button" onclick="updateQty('${cartKey}', 1)" class="w-full bg-purple-700 text-white font-bold py-1 rounded-lg text-xs hover:bg-purple-800">
-                  + Add (जोड़ें)
+                  + Add
                 </button>
               `}
             </div>
@@ -681,7 +997,7 @@
                 </div>
               ` : `
                 <button type="button" onclick="updateQty('${cartKey}', 1)" class="w-full border border-purple-600 text-purple-700 font-bold py-1.5 rounded-lg text-xs hover:bg-purple-50 active:bg-purple-100">
-                  + Add (जोड़ें)
+                  + Add
                 </button>
               `}
             </div>
@@ -1017,6 +1333,7 @@
       }
     }
 
+    // --- GENERAL ADMIN & PIN ---
     function openAdminModal() {
       document.getElementById("adminModal").classList.remove("hidden");
       document.getElementById("adminAuthDiv").classList.remove("hidden");
@@ -1033,7 +1350,7 @@
       if (pin === currentAdminPin) {
         document.getElementById("adminAuthDiv").classList.add("hidden");
         document.getElementById("adminContentDiv").classList.remove("hidden");
-        renderAdminStockList();
+        switchAdminTab('kirana');
       } else {
         alert("Galat PIN!");
       }
