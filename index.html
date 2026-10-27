@@ -117,7 +117,7 @@ async function loadProducts(){
 }
 function setCategory(c,btn){activeCategory=c;document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("active",b===btn));renderProducts()}
 function renderProducts(){
- const q=document.getElementById("search").value.trim().toL
+ const q=document.getElementById("search").value.trim().toLowerCase();
  const arr=products.filter(p=>(activeCategory==="all"||(activeCategory==="new"?p.isNew===true:p.category===activeCategory))&&String(p.name||"").toLowerCase().includes(q));
  document.getElementById("productList").innerHTML=arr.map(p=>{const im=imageUrl(p.imageUrl||"");return `<article class="product">${im?`<img class="prod-image" src="${esc(im)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`:`<div class="prod-placeholder">🛍️</div>`}<div class="prod-body">${p.isNew?'<span class="new-tag">NEW</span>':''}<div class="prod-name">${esc(p.name)}</div><div class="prod-meta"><span>Stock: ${Number(p.stock||0)} bacha</span><span>${esc(p.category||"")}</span></div><div class="prod-bottom"><span class="price">₹${Number(p.price||0)}</span><button class="add-btn" ${Number(p.stock||0)<=0?'disabled':''} onclick="addToCart('${esc(p.id)}')">+ Add</button></div></div></article>`}).join("");
  document.getElementById("emptyMessage").classList.toggle("hidden",arr.length>0);
