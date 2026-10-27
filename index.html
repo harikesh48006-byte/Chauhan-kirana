@@ -24,43 +24,43 @@ main{padding-top:13px;padding-bottom:100px}.panel{background:white;border:1px so
 </style>
 </head>
 <body>
-<div class="brand-strip"><div class="container brand-inner"><div class="brand-title">Chauhan Kirana Store</div><div class="brand-icon">ðŸ›’</div></div></div>
+<div class="brand-strip"><div class="container brand-inner"><div class="brand-title">Chauhan Kirana Store</div><div class="brand-icon">🛒</div></div></div>
 <header><div class="container head-inner">
- <div class="top"><div><h1 class="shop-name">ðŸ›’ à¤šà¥Œà¤¹à¤¾à¤¨ à¤•à¤¿à¤°à¤¾à¤¨à¤¾ à¤¸à¥à¤Ÿà¥‹à¤°</h1><p class="location">ðŸ“ Kutubpur, Bahadurpur Mau (à¤•à¥à¤¤à¥à¤¬à¤ªà¥à¤°)</p></div><button class="admin-open" onclick="openAdmin()">âš™ï¸ Dukandar Panel<br>(à¤¦à¥à¤•à¤¾à¤¨à¤¦à¤¾à¤°)</button></div>
- <button class="tent-banner" onclick="openTent()"><span class="tent-icon">ðŸŽª</span><span style="flex:1"><span class="tent-title">Ramlakhan Tent House</span><br><span class="tent-sub">à¤°à¤¾à¤®à¤²à¤–à¤¨ à¤Ÿà¥‡à¤‚à¤Ÿ à¤¹à¤¾à¤‰à¤¸ Â· à¤¶à¤¾à¤¦à¥€, à¤ªà¤¾à¤°à¥à¤Ÿà¥€, DJ, à¤²à¤¾à¤‡à¤Ÿ</span></span><span class="tent-cta">RATES &<br>BOOKING âžœ</span></button>
- <div class="status"><span>â° Dukan Time: 08:00 AM - 08:00 PM</span><span id="syncStatus" class="status-live">ðŸŸ¡ Connectingâ€¦</span></div>
- <div class="search-wrap"><input id="search" placeholder="ðŸ” Saman khojein (Aata, Tel, Sabun)..." oninput="renderProducts()"><span class="search-icon">ðŸŽ™ï¸</span></div>
- <div class="tabs"><button class="active" data-cat="all" onclick="setCategory('all',this)">Sabhi Saman (à¤¸à¤­à¥€)</button><button data-cat="new" onclick="setCategory('new',this)">âœ¨ Naya Saman (à¤¨à¤¯à¤¾)</button><button data-cat="staples" onclick="setCategory('staples',this)">Aata, Chawal & Daal</button><button data-cat="oil-spices" onclick="setCategory('oil-spices',this)">Tel & Masale</button><button data-cat="snacks" onclick="setCategory('snacks',this)">Biscuits & Drinks</button><button data-cat="cleaning" onclick="setCategory('cleaning',this)">Sabun & Surf</button></div>
+ <div class="top"><div><h1 class="shop-name">🛒 चौहान किराना स्टोर</h1><p class="location">📍 Kutubpur, Bahadurpur Mau (कुतुबपुर)</p></div><button class="admin-open" onclick="openAdmin()">⚙️ Dukandar Panel<br>(दुकानदार)</button></div>
+ <button class="tent-banner" onclick="openTent()"><span class="tent-icon">🎪</span><span style="flex:1"><span class="tent-title">Ramlakhan Tent House</span><br><span class="tent-sub">रामलखन टेंट हाउस · शादी, पार्टी, DJ, लाइट</span></span><span class="tent-cta">RATES &<br>BOOKING ➜</span></button>
+ <div class="status"><span>⏰ Dukan Time: 08:00 AM - 08:00 PM</span><span id="syncStatus" class="status-live">🟡 Connecting…</span></div>
+ <div class="search-wrap"><input id="search" placeholder="🔍 Saman khojein (Aata, Tel, Sabun)..." oninput="renderProducts()"><span class="search-icon">🎙️</span></div>
+ <div class="tabs"><button class="active" data-cat="all" onclick="setCategory('all',this)">Sabhi Saman (सभी)</button><button data-cat="new" onclick="setCategory('new',this)">✨ Naya Saman (नया)</button><button data-cat="staples" onclick="setCategory('staples',this)">Aata, Chawal & Daal</button><button data-cat="oil-spices" onclick="setCategory('oil-spices',this)">Tel & Masale</button><button data-cat="snacks" onclick="setCategory('snacks',this)">Biscuits & Drinks</button><button data-cat="cleaning" onclick="setCategory('cleaning',this)">Sabun & Surf</button></div>
 </div></header>
-<div class="offer">ðŸ”¥ Kutubpur aur Bahadurpur mein â‚¹150+ par Free Delivery âš¡ Shaadi aur Party ke liye Tent House booking shuru hai!</div>
+<div class="offer">🔥 Kutubpur aur Bahadurpur mein ₹150+ par Free Delivery ⚡ Shaadi aur Party ke liye Tent House booking shuru hai!</div>
 <main class="container">
- <section class="panel"><h2 class="section-title">ðŸ“¦ Saman Kaise Lenge? (à¤¸à¤¾à¤®à¤¾à¤¨ à¤•à¥ˆà¤¸à¥‡ à¤²à¥‡à¤‚à¤—à¥‡?)</h2>
-  <div class="grid2"><button id="modePickup" class="mode selected" onclick="setMode('pickup')">ðŸ›ï¸ Dukan Se Lenge (à¤¦à¥à¤•à¤¾à¤¨ à¤¸à¥‡)<small>Pack ready milega</small></button><button id="modeDelivery" class="mode" onclick="setMode('delivery')">ðŸšš Ghar Par Delivery (à¤˜à¤° à¤ªà¤°)<small>15 se 60 Minute</small></button></div>
-  <div class="grid2" style="margin-top:10px"><input id="custName" placeholder="Aapka Naam (à¤¨à¤¾à¤®) *"><input id="custFather" placeholder="Pita/Pati Ka Naam (à¤ªà¤¿à¤¤à¤¾ à¤•à¤¾ à¤¨à¤¾à¤®)"></div>
-  <label class="field-label">ðŸ’° Payment Method (à¤­à¥à¤—à¤¤à¤¾à¤¨ à¤•à¤¾ à¤¤à¤°à¥€à¤•à¤¾)</label><select id="payment"><option value="Cash (à¤¨à¤•à¤¦)">ðŸ’µ Cash (à¤¨à¤•à¤¦)</option><option value="Online UPI">ðŸ“± Online UPI (Google Pay / PhonePe / Paytm)</option><option value="Khata (à¤‰à¤§à¤¾à¤°)">ðŸ“’ Khata Book (à¤–à¤¾à¤¤à¤¾ / à¤‰à¤§à¤¾à¤°)</option></select>
-  <div id="deliveryFields" class="hidden"><label class="field-label">Tola / Mohalla *</label><input id="custTola" placeholder="à¤œà¥ˆà¤¸à¥‡: Chauhan Basti, Purab Tola"><label class="field-label">ðŸ  Ghar ki Pehchan / Landmark *</label><textarea id="custLandmark" rows="2" placeholder="à¤®à¤‚à¤¦à¤¿à¤° à¤•à¥‡ à¤ªà¤¾à¤¸, à¤Ÿà¥à¤°à¤¾à¤‚à¤¸à¤«à¥‰à¤°à¥à¤®à¤° à¤•à¥‡ à¤¸à¤¾à¤®à¤¨à¥‡â€¦"></textarea><button class="primary" style="width:100%;margin-top:8px" onclick="getLocation()">ðŸ“ Add Live GPS Location</button><p id="locStatus" class="muted"></p></div>
+ <section class="panel"><h2 class="section-title">📦 Saman Kaise Lenge? (सामान कैसे लेंगे?)</h2>
+  <div class="grid2"><button id="modePickup" class="mode selected" onclick="setMode('pickup')">🛍️ Dukan Se Lenge (दुकान से)<small>Pack ready milega</small></button><button id="modeDelivery" class="mode" onclick="setMode('delivery')">🚚 Ghar Par Delivery (घर पर)<small>15 se 60 Minute</small></button></div>
+  <div class="grid2" style="margin-top:10px"><input id="custName" placeholder="Aapka Naam (नाम) *"><input id="custFather" placeholder="Pita/Pati Ka Naam (पिता का नाम)"></div>
+  <label class="field-label">💰 Payment Method (भुगतान का तरीका)</label><select id="payment"><option value="Cash (नकद)">💵 Cash (नकद)</option><option value="Online UPI">📱 Online UPI (Google Pay / PhonePe / Paytm)</option><option value="Khata (उधार)">📒 Khata Book (खाता / उधार)</option></select>
+  <div id="deliveryFields" class="hidden"><label class="field-label">Tola / Mohalla *</label><input id="custTola" placeholder="जैसे: Chauhan Basti, Purab Tola"><label class="field-label">🏠 Ghar ki Pehchan / Landmark *</label><textarea id="custLandmark" rows="2" placeholder="मंदिर के पास, ट्रांसफॉर्मर के सामने…"></textarea><button class="primary" style="width:100%;margin-top:8px" onclick="getLocation()">📍 Add Live GPS Location</button><p id="locStatus" class="muted"></p></div>
  </section>
- <div class="product-head"><h2>âœ¨ Dukan Me Saman (à¤¦à¥à¤•à¤¾à¤¨ à¤•à¤¾ à¤¸à¤¾à¤®à¤¾à¤¨)</h2><button class="refresh" onclick="loadProducts()">â†» Refresh</button></div>
- <div id="productList" class="products"></div><div id="emptyMessage" class="empty">à¤¸à¤¾à¤®à¤¾à¤¨ à¤²à¥‹à¤¡ à¤¹à¥‹ à¤°à¤¹à¤¾ à¤¹à¥ˆâ€¦</div>
+ <div class="product-head"><h2>✨ Dukan Me Saman (दुकान का सामान)</h2><button class="refresh" onclick="loadProducts()">↻ Refresh</button></div>
+ <div id="productList" class="products"></div><div id="emptyMessage" class="empty">सामान लोड हो रहा है…</div>
 </main>
-<div id="cartBar" class="cartbar hidden"><div><div class="muted"><span id="totalItems">0</span> Saman</div><div class="cart-total">Total: â‚¹<span id="totalPrice">0</span></div></div><button class="cart-btn" onclick="sendOrder()">WhatsApp Par Order Bhejein ðŸš€</button></div>
+<div id="cartBar" class="cartbar hidden"><div><div class="muted"><span id="totalItems">0</span> Saman</div><div class="cart-total">Total: ₹<span id="totalPrice">0</span></div></div><button class="cart-btn" onclick="sendOrder()">WhatsApp Par Order Bhejein 🚀</button></div>
 
 <!-- Admin modal -->
 <div id="adminModal" class="modal hidden"><div class="modal-box">
- <div class="modal-head"><div><h2>âš™ï¸ Dukandar Panel</h2><p class="muted">Product, price, stock aur photo manage karein</p></div><button class="close" onclick="closeAdmin()">Ã—</button></div>
+ <div class="modal-head"><div><h2>⚙️ Dukandar Panel</h2><p class="muted">Product, price, stock aur photo manage karein</p></div><button class="close" onclick="closeAdmin()">×</button></div>
  <div id="loginBox"><p class="muted">Sirf authorized dukandar apna Admin PIN daalein.</p><input id="adminPin" type="password" inputmode="numeric" placeholder="Admin PIN"><button class="primary" style="width:100%;margin-top:8px" onclick="adminLogin()">Login</button><p id="loginError" class="msg err"></p></div>
  <div id="adminPanel" class="hidden">
   <input id="editId" type="hidden"><label class="field-label">Saman ka Naam *</label><input id="pName" placeholder="Jaise: Aata 5kg">
-  <div class="grid2"><div><label class="field-label">Price (â‚¹) *</label><input id="pPrice" type="number" min="0" placeholder="Price"></div><div><label class="field-label">Stock Qty</label><input id="pStock" type="number" min="0" placeholder="Stock"></div></div>
-  <div class="grid2"><div><label class="field-label">Category</label><select id="pCategory"><option value="staples">Aata, Chawal & Daal</option><option value="oil-spices">Tel & Masale</option><option value="snacks">Biscuits & Drinks</option><option value="cleaning">Sabun & Surf</option><option value="other">Other</option></select></div><div><label class="field-label">Photo URL (optional)</label><input id="pImageUrl" placeholder="https://â€¦"></div></div>
+  <div class="grid2"><div><label class="field-label">Price (₹) *</label><input id="pPrice" type="number" min="0" placeholder="Price"></div><div><label class="field-label">Stock Qty</label><input id="pStock" type="number" min="0" placeholder="Stock"></div></div>
+  <div class="grid2"><div><label class="field-label">Category</label><select id="pCategory"><option value="staples">Aata, Chawal & Daal</option><option value="oil-spices">Tel & Masale</option><option value="snacks">Biscuits & Drinks</option><option value="cleaning">Sabun & Surf</option><option value="other">Other</option></select></div><div><label class="field-label">Photo URL (optional)</label><input id="pImageUrl" placeholder="https://…"></div></div>
   <label class="field-label">Ya photo file choose karein (1.5 MB tak)</label><input id="pImageFile" type="file" accept="image/*">
-  <div class="grid2" style="margin-top:8px"><button id="saveBtn" class="primary" onclick="saveProduct()">ðŸ’¾ Save Product</button><button style="background:#e5e7eb;border-radius:11px;font-weight:900" onclick="clearForm()">Clear Form</button></div>
+  <div class="grid2" style="margin-top:8px"><button id="saveBtn" class="primary" onclick="saveProduct()">💾 Save Product</button><button style="background:#e5e7eb;border-radius:11px;font-weight:900" onclick="clearForm()">Clear Form</button></div>
   <p id="adminMessage" class="msg"></p>
   <details style="margin-top:14px;border:1px solid #fde68a;background:#fffbeb;border-radius:12px;padding:12px">
-   <summary style="font-weight:900;color:#92400e;cursor:pointer">ðŸ” Change Admin PIN</summary>
-   <p class="muted">Current PIN verify karke naya PIN set karein. Naya PIN 4â€“6 digits ka ho.</p>
+   <summary style="font-weight:900;color:#92400e;cursor:pointer">🔐 Change Admin PIN</summary>
+   <p class="muted">Current PIN verify karke naya PIN set karein. Naya PIN 4–6 digits ka ho.</p>
    <label class="field-label">Current PIN</label><input id="currentPin" type="password" inputmode="numeric" maxlength="6" autocomplete="current-password" placeholder="Current PIN">
-   <label class="field-label">New PIN</label><input id="newPin" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" placeholder="4â€“6 digit new PIN">
+   <label class="field-label">New PIN</label><input id="newPin" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" placeholder="4–6 digit new PIN">
    <label class="field-label">Confirm New PIN</label><input id="confirmPin" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" placeholder="Naya PIN dobara likhein">
    <button class="primary" style="width:100%;margin-top:8px" onclick="changeAdminPin()">Save New PIN</button>
    <p id="pinMessage" class="msg"></p>
@@ -71,38 +71,38 @@ main{padding-top:13px;padding-bottom:100px}.panel{background:white;border:1px so
 
 <!-- Tent booking modal -->
 <div id="tentModal" class="modal hidden"><div class="modal-box">
- <div class="modal-head" style="background:#fff7ed;border-color:#fed7aa"><div><h2>ðŸŽª à¤°à¤¾à¤®à¤²à¤–à¤¨ à¤Ÿà¥‡à¤‚à¤Ÿ à¤¹à¤¾à¤‰à¤¸</h2><p class="muted">Kutubpur, Bahadurpur Mau Â· Booking Request</p></div><button class="close" onclick="closeTent()">Ã—</button></div>
- <div class="grid2"><div><label class="field-label">ðŸ“… Function ki Date *</label><input id="tentDate" type="date"></div><div><label class="field-label">Kitne Din *</label><select id="tentDays" onchange="calcTent()"><option value="1">1 Din</option><option value="2">2 Din</option><option value="3">3 Din</option><option value="4">4 Din</option><option value="5">5 Din</option></select></div></div>
- <p class="muted">Items select karein aur quantity bharein. Rates sample hainâ€”booking bhejne se pehle dukandar se final rate confirm hoga.</p>
+ <div class="modal-head" style="background:#fff7ed;border-color:#fed7aa"><div><h2>🎪 रामलखन टेंट हाउस</h2><p class="muted">Kutubpur, Bahadurpur Mau · Booking Request</p></div><button class="close" onclick="closeTent()">×</button></div>
+ <div class="grid2"><div><label class="field-label">📅 Function ki Date *</label><input id="tentDate" type="date"></div><div><label class="field-label">Kitne Din *</label><select id="tentDays" onchange="calcTent()"><option value="1">1 Din</option><option value="2">2 Din</option><option value="3">3 Din</option><option value="4">4 Din</option><option value="5">5 Din</option></select></div></div>
+ <p class="muted">Items select karein aur quantity bharein. Rates sample hain—booking bhejne se pehle dukandar se final rate confirm hoga.</p>
  <div id="tentItems" style="display:grid;gap:8px"></div>
  <div class="grid2" style="margin-top:12px"><input id="tentName" placeholder="Aapka Naam *"><input id="tentPhone" placeholder="Mobile Number *" inputmode="numeric"></div>
  <label class="field-label">Pita ka Naam</label><input id="tentFather" placeholder="Pita ka naam (optional)">
- <label class="field-label">ðŸ“ Function ka poora address *</label><input id="tentVillage" placeholder="Gaon / Tola *"><textarea id="tentLandmark" rows="2" placeholder="Landmark / stage ki pehchan *"></textarea>
- <div class="tent-total"><div style="display:flex;justify-content:space-between;gap:10px;font-weight:900"><span>Estimated Total</span><span style="color:#15803d">â‚¹<span id="tentTotal">0</span></span></div><label class="field-label">Advance amount (â‚¹)</label><input id="tentAdvance" type="number" value="1000" min="0"><label class="field-label">Advance payment method</label><select id="tentPay"><option>Online UPI (GooglePay/PhonePe)</option><option>Cash (à¤¨à¤•à¤¦)</option><option>Dukan par aakar denge</option></select><p class="muted">Ye booking request hai, confirmed booking nahi. Final rate aur availability dukandar confirm karega.</p></div>
- <button class="gold-btn" onclick="sendTentBooking()">Pre-Booking WhatsApp par bhejein ðŸš€</button>
+ <label class="field-label">📍 Function ka poora address *</label><input id="tentVillage" placeholder="Gaon / Tola *"><textarea id="tentLandmark" rows="2" placeholder="Landmark / stage ki pehchan *"></textarea>
+ <div class="tent-total"><div style="display:flex;justify-content:space-between;gap:10px;font-weight:900"><span>Estimated Total</span><span style="color:#15803d">₹<span id="tentTotal">0</span></span></div><label class="field-label">Advance amount (₹)</label><input id="tentAdvance" type="number" value="1000" min="0"><label class="field-label">Advance payment method</label><select id="tentPay"><option>Online UPI (GooglePay/PhonePe)</option><option>Cash (नकद)</option><option>Dukan par aakar denge</option></select><p class="muted">Ye booking request hai, confirmed booking nahi. Final rate aur availability dukandar confirm karega.</p></div>
+ <button class="gold-btn" onclick="sendTentBooking()">Pre-Booking WhatsApp par bhejein 🚀</button>
 </div></div>
-<footer class="footer">Chauhan Kirana Store & Ramlakhan Tent House Â· Kutubpur, Mau</footer>
+<footer class="footer">Chauhan Kirana Store & Ramlakhan Tent House · Kutubpur, Mau</footer>
 
 <script>
 "use strict";
 /* Your provided Apps Script URL is prefilled. Redeploy the Apps Script if its code has changed. */
 const API_URL = "https://script.google.com/macros/s/AKfycbwfhqkex54h9ngT1b8aEx9e6-osox_Zl4I5AiqK_rU6wBaD7TAaSyjZjfXahw9ms7Ei6Q/exec";
-const SHOP_WHATSAPP = "918595861207";
+const SHOP_WHATSAPP = "REPLACE_WITH_10_DIGIT_WHATSAPP_NUMBER";
 let products=[],cart={},activeCategory="all",orderMode="pickup",adminPin="",gps="";
 const tentRates=[
- {id:"chairs",name:"Plastic Chair",rate:8,unit:"per chair/day",icon:"ðŸª‘"},
- {id:"tables",name:"Table",rate:80,unit:"per table/day",icon:"ðŸªµ"},
- {id:"plates",name:"Bartan / Plate Set",rate:5,unit:"per set/day",icon:"ðŸ½ï¸"},
- {id:"lights",name:"Light Decoration",rate:1500,unit:"per event/day",icon:"ðŸ’¡"},
- {id:"generator",name:"Generator",rate:2500,unit:"per day",icon:"âš¡"},
- {id:"dj",name:"DJ Sound",rate:3000,unit:"per day",icon:"ðŸ”Š"},
- {id:"tent",name:"Tent / Pandal",rate:2500,unit:"per event/day",icon:"ðŸŽª"},
- {id:"stage",name:"Stage Setup",rate:2000,unit:"per event/day",icon:"ðŸŽ¤"}
+ {id:"chairs",name:"Plastic Chair",rate:8,unit:"per chair/day",icon:"🪑"},
+ {id:"tables",name:"Table",rate:80,unit:"per table/day",icon:"🪵"},
+ {id:"plates",name:"Bartan / Plate Set",rate:5,unit:"per set/day",icon:"🍽️"},
+ {id:"lights",name:"Light Decoration",rate:1500,unit:"per event/day",icon:"💡"},
+ {id:"generator",name:"Generator",rate:2500,unit:"per day",icon:"⚡"},
+ {id:"dj",name:"DJ Sound",rate:3000,unit:"per day",icon:"🔊"},
+ {id:"tent",name:"Tent / Pandal",rate:2500,unit:"per event/day",icon:"🎪"},
+ {id:"stage",name:"Stage Setup",rate:2000,unit:"per event/day",icon:"🎤"}
 ];
 function configured(){return /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(API_URL)}
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function imageUrl(v){try{let u=new URL(v);return ["https:","http:"].includes(u.protocol)?u.href:""}catch(e){return""}}
-function setStatus(t,good=false){let el=document.getElementById("syncStatus");el.textContent=(good?"ðŸŸ¢ ":"ðŸ”´ ")+t;el.style.color=good?"#6ee7b7":"#fecaca"}
+function setStatus(t,good=false){let el=document.getElementById("syncStatus");el.textContent=(good?"🟢 ":"🔴 ")+t;el.style.color=good?"#6ee7b7":"#fecaca"}
 async function api(action,data={},pin=""){
  if(!configured())throw Error("API_URL mein Apps Script /exec URL set karein.");
  const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action,...data,pin})});
@@ -110,5 +110,78 @@ async function api(action,data={},pin=""){
  const r=await res.json();if(!r.success)throw Error(r.error||"Request failed");return r;
 }
 async function loadProducts(){
- setStatus("Connectingâ€¦");
- try{const r=await api("listProducts");products=Array.isArray(r.products)?r.products:[];setStatus("Live Google Sheet",true);document.getElementById("emp
+ setStatus("Connecting…");
+ try{const r=await api("listProducts");products=Array.isArray(r.products)?r.products:[];setStatus("Live Google Sheet",true);document.getElementById("emptyMessage").textContent=products.length?"":"Abhi koi saman add nahi hai."}
+ catch(e){setStatus("Sync error");document.getElementById("emptyMessage").textContent="Product load nahi hua: "+e.message+" — Apps Script deployment/access check karein.";console.error(e)}
+ renderProducts();renderAdminProducts();
+}
+function setCategory(c,btn){activeCategory=c;document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("active",b===btn));renderProducts()}
+function renderProducts(){
+ const q=document.getElementById("search").value.trim().toL
+ const arr=products.filter(p=>(activeCategory==="all"||(activeCategory==="new"?p.isNew===true:p.category===activeCategory))&&String(p.name||"").toLowerCase().includes(q));
+ document.getElementById("productList").innerHTML=arr.map(p=>{const im=imageUrl(p.imageUrl||"");return `<article class="product">${im?`<img class="prod-image" src="${esc(im)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`:`<div class="prod-placeholder">🛍️</div>`}<div class="prod-body">${p.isNew?'<span class="new-tag">NEW</span>':''}<div class="prod-name">${esc(p.name)}</div><div class="prod-meta"><span>Stock: ${Number(p.stock||0)} bacha</span><span>${esc(p.category||"")}</span></div><div class="prod-bottom"><span class="price">₹${Number(p.price||0)}</span><button class="add-btn" ${Number(p.stock||0)<=0?'disabled':''} onclick="addToCart('${esc(p.id)}')">+ Add</button></div></div></article>`}).join("");
+ document.getElementById("emptyMessage").classList.toggle("hidden",arr.length>0);
+}
+function addToCart(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;const qty=cart[id]||0;if(qty>=Number(p.stock||0))return alert("Itna stock available nahi hai.");cart[id]=qty+1;updateCart()}
+function updateCart(){let count=0,total=0;Object.entries(cart).forEach(([id,q])=>{const p=products.find(x=>String(x.id)===String(id));if(p){count+=q;total+=q*Number(p.price||0)}});document.getElementById("totalItems").textContent=count;document.getElementById("totalPrice").textContent=total.toFixed(2).replace(/\.00$/,"");document.getElementById("cartBar").classList.toggle("hidden",count===0)}
+function setMode(mode){orderMode=mode;document.getElementById("modePickup").classList.toggle("selected",mode==="pickup");document.getElementById("modeDelivery").classList.toggle("selected",mode==="delivery");document.getElementById("deliveryFields").classList.toggle("hidden",mode!=="delivery")}
+function getLocation(){const out=document.getElementById("locStatus");if(!navigator.geolocation){out.textContent="Is browser mein GPS available nahi hai.";return}out.textContent="Location le rahe hain…";navigator.geolocation.getCurrentPosition(p=>{gps=`https://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;out.textContent="✅ Location add ho gayi.";},e=>{out.textContent="Location nahi mili. Browser permission allow karein.";},{enableHighAccuracy:true,timeout:10000})}
+function sendOrder(){
+ if(!Object.keys(cart).length)return alert("Pehle saman add karein.");
+ const name=document.getElementById("custName").value.trim();if(!name)return alert("Apna naam bharein.");
+ if(!/^\d{10}$/.test(SHOP_WHATSAPP))return alert("Code mein SHOP_WHATSAPP ki jagah dukaan ka 10 digit number set karein.");
+ const tola=document.getElementById("custTola").value.trim(),landmark=document.getElementById("custLandmark").value.trim();
+ if(orderMode==="delivery"&&(!tola||!landmark))return alert("Delivery ke liye tola aur landmark bharein.");
+ let total=0,lines=[];Object.entries(cart).forEach(([id,q])=>{const p=products.find(x=>String(x.id)===String(id));if(p){total+=q*Number(p.price||0);lines.push(`${p.name} x ${q} = ₹${q*Number(p.price||0)}`)}});
+ const address=orderMode==="pickup"?"Dukan se pickup":`${tola}, ${landmark} ${gps}`;
+ const msg=`Naya Order - Chauhan Kirana Store\nNaam: ${name}\nPita/Pati: ${document.getElementById("custFather").value}\nDelivery: ${orderMode}\nAddress: ${address}\nPayment: ${document.getElementById("payment").value}\n\n${lines.join("\n")}\nTotal: ₹${total}`;
+ window.open("https://wa.me/91"+SHOP_WHATSAPP+"?text="+encodeURIComponent(msg),"_blank");
+}
+function openAdmin(){document.getElementById("adminModal").classList.remove("hidden")}
+function closeAdmin(){document.getElementById("adminModal").classList.add("hidden")}
+async function adminLogin(){const pin=document.getElementById("adminPin").value.trim();try{await api("adminLogin",{},pin);adminPin=pin;document.getElementById("loginBox").classList.add("hidden");document.getElementById("adminPanel").classList.remove("hidden");document.getElementById("loginError").textContent="";await loadProducts()}catch(e){document.getElementById("loginError").textContent=e.message+" — Deploy access aur latest version check karein.";}}
+function adminLogout(){adminPin="";document.getElementById("loginBox").classList.remove("hidden");document.getElementById("adminPanel").classList.add("hidden");document.getElementById("adminPin").value=""}
+function clearForm(){["editId","pName","pPrice","pStock","pImageUrl"].forEach(id=>document.getElementById(id).value="");document.getElementById("pCategory").value="staples";document.getElementById("pImageFile").value=""}
+function editProduct(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;document.getElementById("editId").value=p.id;document.getElementById("pName").value=p.name||"";document.getElementById("pPrice").value=p.price??"";document.getElementById("pStock").value=p.stock??0;document.getElementById("pCategory").value=p.category||"other";document.getElementById("pImageUrl").value=p.imageUrl||"";document.getElementById("pImageFile").value="";document.getElementById("pName").scrollIntoView({behavior:"smooth",block:"center"})}
+function renderAdminProducts(){document.getElementById("adminProductList").innerHTML=products.map(p=>`<div class="admin-row"><div style="min-width:0"><b>${esc(p.name)}</b><div class="muted">₹${Number(p.price||0)} · Stock ${Number(p.stock||0)}</div></div><div class="row-actions"><button class="tiny-btn" style="background:#dbeafe;color:#1d4ed8" onclick="editProduct('${esc(p.id)}')">Edit</button><button class="tiny-btn" style="background:#fee2e2;color:#b91c1c" onclick="deleteProduct('${esc(p.id)}')">Delete</button></div></div>`).join("")||'<p class="muted">Abhi product nahi hai.</p>'}
+function fileBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(",")[1]);r.onerror=()=>reject(Error("Photo read nahi hui."));r.readAsDataURL(file)})}
+async function saveProduct(){
+ const id=document.getElementById("editId").value,name=document.getElementById("pName").value.trim(),raw=document.getElementById("pPrice").value,price=Number(raw),stock=Number(document.getElementById("pStock").value||0),msg=document.getElementById("adminMessage"),btn=document.getElementById("saveBtn");
+ if(!name||raw===""||!Number.isFinite(price)||price<0||!Number.isFinite(stock)||stock<0)return alert("Naam, valid price aur stock bharein.");
+ btn.disabled=true;btn.textContent="Saving…";msg.className="msg";
+ try{let imageUrl=document.getElementById("pImageUrl").value.trim(),f=document.getElementById("pImageFile").files[0];if(f){if(f.size>1.5*1024*1024)throw Error("Photo 1.5 MB se chhoti rakhein.");const r=await api("uploadImage",{fileName:f.name,mimeType:f.type,base64:await fileBase64(f)},adminPin);imageUrl=r.imageUrl}
+ const product={id,name,price,stock,category:document.getElementById("pCategory").value,imageUrl};await api(id?"updateProduct":"addProduct",{product},adminPin);msg.className="msg ok";msg.textContent="✅ Product Google Sheet mein save ho gaya.";clearForm();await loadProducts()
+ }catch(e){msg.className="msg err";msg.textContent="❌ Save nahi hua: "+e.message;console.error(e)}finally{btn.disabled=false;btn.textContent="💾 Save Product"}
+}
+async function deleteProduct(id){if(!confirm("Is product ko delete karein?"))return;try{await api("deleteProduct",{id},adminPin);await loadProducts();document.getElementById("adminMessage").textContent="Product delete ho gaya."}catch(e){alert("Delete error: "+e.message)}}
+
+async function changeAdminPin(){
+ const current=document.getElementById("currentPin").value;
+ const next=document.getElementById("newPin").value;
+ const confirm=document.getElementById("confirmPin").value;
+ const out=document.getElementById("pinMessage");
+ if(!/^\\d{4,6}$/.test(next)){out.className="msg err";out.textContent="Naya PIN 4–6 digits ka hona chahiye.";return}
+ if(next!==confirm){out.className="msg err";out.textContent="Dono naye PIN match nahi kar rahe.";return}
+ try{
+  await api("changePin",{currentPin:current,newPin:next},adminPin);
+  adminPin=next;
+  ["currentPin","newPin","confirmPin"].forEach(id=>document.getElementById(id).value="");
+  out.className="msg ok";out.textContent="✅ PIN successfully change ho gaya. Naya PIN safe jagah rakhein.";
+ }catch(e){out.className="msg err";out.textContent="PIN change nahi hua: "+e.message}
+}
+function renderTentItems(){document.getElementById("tentItems").innerHTML=tentRates.map(x=>`<div class="tent-rate-row"><label>${x.icon} ${x.name}<small>₹${x.rate} · ${x.unit}</small></label><input aria-label="${x.name} quantity" id="tq_${x.id}" type="number" min="0" value="0" onchange="calcTent()" oninput="calcTent()" placeholder="Qty"><span style="font-size:12px;font-weight:900">₹<span id="ts_${x.id}">0</span></span></div>`).join("")}
+function calcTent(){const days=Number(document.getElementById("tentDays").value||1);let total=0;tentRates.forEach(x=>{const qty=Math.max(0,Number(document.getElementById("tq_"+x.id)?.value||0));const subtotal=qty*x.rate*days;total+=subtotal;const s=document.getElementById("ts_"+x.id);if(s)s.textContent=subtotal});document.getElementById("tentTotal").textContent=total.toLocaleString("en-IN")}
+function openTent(){document.getElementById("tentModal").classList.remove("hidden")}
+function closeTent(){document.getElementById("tentModal").classList.add("hidden")}
+function sendTentBooking(){
+ const date=document.getElementById("tentDate").value,name=document.getElementById("tentName").value.trim(),phone=document.getElementById("tentPhone").value.trim(),village=document.getElementById("tentVillage").value.trim(),landmark=document.getElementById("tentLandmark").value.trim();
+ if(!date||!name||!/^\\d{10}$/.test(phone)||!village||!landmark)return alert("Date, naam, 10-digit mobile aur poora address bharein.");
+ if(!/^\d{10}$/.test(SHOP_WHATSAPP))return alert("Code mein SHOP_WHATSAPP set karein.");
+ let lines=[],total=0;tentRates.forEach(x=>{const q=Number(document.getElementById("tq_"+x.id).value||0);if(q>0){let sub=q*x.rate*Number(document.getElementById("tentDays").value);total+=sub;lines.push(`${x.name}: ${q} × ₹${x.rate} × ${document.getElementById("tentDays").value} din = ₹${sub}`)}});
+ if(!lines.length)return alert("Kam se kam ek tent item select karein.");
+ const msg=`Ramlakhan Tent House - Booking Request\nDate: ${date}\nDays: ${document.getElementById("tentDays").value}\nName: ${name}\nMobile: ${phone}\nFather: ${document.getElementById("tentFather").value}\nAddress: ${village}, ${landmark}\n\n${lines.join("\n")}\nEstimated total: ₹${total}\nAdvance offered: ₹${document.getElementById("tentAdvance").value}\nPayment: ${document.getElementById("tentPay").value}\nNote: Request only; please confirm final rates and availability.`;
+ window.open("https://wa.me/91"+SHOP_WHATSAPP+"?text="+encodeURIComponent(msg),"_blank");
+}
+renderTentItems();calcTent();loadProducts();
+</script>
+</body></html>
