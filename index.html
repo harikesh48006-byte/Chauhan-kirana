@@ -1,5 +1,4 @@
 <!doctype html>
-<!doctype html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
@@ -54,7 +53,7 @@ main{padding-top:13px;padding-bottom:100px}.panel{background:white;border:1px so
   <input id="editId" type="hidden"><label class="field-label">Saman ka Naam *</label><input id="pName" placeholder="Jaise: Aata 5kg">
   <div class="grid2"><div><label class="field-label">Price (₹) *</label><input id="pPrice" type="number" min="0" placeholder="Price"></div><div><label class="field-label">Stock Qty</label><input id="pStock" type="number" min="0" placeholder="Stock"></div></div>
   <div class="grid2"><div><label class="field-label">Category</label><select id="pCategory"><option value="staples">Aata, Chawal & Daal</option><option value="oil-spices">Tel & Masale</option><option value="snacks">Biscuits & Drinks</option><option value="cleaning">Sabun & Surf</option><option value="other">Other</option></select></div><div><label class="field-label">Photo URL (optional)</label><input id="pImageUrl" placeholder="https://…"></div></div>
-  <label class="field-label">Ya photo file choose karein (1.5 MB tak)</label><input
+  <label class="field-label">Gallery se photo ya camera se photo choose karein</label><input
   id="pImageFile"
   type="file"
   accept="image/*"
@@ -146,7 +145,7 @@ function openReceiptPage({title,accent="#1f2937",subtitle="",details=[],items=[]
  *{box-sizing:border-box}body{margin:0;background:#f3f4f6;color:#111827;font:16px/1.5 Arial,Helvetica,sans-serif}.actions{max-width:760px;margin:16px auto;display:flex;gap:10px;flex-wrap:wrap;padding:0 12px}.actions button,.actions a{border:0;border-radius:9px;padding:12px 16px;font-weight:800;text-decoration:none;color:white;background:#15803d;cursor:pointer}.actions .print{background:#1f2937}.paper{width:calc(100% - 24px);max-width:760px;margin:0 auto 24px;background:white;border:3px solid ${accent};border-radius:18px;padding:clamp(16px,4vw,34px);overflow-wrap:anywhere}.head{text-align:center;border-bottom:4px dashed ${accent};padding-bottom:14px;margin-bottom:18px}.head h1{font-size:clamp(23px,5vw,34px);line-height:1.2;margin:0 0 8px;color:${accent};font-weight:900}.head .sub{font-size:clamp(14px,3vw,20px);font-weight:700;color:#374151}.head .kind{margin-top:10px;color:${accent};font-size:18px;font-weight:900}.details{background:${accent==="#a45112"?"#fffbeb":"#f8fafc"};border:1px solid ${accent==="#a45112"?"#fde68a":"#e5e7eb"};border-radius:13px;padding:12px 14px;margin:18px 0 24px}.detail{margin:3px 0;display:flex;gap:6px;flex-wrap:wrap}.detail b{white-space:nowrap}.tablewrap{width:100%;margin:18px 0 24px}table{width:100%;border-collapse:collapse;table-layout:fixed}thead{background:${accent==="#a45112"?"#fef3c7":"#f3f4f6"}}th{border-top:3px solid ${accent};border-bottom:3px solid ${accent};text-align:left;padding:9px 7px;font-size:clamp(13px,3vw,18px)}td{padding:12px 7px;border-bottom:1px dashed #d1d5db;vertical-align:top;overflow-wrap:anywhere}th:first-child,td:first-child{width:64%}th:nth-child(2),td:nth-child(2){width:13%}th:nth-child(3),td:nth-child(3){width:23%}.num{text-align:right;font-weight:700;white-space:normal}.unit{color:#6b7280;font-size:.9em}.totals{border-top:3px solid ${accent};padding-top:12px;margin-top:22px;max-width:420px;margin-left:auto}.sumrow{display:flex;justify-content:space-between;gap:16px;padding:5px 0;font-size:18px}.sumrow b{text-align:right}.grand{margin-top:12px;padding-top:14px;border-top:3px solid ${accent};font-size:clamp(21px,4vw,28px);font-weight:900;color:${accent};text-align:right}.thanks{text-align:center;margin:28px 0 0;color:#4b5563;font-weight:700}.smallnote{font-size:12px;color:#6b7280;text-align:center;margin-top:12px}
  @media(max-width:420px){.paper{padding:14px;border-width:2px}.details{padding:10px}.sumrow{font-size:15px}td{padding:10px 4px}th{padding:8px 4px}}
  @media print{@page{size:A4 portrait;margin:10mm}body{background:white;font-size:12pt}.actions{display:none!important}.paper{width:100%;max-width:none;margin:0;border:2px solid ${accent};border-radius:10px;padding:8mm;overflow:visible}.head h1{font-size:22pt}.head .sub{font-size:12pt}.details{break-inside:avoid;page-break-inside:avoid}.tablewrap{overflow:visible}table{width:100%}thead{display:table-header-group}tr{break-inside:avoid;page-break-inside:avoid}th,td{padding:7px 5px}.totals,.grand,.thanks{break-inside:avoid;page-break-inside:avoid}button,a{display:none!important}}
- </style></head><body><div class="actions"><button class="print" onclick="window.print()">🖨️ Print / Save PDF</button><a href="${wa}" target="_blank" rel="noopener">WhatsApp par bhejein</a></div><main class="paper"><header class="head"><h1>${esc(title)}</h1><div class="sub">Kutubpur, Bahadurpur (Mau) | Mob: ${esc(SHOP_WHATSAPP)}</div><div class="kind">${esc(subtitle)}</div></header><section class="details">${detailHtml}</section><div class="tablewrap"><table><thead><tr><th>Saman</th><th class="num">Qty</th><th class="num">${accent==="#a45112"?"Kiraya":"Price"}</th></tr></thead><tbody>${rows}</tbody></table></div><section class="totals">${extras}<div class="grand">${esc(totalLabel)}: ₹${Number(total||0).toLocaleString("en-IN")}</div></section><div class="thanks">❤️ Dhanyawad! Fir Padharein. 🙏</div><div class="smallnote">Computer-generated receipt · Please keep this receipt for your records.</div></main></body></html>`);w.document.close();
+ </style></head><body><div class="actions"><button class="print" onclick="window.print()">🖨️ Print / Save PDF</button><a href="${wa}" target="_blank" rel="noopener">WhatsApp par parchi bhejein</a></div><main class="paper"><header class="head"><h1>${esc(title)}</h1><div class="sub">Kutubpur, Bahadurpur (Mau) | Mob: ${esc(SHOP_WHATSAPP)}</div><div class="kind">${esc(subtitle)}</div></header><section class="details">${detailHtml}</section><div class="tablewrap"><table><thead><tr><th>Saman</th><th class="num">Qty</th><th class="num">${accent==="#a45112"?"Kiraya":"Price"}</th></tr></thead><tbody>${rows}</tbody></table></div><section class="totals">${extras}<div class="grand">${esc(totalLabel)}: ₹${Number(total||0).toLocaleString("en-IN")}</div></section><div class="thanks">❤️ Dhanyawad! Fir Padharein. 🙏</div><div class="smallnote">Computer-generated receipt · Please keep this receipt for your records.</div></main></body></html>`);w.document.close();
 }
 
 function sendOrder(){
@@ -165,15 +164,47 @@ function openAdmin(){document.getElementById("adminModal").classList.remove("hid
 function closeAdmin(){document.getElementById("adminModal").classList.add("hidden")}
 async function adminLogin(){const pin=document.getElementById("adminPin").value.trim();try{await api("adminLogin",{},pin);adminPin=pin;document.getElementById("loginBox").classList.add("hidden");document.getElementById("adminPanel").classList.remove("hidden");document.getElementById("loginError").textContent="";await loadProducts()}catch(e){document.getElementById("loginError").textContent=e.message+" — Deploy access aur latest version check karein.";}}
 function adminLogout(){adminPin="";document.getElementById("loginBox").classList.remove("hidden");document.getElementById("adminPanel").classList.add("hidden");document.getElementById("adminPin").value=""}
-function clearForm(){["editId","pName","pPrice","pStock","pImageUrl"].forEach(id=>document.getElementById(id).value="");document.getElementById("pCategory").value="staples";document.getElementById("pImageFile").value=""}
-function editProduct(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;document.getElementById("editId").value=p.id;document.getElementById("pName").value=p.name||"";document.getElementById("pPrice").value=p.price??"";document.getElementById("pStock").value=p.stock??0;document.getElementById("pCategory").value=p.category||"other";document.getElementById("pImageUrl").value=p.imageUrl||"";document.getElementById("pImageFile").value="";document.getElementById("pName").scrollIntoView({behavior:"smooth",block:"center"})}
+function clearForm(){["editId","pName","pPrice","pStock","pImageUrl"].forEach(id=>document.getElementById(id).value="");document.getElementById("pCategory").value="staples";document.getElementById("pImageFile").value="";const preview=document.getElementById("productPhotoPreview");if(preview)preview.remove()}
+function editProduct(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;document.getElementById("editId").value=p.id;document.getElementById("pName").value=p.name||"";document.getElementById("pPrice").value=p.price??"";document.getElementById("pStock").value=p.stock??0;document.getElementById("pCategory").value=p.category||"other";document.getElementById("pImageUrl").value=p.imageUrl||"";document.getElementById("pImageFile").value="";const preview=document.getElementById("productPhotoPreview");if(preview)preview.remove();document.getElementById("pName").scrollIntoView({behavior:"smooth",block:"center"})}
 function renderAdminProducts(){document.getElementById("adminProductList").innerHTML=products.map(p=>`<div class="admin-row"><div style="min-width:0"><b>${esc(p.name)}</b><div class="muted">₹${Number(p.price||0)} · Stock ${Number(p.stock||0)}</div></div><div class="row-actions"><button class="tiny-btn" style="background:#dbeafe;color:#1d4ed8" onclick="editProduct('${esc(p.id)}')">Edit</button><button class="tiny-btn" style="background:#fee2e2;color:#b91c1c" onclick="deleteProduct('${esc(p.id)}')">Delete</button></div></div>`).join("")||'<p class="muted">Abhi product nahi hai.</p>'}
 function fileBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(",")[1]);r.onerror=()=>reject(Error("Photo read nahi hui."));r.readAsDataURL(file)})}
+async function compressProductImage(file){
+ if(!file || !file.type.startsWith("image/")) throw Error("Kripya image photo choose karein.");
+ // Always re-encode photos so large camera photos are reduced instead of rejected.
+ const img=await new Promise((resolve,reject)=>{
+  const url=URL.createObjectURL(file),im=new Image();
+  im.onload=()=>{URL.revokeObjectURL(url);resolve(im)};
+  im.onerror=()=>{URL.revokeObjectURL(url);reject(Error("Photo open nahi hui. Dusri photo try karein."))};
+  im.src=url;
+ });
+ let scale=Math.min(1,1600/Math.max(img.naturalWidth,img.naturalHeight));
+ for(let attempt=0;attempt<8;attempt++){
+  const canvas=document.createElement("canvas");
+  canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));
+  canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+  const ctx=canvas.getContext("2d");
+  ctx.fillStyle="#ffffff";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",Math.max(.42,.82-attempt*.06)));
+  if(blob && blob.size<=1.35*1024*1024) return new File([blob],(file.name||"product-photo").replace(/\.[^.]+$/,"")+".jpg",{type:"image/jpeg"});
+  scale*=.78;
+ }
+ throw Error("Photo compress nahi hui. Gallery se doosri photo try karein.");
+}
+function showProductPhotoPreview(file){
+ let old=document.getElementById("productPhotoPreview");if(old)old.remove();
+ if(!file)return;
+ const wrap=document.createElement("div");wrap.id="productPhotoPreview";wrap.style.cssText="margin:8px 0;padding:8px;border:1px solid #ddd;border-radius:10px";
+ const img=document.createElement("img");img.alt="Photo preview";img.style.cssText="display:block;max-width:100%;max-height:180px;object-fit:contain;margin:auto";img.src=URL.createObjectURL(file);
+ const label=document.createElement("p");label.className="muted";label.style.margin="6px 0 0";label.textContent="Selected: "+file.name+" ("+(file.size/1024/1024).toFixed(2)+" MB)";
+ wrap.append(img,label);document.getElementById("pImageFile").insertAdjacentElement("afterend",wrap);
+}
+document.addEventListener("DOMContentLoaded",()=>{const f=document.getElementById("pImageFile");if(f)f.addEventListener("change",()=>showProductPhotoPreview(f.files&&f.files[0]));});
+
 async function saveProduct(){
  const id=document.getElementById("editId").value,name=document.getElementById("pName").value.trim(),raw=document.getElementById("pPrice").value,price=Number(raw),stock=Number(document.getElementById("pStock").value||0),msg=document.getElementById("adminMessage"),btn=document.getElementById("saveBtn");
  if(!name||raw===""||!Number.isFinite(price)||price<0||!Number.isFinite(stock)||stock<0)return alert("Naam, valid price aur stock bharein.");
  btn.disabled=true;btn.textContent="Saving…";msg.className="msg";
- try{let imageUrl=document.getElementById("pImageUrl").value.trim(),f=document.getElementById("pImageFile").files[0];if(f){if(f.size>1.5*1024*1024)throw Error("Photo 1.5 MB se chhoti rakhein.");const r=await api("uploadImage",{fileName:f.name,mimeType:f.type,base64:await fileBase64(f)},adminPin);imageUrl=r.imageUrl}
+ try{let imageUrl=document.getElementById("pImageUrl").value.trim(),f=document.getElementById("pImageFile").files[0];if(f){msg.textContent="Photo compress aur upload ho rahi hai…";const small=await compressProductImage(f);const r=await api("uploadImage",{fileName:small.name,mimeType:small.type,base64:await fileBase64(small)},adminPin);if(!r||!r.imageUrl)throw Error("Photo upload hui, lekin image link nahi mila. Apps Script uploadImage check karein.");imageUrl=r.imageUrl}
  const product={id,name,price,stock,category:document.getElementById("pCategory").value,imageUrl};await api(id?"updateProduct":"addProduct",{product},adminPin);msg.className="msg ok";msg.textContent="✅ Product Google Sheet mein save ho gaya.";clearForm();await loadProducts()
  }catch(e){msg.className="msg err";msg.textContent="❌ Save nahi hua: "+e.message;console.error(e)}finally{btn.disabled=false;btn.textContent="💾 Save Product"}
 }
