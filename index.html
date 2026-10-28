@@ -53,7 +53,12 @@ main{padding-top:13px;padding-bottom:100px}.panel{background:white;border:1px so
   <input id="editId" type="hidden"><label class="field-label">Saman ka Naam *</label><input id="pName" placeholder="Jaise: Aata 5kg">
   <div class="grid2"><div><label class="field-label">Price (₹) *</label><input id="pPrice" type="number" min="0" placeholder="Price"></div><div><label class="field-label">Stock Qty</label><input id="pStock" type="number" min="0" placeholder="Stock"></div></div>
   <div class="grid2"><div><label class="field-label">Category</label><select id="pCategory"><option value="staples">Aata, Chawal & Daal</option><option value="oil-spices">Tel & Masale</option><option value="snacks">Biscuits & Drinks</option><option value="cleaning">Sabun & Surf</option><option value="other">Other</option></select></div><div><label class="field-label">Photo URL (optional)</label><input id="pImageUrl" placeholder="https://…"></div></div>
-  <label class="field-label">Ya photo file choose karein (1.5 MB tak)</label><input id="pImageFile" type="file" accept="image/*">
+  <label class="field-label">Ya photo file choose karein (1.5 MB tak)</label><input
+  id="pImageFile"
+  type="file"
+  accept="image/*"
+  capture="environment"
+>
   <div class="grid2" style="margin-top:8px"><button id="saveBtn" class="primary" onclick="saveProduct()">💾 Save Product</button><button style="background:#e5e7eb;border-radius:11px;font-weight:900" onclick="clearForm()">Clear Form</button></div>
   <p id="adminMessage" class="msg"></p>
   <details style="margin-top:14px;border:1px solid #fde68a;background:#fffbeb;border-radius:12px;padding:12px">
