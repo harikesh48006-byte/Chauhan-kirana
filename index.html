@@ -87,7 +87,7 @@ main{padding-top:13px;padding-bottom:100px}.panel{background:white;border:1px so
 "use strict";
 /* Your provided Apps Script URL is prefilled. Redeploy the Apps Script if its code has changed. */
 const API_URL = "https://script.google.com/macros/s/AKfycbw0OGBXPEfmZUE7a3oLSvQvfjb0u8T7I3TmANiY8VrQovK763zEKPgn3pqe0BGGUPMHTg/exec";
-const SHOP_WHATSAPP = "918595861207";
+const SHOP_WHATSAPP = "8595861207";
 let products=[],cart={},activeCategory="all",orderMode="pickup",adminPin="",gps="";
 const tentRates=[
  {id:"chairs",name:"Plastic Chair",rate:8,unit:"per chair/day",icon:"🪑"},
@@ -129,7 +129,7 @@ function getLocation(){const out=document.getElementById("locStatus");if(!naviga
 function sendOrder(){
  if(!Object.keys(cart).length)return alert("Pehle saman add karein.");
  const name=document.getElementById("custName").value.trim();if(!name)return alert("Apna naam bharein.");
- if(!/^\d{10}$/.test(SHOP_WHATSAPP))return alert("Code mein SHOP_WHATSAPP ki jagah dukaan ka 10 digit number set karein.");
+ if(!/^\d{10}$/.test(8595861207))return alert("Code mein SHOP_WHATSAPP ki jagah dukaan ka 10 digit number set karein.");
  const tola=document.getElementById("custTola").value.trim(),landmark=document.getElementById("custLandmark").value.trim();
  if(orderMode==="delivery"&&(!tola||!landmark))return alert("Delivery ke liye tola aur landmark bharein.");
  let total=0,lines=[];Object.entries(cart).forEach(([id,q])=>{const p=products.find(x=>String(x.id)===String(id));if(p){total+=q*Number(p.price||0);lines.push(`${p.name} x ${q} = ₹${q*Number(p.price||0)}`)}});
@@ -176,7 +176,7 @@ function closeTent(){document.getElementById("tentModal").classList.add("hidden"
 function sendTentBooking(){
  const date=document.getElementById("tentDate").value,name=document.getElementById("tentName").value.trim(),phone=document.getElementById("tentPhone").value.trim(),village=document.getElementById("tentVillage").value.trim(),landmark=document.getElementById("tentLandmark").value.trim();
  if(!date||!name||!/^\\d{10}$/.test(phone)||!village||!landmark)return alert("Date, naam, 10-digit mobile aur poora address bharein.");
- if(!/^\d{10}$/.test(SHOP_WHATSAPP))return alert("Code mein SHOP_WHATSAPP set karein.");
+ if(!/^\d{10}$/.test(SHOP_WHATSAPP))return alert("8595861207");
  let lines=[],total=0;tentRates.forEach(x=>{const q=Number(document.getElementById("tq_"+x.id).value||0);if(q>0){let sub=q*x.rate*Number(document.getElementById("tentDays").value);total+=sub;lines.push(`${x.name}: ${q} × ₹${x.rate} × ${document.getElementById("tentDays").value} din = ₹${sub}`)}});
  if(!lines.length)return alert("Kam se kam ek tent item select karein.");
  const msg=`Ramlakhan Tent House - Booking Request\nDate: ${date}\nDays: ${document.getElementById("tentDays").value}\nName: ${name}\nMobile: ${phone}\nFather: ${document.getElementById("tentFather").value}\nAddress: ${village}, ${landmark}\n\n${lines.join("\n")}\nEstimated total: ₹${total}\nAdvance offered: ₹${document.getElementById("tentAdvance").value}\nPayment: ${document.getElementById("tentPay").value}\nNote: Request only; please confirm final rates and availability.`;
