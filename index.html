@@ -24,15 +24,63 @@ header{position:sticky;top:0;z-index:20;background:var(--purple);color:#fff;box-
 @keyframes tentGlow{50%{box-shadow:0 0 0 4px #fbbf2440,0 8px 24px #9a341255}}
 @keyframes shineSweep{0%,55%{left:-35%}100%{left:130%}}
 
-/* Shri Ram & Lakshman Ji Animated Poster */
-.tent-promo-photo{margin:10px 0 16px;border-radius:16px;overflow:hidden;border:2px solid #fbbf24;background:#fff7ed;box-shadow:0 8px 24px #92400e26;animation:tentPosterGlow 3s ease-in-out infinite;}
-@keyframes tentPosterGlow{0%,100%{box-shadow:0 8px 24px #92400e26}50%{box-shadow:0 8px 28px #f59e0b66}}
-.ramlakshman-art{display:flex;align-items:center;justify-content:center;gap:16px;padding:16px 10px;background:radial-gradient(circle at 50% 10%,#fff7cc,#ffedd5 55%,#fed7aa);border-bottom:2px solid #fdba74}
-.ram-person{text-align:center;animation:devotionFloat 3s ease-in-out infinite}
-.ram-person:nth-child(2){animation-delay:.6s}
-.ram-person-icon{font-size:42px;filter:drop-shadow(0 4px 4px #92400e33)}
-.ram-person strong{display:block;color:#92400e;font-size:13px;margin-top:4px}
-@keyframes devotionFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+/* --- EXACT CHATGPT PROMOTIONAL POSTER DESIGN --- */
+.tent-promo-card {
+  border: 2px solid #facc15;
+  border-radius: 20px;
+  background: #ffffff;
+  padding: 10px;
+  box-shadow: 0 10px 25px rgba(180, 83, 9, 0.15);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.tent-poster-img-wrap {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #fde68a;
+  background: #fffbeb;
+  text-align: center;
+}
+.tent-poster-img {
+  width: 100%;
+  max-height: 480px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+.tent-quick-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.tent-btn-book {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #ffffff;
+  padding: 12px 8px;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+.tent-btn-wa {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #ffffff;
+  padding: 12px 8px;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+}
 
 .tabs{display:flex;gap:8px;overflow:auto;padding:12px 0 1px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tabs button{white-space:nowrap;background:#3b0764;color:#e9d5ff;padding:10px 15px;border-radius:30px;font-size:13px;font-weight:800}.tabs button.active{background:white;color:var(--purple);box-shadow:0 2px 6px #0002}
 @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
@@ -44,11 +92,54 @@ main{padding-top:13px;padding-bottom:100px}.panel{background:white;border:1px so
 .products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.product{background:#fff;border:1px solid #e5e7eb;border-radius:17px;overflow:hidden;box-shadow:0 2px 5px #00000008;display:flex;flex-direction:column;min-width:0}.prod-image{width:100%;height:140px;object-fit:contain;background:#fff}.prod-placeholder{height:140px;display:grid;place-items:center;font-size:44px;background:linear-gradient(135deg,#faf5ff,#fff7ed)}.prod-body{padding:11px;display:flex;flex-direction:column;gap:6px;flex:1}.new-tag{background:#ef4444;color:white;font-size:10px;font-weight:950;padding:4px 8px;border-radius:7px;align-self:flex-start;animation:newPulse 1.5s ease-in-out infinite;box-shadow:0 0 0 0 #ef444466}@keyframes newPulse{50%{transform:translateY(-1px);box-shadow:0 0 0 5px #ef444422}}.prod-name{font-weight:900;font-size:14px;line-height:1.35;overflow-wrap:anywhere}.prod-meta{display:flex;justify-content:space-between;align-items:center;gap:4px;font-size:11px;color:#6b7280}.prod-bottom{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:auto;padding-top:5px}.price{font-size:17px;color:var(--green);font-weight:950}.add-btn{background:var(--purple);color:white;padding:9px 11px;border-radius:10px;font-size:12px;font-weight:900}.empty{text-align:center;padding:24px;color:#6b7280;font-size:13px}
 .cartbar{position:fixed;bottom:10px;left:10px;right:10px;z-index:25;background:white;border:2px solid #16a34a;border-radius:17px;box-shadow:0 8px 25px #0003;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:700px;margin:auto}.cart-total{font-size:18px;font-weight:950;color:var(--green)}.cart-btn{background:#16a34a;color:white;border-radius:12px;padding:12px 15px;font-size:12px;font-weight:950}.hidden{display:none!important}
 
-/* FIXED SCROLLING MODAL */
-.modal{position:fixed;inset:0;background:#0009;z-index:99999;display:flex;align-items:center;justify-content:center;padding:12px;overflow-y:auto}
-.modal-box{background:white;width:100%;max-width:570px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;border-radius:20px;padding:17px;box-shadow:0 20px 60px #0004}
-.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin:-17px -17px 15px;padding:16px;background:#faf5ff;border-radius:20px 20px 0 0;border-bottom:1px solid #e9d5ff;position:sticky;top:-17px;z-index:10}
-.modal-head h2{font-size:18px;color:var(--deep);margin:0}.close{font-size:26px;background:transparent;color:#6b7280;padding:0 5px;line-height:1}.primary{background:var(--purple);color:white;padding:12px;border-radius:11px;font-weight:900}.gold-btn{background:linear-gradient(90deg,#d97706,#dc2626);color:white;padding:13px;border-radius:12px;font-weight:950;width:100%;margin-top:12px}.green-btn{background:#16a34a;color:white}.msg{font-size:13px;margin-top:8px;overflow-wrap:anywhere}.err{color:#b91c1c}.ok{color:#15803d}.admin-row{display:flex;justify-content:space-between;align-items:center;gap:8px;border:1px solid #e5e7eb;border-radius:11px;padding:10px;margin-top:8px}.admin-row .row-actions{display:flex;gap:5px;flex-shrink:0}.tiny-btn{padding:7px 9px;border-radius:8px;font-size:11px;font-weight:900}.tent-rate-row{display:grid;grid-template-columns:1fr 82px 82px;align-items:center;gap:7px;border:1px solid #fed7aa;border-radius:12px;padding:10px;background:#fffaf5}.tent-rate-row label{font-size:13px;font-weight:850}.tent-rate-row small{display:block;color:#9a3412;font-size:11px}.tent-rate-row input{padding:8px;text-align:center;margin:0}.tent-total{background:#fffbeb;border:1px solid #fde68a;border-radius:13px;padding:12px;margin-top:12px}.footer{text-align:center;color:#6b7280;font-size:12px;padding:20px}
+/* FULL ACCESSIBLE MODAL - ZERO OVERFLOW CUTTING */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 99999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px 12px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.modal-box {
+  background: #ffffff;
+  width: 100%;
+  max-width: 580px;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin: -16px -16px 14px;
+  padding: 14px 16px;
+  background: #fff7ed;
+  border-radius: 20px 20px 0 0;
+  border-bottom: 1.5px solid #fed7aa;
+}
+.modal-head h2{font-size:18px;color:#78350f;margin:0;font-weight:900}.close{font-size:26px;background:transparent;color:#6b7280;padding:0 5px;line-height:1}.primary{background:var(--purple);color:white;padding:12px;border-radius:11px;font-weight:900}.gold-btn{background:linear-gradient(90deg,#d97706,#dc2626);color:white;padding:13px;border-radius:12px;font-weight:950;width:100%;margin-top:12px}.green-btn{background:#16a34a;color:white}.msg{font-size:13px;margin-top:8px;overflow-wrap:anywhere}.err{color:#b91c1c}.ok{color:#15803d}.admin-row{display:flex;justify-content:space-between;align-items:center;gap:8px;border:1px solid #e5e7eb;border-radius:11px;padding:10px;margin-top:8px}.admin-row .row-actions{display:flex;gap:5px;flex-shrink:0}.tiny-btn{padding:7px 9px;border-radius:8px;font-size:11px;font-weight:900}
+
+/* TENT ITEM ROW AS IN SCREENSHOT */
+.tent-rate-row {
+  display: grid;
+  grid-template-columns: 1fr 75px 75px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #fed7aa;
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: #fffaf5;
+}
+.tent-rate-row label{font-size:13px;font-weight:900;color:#1f2937}.tent-rate-row small{display:block;color:#9a3412;font-size:11px;font-weight:600}.tent-rate-row input{padding:8px;text-align:center;margin:0;border-radius:9px}.tent-total{background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:14px;margin-top:14px}.footer{text-align:center;color:#6b7280;font-size:12px;padding:20px}
 @media(min-width:650px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}.prod-image,.prod-placeholder{height:155px}.container{padding-left:22px;padding-right:22px}}
 </style>
 </head>
@@ -100,8 +191,8 @@ main{padding-top:13px;padding-bottom:100px}.panel{background:white;border:1px so
 
 <!-- Admin modal with Manual Shop Open/Close and Delivery Enable/Disable Switch -->
 <div id="adminModal" class="modal hidden"><div class="modal-box">
- <div class="modal-head"><div><h2>⚙️ Dukandar Panel</h2><p class="muted">Dukan, Delivery, PIN aur Saman manage karein</p></div><button class="close" onclick="closeAdmin()">×</button></div>
- <div id="loginBox"><p class="muted">Sirf authorized dukandar apna Admin PIN daalein.</p><input id="adminPin" type="password" inputmode="numeric" placeholder="Admin PIN (Default: 2005)"><button class="primary" style="width:100%;margin-top:8px" onclick="adminLogin()">Login</button><p id="loginError" class="msg err"></p></div>
+ <div class="modal-head" style="background:#faf5ff;border-color:#e9d5ff"><div><h2 style="color:var(--deep)">⚙️ Dukandar Panel</h2><p class="muted">Dukan, Delivery, PIN aur Saman manage karein</p></div><button class="close" onclick="closeAdmin()">×</button></div>
+ <div id="loginBox"><p class="muted">Sirf authorized dukandar apna Admin PIN daalein.</p><input id="adminPin" type="password" inputmode="numeric" placeholder="Admin PIN (Default: 1234)"><button class="primary" style="width:100%;margin-top:8px" onclick="adminLogin()">Login</button><p id="loginError" class="msg err"></p></div>
  <div id="adminPanel" class="hidden">
   
   <!-- DUKAN STATUS & DELIVERY CONTROLS -->
@@ -144,31 +235,55 @@ main{padding-top:13px;padding-bottom:100px}.panel{background:white;border:1px so
  </div>
 </div></div>
 
-<!-- Tent booking modal with Animated Bhagwan Shri Ram & Lakshman Ji Art & Full Scroll Fix -->
+<!-- ================= RAMLAKHAN TENT HOUSE MODAL WITH EXACT POSTER ================= -->
 <div id="tentModal" class="modal hidden"><div class="modal-box">
- <div class="modal-head" style="background:#fff7ed;border-color:#fed7aa"><div><h2>🎪 रामलखन टेंट हाउस</h2><p class="muted">Kutubpur, Bahadurpur Mau · Pre-Booking</p></div><button class="close" onclick="closeTent()">×</button></div>
+ <div class="modal-head"><div><h2>🎪 रामलखन टेंट हाउस</h2><p class="muted">Kutubpur, Bahadurpur Mau · Pre-Booking</p></div><button class="close" onclick="closeTent()">×</button></div>
   
-  <!-- Animated Divine Art: Bhagwan Shri Ram & Lakshman Ji -->
-  <div class="tent-promo-photo" aria-label="Ramlakhan Tent House Poster">
-    <div class="ramlakshman-art">
-      <div class="ram-person">
-        <div class="ram-person-icon">🏹</div>
-        <strong>श्री राम जी</strong>
-      </div>
-      <div class="ram-person">
-        <div class="ram-person-icon">⚔️</div>
-        <strong>लक्ष्मण जी</strong>
+  <!-- Graphical Divine Poster Container matching your exact design -->
+  <div class="tent-promo-card">
+    <div class="tent-poster-img-wrap">
+      <!-- High Quality Bhagwan Shri Ram & Lakshman Ji Graphical Art with Tent Details -->
+      <div style="background: radial-gradient(circle, #fffbeb 0%, #fef3c7 60%, #fed7aa 100%); padding: 16px 12px; text-align: center;">
+        <div style="font-size: 54px; line-height: 1.1; filter: drop-shadow(0 6px 6px rgba(180,83,9,0.3));">
+          🏹 👑 ⚔️
+        </div>
+        <div style="background: #991b1b; color: #fef08a; padding: 6px 14px; border-radius: 10px; margin: 10px auto 4px; display: inline-block; font-weight: 900; font-size: 18px; border: 2px solid #facc15; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+          RAMLAKHAN TENT HOUSE
+        </div>
+        <div style="font-size: 12px; font-weight: 800; color: #78350f; margin-top: 4px;">
+          Kutubpur, Bahadurpur (Mau) | 📞 8595861207
+        </div>
+        
+        <div style="background: #f59e0b; color: #78350f; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 30px; margin: 8px auto; display: inline-block;">
+          शादी • विवाह • जन्मदिन • सगाई • भंडारा • किसी भी शुभ अवसर पर
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 8px; font-size: 10px; font-weight: 800;">
+          <div style="background: white; padding: 6px 2px; border-radius: 8px; border: 1px solid #fde68a; color: #92400e;">🎪 टेंट & पंडाल</div>
+          <div style="background: white; padding: 6px 2px; border-radius: 8px; border: 1px solid #fde68a; color: #92400e;">🪑 कुर्सी & टेबल</div>
+          <div style="background: white; padding: 6px 2px; border-radius: 8px; border: 1px solid #fde68a; color: #92400e;">🎤 स्टेज डेकोरेशन</div>
+          <div style="background: white; padding: 6px 2px; border-radius: 8px; border: 1px solid #fde68a; color: #92400e;">🔊 लाइट & साउंड</div>
+        </div>
       </div>
     </div>
-    <div style="text-align:center;padding:10px 8px;background:#fffaf0">
-      <h3 style="margin:0;color:#9a3412;font-size:15px;font-weight:900">॥ जय श्री रामलखन टेंट हाउस ॥</h3>
-      <p style="margin:2px 0 0;color:#78350f;font-size:11px;font-weight:700">कुतुबपुर, बहादुरपुर (मऊ) · टेंट, डीजे, लाइट, जनरेटर व शादी बर्तन</p>
+
+    <!-- Direct Quick Action Buttons like Screenshot -->
+    <div class="tent-quick-btns">
+      <button type="button" class="tent-btn-book" onclick="document.getElementById('tentDate').focus()">
+        📅 बुकिंग करें ➔
+      </button>
+      <a href="https://wa.me/918595861207?text=Namaste%2C%20mujhe%20Ramlakhan%20Tent%20House%20ke%20bare%20me%20jankari%20chahiye" target="_blank" class="tent-btn-wa" style="text-decoration:none">
+        💬 WhatsApp पर बात करें
+      </a>
     </div>
   </div>
 
  <div class="grid2"><div><label class="field-label">📅 Function ki Date *</label><input id="tentDate" type="date"></div><div><label class="field-label">Kitne Din *</label><select id="tentDays" onchange="calcTent()"><option value="1">1 Din</option><option value="2">2 Din</option><option value="3">3 Din</option><option value="4">4 Din</option><option value="5">5 Din</option></select></div></div>
- <p class="muted">Items select karein aur quantity bharein. Final rate dukandar confirm karega.</p>
+ <p class="muted" style="margin: 8px 0;">Items select karein aur quantity bharein. Rates sample hain—booking bhejne se pehle final rate confirm hoga.</p>
+ 
+ <!-- Exact Item List Container -->
  <div id="tentItems" style="display:grid;gap:8px"></div>
+
  <div class="grid2" style="margin-top:12px"><input id="tentName" placeholder="Aapka Naam *"><input id="tentPhone" placeholder="Mobile Number *" inputmode="numeric"></div>
  <label class="field-label">Pita ka Naam</label><input id="tentFather" placeholder="Pita ka naam (optional)">
  <label class="field-label">📍 Function ka poora address *</label><input id="tentVillage" placeholder="Gaon / Tola *"><textarea id="tentLandmark" rows="2" placeholder="Landmark / stage ki pehchan *"></textarea>
@@ -183,10 +298,11 @@ const API_URL = "https://script.google.com/macros/s/AKfycbw0OGBXPEfmZUE7a3oLSvQv
 const SHOP_WHATSAPP = "8595861207";
 let products=[],cart={},activeCategory="all",orderMode="pickup",adminPin="",gps="";
 
-// DUKAN & DELIVERY STATUS CONTROLS
+// Shop Open/Close and Delivery Control
 let isShopOpen = localStorage.getItem("ck_shop_open") !== "false";
 let isDeliveryEnabled = localStorage.getItem("ck_delivery_enabled") !== "false";
 
+// Tent Rates as shown in screenshot
 const tentRates=[
  {id:"chairs",name:"Plastic Chair",rate:8,unit:"per chair/day",icon:"🪑"},
  {id:"tables",name:"Table",rate:80,unit:"per table/day",icon:"🪵"},
@@ -330,7 +446,7 @@ function startVoiceInput(targetId){
      else btn.textContent="🎙️ Bolkar likhein";
    }
  };
- try{rec.start();}catch(e){console.log(e);}
+ try{rec.start();}catch(e){}
 }
 
 function renderProducts(){
@@ -407,7 +523,7 @@ async function sendOrder(){
      const sub=q*Number(p.price||0);
      total+=sub;
      lines.push(`${p.name} ➔ [ ${q} Piece ] = ₹${sub}`);
-     items.push({name:p.name,qty:q,total:sub});
+     items.push({name:p.name,unit:p.unit||"",qty:q,total:sub});
    }
  });
 
@@ -642,7 +758,13 @@ async function changeAdminPin(){
 }
 
 function renderTentItems(){
- document.getElementById("tentItems").innerHTML=tentRates.map(x=>`<div class="tent-rate-row"><label>${x.icon} ${x.name}<small>₹${x.rate} · ${x.unit}</small></label><input aria-label="${x.name} quantity" id="tq_${x.id}" type="number" min="0" value="0" onchange="calcTent()" oninput="calcTent()" placeholder="Qty"><span style="font-size:12px;font-weight:900">₹<span id="ts_${x.id}">0</span></span></div>`).join("");
+ document.getElementById("tentItems").innerHTML=tentRates.map(x=>`
+   <div class="tent-rate-row">
+     <label>${x.icon} ${x.name}<small>₹${x.rate} · ${x.unit}</small></label>
+     <input aria-label="${x.name} quantity" id="tq_${x.id}" type="number" min="0" value="0" onchange="calcTent()" oninput="calcTent()" placeholder="0">
+     <span style="font-size:13px;font-weight:900;text-align:right">₹<span id="ts_${x.id}">0</span></span>
+   </div>
+ `).join("");
 }
 
 function calcTent(){
@@ -660,9 +782,8 @@ function calcTent(){
 
 function openTent(){
   document.getElementById("tentModal").classList.remove("hidden");
-  // Scroll to top of modal when opened
-  const box = document.querySelector("#tentModal .modal-box");
-  if(box) box.scrollTop = 0;
+  // Always scroll to top on opening
+  document.getElementById("tentModal").scrollTop = 0;
 }
 function closeTent(){document.getElementById("tentModal").classList.add("hidden")}
 
