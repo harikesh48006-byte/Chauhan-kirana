@@ -1,4 +1,5 @@
 <!doctype html>
+<!doctype html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
@@ -131,16 +132,34 @@ function addToCart(id){const p=products.find(x=>String(x.id)===String(id));if(!p
 function updateCart(){let count=0,total=0;Object.entries(cart).forEach(([id,q])=>{const p=products.find(x=>String(x.id)===String(id));if(p){count+=q;total+=q*Number(p.price||0)}});document.getElementById("totalItems").textContent=count;document.getElementById("totalPrice").textContent=total.toFixed(2).replace(/\.00$/,"");document.getElementById("cartBar").classList.toggle("hidden",count===0)}
 function setMode(mode){orderMode=mode;document.getElementById("modePickup").classList.toggle("selected",mode==="pickup");document.getElementById("modeDelivery").classList.toggle("selected",mode==="delivery");document.getElementById("deliveryFields").classList.toggle("hidden",mode!=="delivery")}
 function getLocation(){const out=document.getElementById("locStatus");if(!navigator.geolocation){out.textContent="Is browser mein GPS available nahi hai.";return}out.textContent="Location le rahe hain…";navigator.geolocation.getCurrentPosition(p=>{gps=`https://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;out.textContent="✅ Location add ho gayi.";},e=>{out.textContent="Location nahi mili. Browser permission allow karein.";},{enableHighAccuracy:true,timeout:10000})}
+
+function receiptEscape(value){return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
+function openReceiptPage({title,accent="#1f2937",subtitle="",details=[],items=[],totalLabel="TOTAL BILL",total=0,extraRows=[],message=""}){
+ const w=window.open("","_blank");
+ if(!w){alert("Receipt kholne ke liye browser mein pop-ups allow karein.");return;}
+ const esc=receiptEscape;
+ const detailHtml=details.map(([k,v])=>`<div class="detail"><b>${esc(k)}:</b> <span>${esc(v||"-")}</span></div>`).join("");
+ const rows=items.map(it=>`<tr><td>${esc(it.name)}${it.unit?` <span class="unit">(${esc(it.unit)})</span>`:""}</td><td class="num">${esc(it.qty)}</td><td class="num">₹${Number(it.price||0).toLocaleString("en-IN")}</td></tr>`).join("");
+ const extras=extraRows.map(([k,v])=>`<div class="sumrow"><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join("");
+ const wa="https://wa.me/91"+SHOP_WHATSAPP+"?text="+encodeURIComponent(message);
+ w.document.open();w.document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>
+ *{box-sizing:border-box}body{margin:0;background:#f3f4f6;color:#111827;font:16px/1.5 Arial,Helvetica,sans-serif}.actions{max-width:760px;margin:16px auto;display:flex;gap:10px;flex-wrap:wrap;padding:0 12px}.actions button,.actions a{border:0;border-radius:9px;padding:12px 16px;font-weight:800;text-decoration:none;color:white;background:#15803d;cursor:pointer}.actions .print{background:#1f2937}.paper{width:calc(100% - 24px);max-width:760px;margin:0 auto 24px;background:white;border:3px solid ${accent};border-radius:18px;padding:clamp(16px,4vw,34px);overflow-wrap:anywhere}.head{text-align:center;border-bottom:4px dashed ${accent};padding-bottom:14px;margin-bottom:18px}.head h1{font-size:clamp(23px,5vw,34px);line-height:1.2;margin:0 0 8px;color:${accent};font-weight:900}.head .sub{font-size:clamp(14px,3vw,20px);font-weight:700;color:#374151}.head .kind{margin-top:10px;color:${accent};font-size:18px;font-weight:900}.details{background:${accent==="#a45112"?"#fffbeb":"#f8fafc"};border:1px solid ${accent==="#a45112"?"#fde68a":"#e5e7eb"};border-radius:13px;padding:12px 14px;margin:18px 0 24px}.detail{margin:3px 0;display:flex;gap:6px;flex-wrap:wrap}.detail b{white-space:nowrap}.tablewrap{width:100%;margin:18px 0 24px}table{width:100%;border-collapse:collapse;table-layout:fixed}thead{background:${accent==="#a45112"?"#fef3c7":"#f3f4f6"}}th{border-top:3px solid ${accent};border-bottom:3px solid ${accent};text-align:left;padding:9px 7px;font-size:clamp(13px,3vw,18px)}td{padding:12px 7px;border-bottom:1px dashed #d1d5db;vertical-align:top;overflow-wrap:anywhere}th:first-child,td:first-child{width:64%}th:nth-child(2),td:nth-child(2){width:13%}th:nth-child(3),td:nth-child(3){width:23%}.num{text-align:right;font-weight:700;white-space:normal}.unit{color:#6b7280;font-size:.9em}.totals{border-top:3px solid ${accent};padding-top:12px;margin-top:22px;max-width:420px;margin-left:auto}.sumrow{display:flex;justify-content:space-between;gap:16px;padding:5px 0;font-size:18px}.sumrow b{text-align:right}.grand{margin-top:12px;padding-top:14px;border-top:3px solid ${accent};font-size:clamp(21px,4vw,28px);font-weight:900;color:${accent};text-align:right}.thanks{text-align:center;margin:28px 0 0;color:#4b5563;font-weight:700}.smallnote{font-size:12px;color:#6b7280;text-align:center;margin-top:12px}
+ @media(max-width:420px){.paper{padding:14px;border-width:2px}.details{padding:10px}.sumrow{font-size:15px}td{padding:10px 4px}th{padding:8px 4px}}
+ @media print{@page{size:A4 portrait;margin:10mm}body{background:white;font-size:12pt}.actions{display:none!important}.paper{width:100%;max-width:none;margin:0;border:2px solid ${accent};border-radius:10px;padding:8mm;overflow:visible}.head h1{font-size:22pt}.head .sub{font-size:12pt}.details{break-inside:avoid;page-break-inside:avoid}.tablewrap{overflow:visible}table{width:100%}thead{display:table-header-group}tr{break-inside:avoid;page-break-inside:avoid}th,td{padding:7px 5px}.totals,.grand,.thanks{break-inside:avoid;page-break-inside:avoid}button,a{display:none!important}}
+ </style></head><body><div class="actions"><button class="print" onclick="window.print()">🖨️ Print / Save PDF</button><a href="${wa}" target="_blank" rel="noopener">WhatsApp par bhejein</a></div><main class="paper"><header class="head"><h1>${esc(title)}</h1><div class="sub">Kutubpur, Bahadurpur (Mau) | Mob: ${esc(SHOP_WHATSAPP)}</div><div class="kind">${esc(subtitle)}</div></header><section class="details">${detailHtml}</section><div class="tablewrap"><table><thead><tr><th>Saman</th><th class="num">Qty</th><th class="num">${accent==="#a45112"?"Kiraya":"Price"}</th></tr></thead><tbody>${rows}</tbody></table></div><section class="totals">${extras}<div class="grand">${esc(totalLabel)}: ₹${Number(total||0).toLocaleString("en-IN")}</div></section><div class="thanks">❤️ Dhanyawad! Fir Padharein. 🙏</div><div class="smallnote">Computer-generated receipt · Please keep this receipt for your records.</div></main></body></html>`);w.document.close();
+}
+
 function sendOrder(){
  if(!Object.keys(cart).length)return alert("Pehle saman add karein.");
  const name=document.getElementById("custName").value.trim();if(!name)return alert("Apna naam bharein.");
- if(!/^\d{10}$/.test(8595861207))return alert("Code mein SHOP_WHATSAPP ki jagah dukaan ka 10 digit number set karein.");
+ if(!/^\d{10}$/.test(SHOP_WHATSAPP))return alert("Code mein SHOP_WHATSAPP ki jagah dukaan ka 10 digit number set karein.");
  const tola=document.getElementById("custTola").value.trim(),landmark=document.getElementById("custLandmark").value.trim();
  if(orderMode==="delivery"&&(!tola||!landmark))return alert("Delivery ke liye tola aur landmark bharein.");
- let total=0,lines=[];Object.entries(cart).forEach(([id,q])=>{const p=products.find(x=>String(x.id)===String(id));if(p){total+=q*Number(p.price||0);lines.push(`${p.name} x ${q} = ₹${q*Number(p.price||0)}`)}});
- const address=orderMode==="pickup"?"Dukan se pickup":`${tola}, ${landmark} ${gps}`;
- const msg=`Naya Order - Chauhan Kirana Store\nNaam: ${name}\nPita/Pati: ${document.getElementById("custFather").value}\nDelivery: ${orderMode}\nAddress: ${address}\nPayment: ${document.getElementById("payment").value}\n\n${lines.join("\n")}\nTotal: ₹${total}`;
- window.open("https://wa.me/91"+SHOP_WHATSAPP+"?text="+encodeURIComponent(msg),"_blank");
+ let total=0,lines=[],items=[];Object.entries(cart).forEach(([id,q])=>{const p=products.find(x=>String(x.id)===String(id));if(p){const sub=q*Number(p.price||0);total+=sub;lines.push(`${p.name} x ${q} = ₹${sub}`);items.push({name:p.name,unit:p.unit||p.size||"",qty:q,price:sub})}});
+ const address=orderMode==="pickup"?"Dukan se pickup":`${tola}, ${landmark}${gps?" | "+gps:""}`;
+ const payment=document.getElementById("payment").value;
+ const msg=`Naya Order - Chauhan Kirana Store\nNaam: ${name}\nPita/Pati: ${document.getElementById("custFather").value}\nDelivery: ${orderMode==="pickup"?"Dukan Se (Pick-up)":"Home Delivery"}\nAddress: ${address}\nPayment: ${payment}\n\n${lines.join("\n")}\nSaman Bill: ₹${total}\nDelivery Fee: FREE\nTOTAL BILL: ₹${total}`;
+ openReceiptPage({title:"CHAUHAN KIRANA STORE",subtitle:"CUSTOMER BILL / ORDER RECEIPT",accent:"#1f2937",details:[["Customer",name],["Pita/Pati",document.getElementById("custFather").value||"-"],["Order Type",orderMode==="pickup"?"🛍️ Dukan Se (Pick-up)":"🏠 Home Delivery"],["Address",address],["Payment",payment],["Date",new Date().toLocaleString("en-IN")]],items,totalLabel:"TOTAL BILL",total,extraRows:[["Saman Bill","₹"+total.toLocaleString("en-IN")],["Delivery Fee","FREE"]],message:msg});
 }
 function openAdmin(){document.getElementById("adminModal").classList.remove("hidden")}
 function closeAdmin(){document.getElementById("adminModal").classList.add("hidden")}
@@ -180,12 +199,13 @@ function openTent(){document.getElementById("tentModal").classList.remove("hidde
 function closeTent(){document.getElementById("tentModal").classList.add("hidden")}
 function sendTentBooking(){
  const date=document.getElementById("tentDate").value,name=document.getElementById("tentName").value.trim(),phone=document.getElementById("tentPhone").value.trim(),village=document.getElementById("tentVillage").value.trim(),landmark=document.getElementById("tentLandmark").value.trim();
- if(!date||!name||!/^\\d{10}$/.test(phone)||!village||!landmark)return alert("Date, naam, 10-digit mobile aur poora address bharein.");
- if(!/^\d{10}$/.test(SHOP_WHATSAPP))return alert("8595861207");
- let lines=[],total=0;tentRates.forEach(x=>{const q=Number(document.getElementById("tq_"+x.id).value||0);if(q>0){let sub=q*x.rate*Number(document.getElementById("tentDays").value);total+=sub;lines.push(`${x.name}: ${q} × ₹${x.rate} × ${document.getElementById("tentDays").value} din = ₹${sub}`)}});
+ if(!date||!name||!/^\d{10}$/.test(phone)||!village||!landmark)return alert("Date, naam, 10-digit mobile aur poora address bharein.");
+ if(!/^\d{10}$/.test(SHOP_WHATSAPP))return alert("Shop WhatsApp number check karein.");
+ let lines=[],items=[],total=0;const days=Number(document.getElementById("tentDays").value||1);tentRates.forEach(x=>{const q=Number(document.getElementById("tq_"+x.id).value||0);if(q>0){const sub=q*x.rate*days;total+=sub;lines.push(`${x.name}: ${q} × ₹${x.rate} × ${days} din = ₹${sub}`);items.push({name:x.name,unit:days+" din",qty:q,price:sub})}});
  if(!lines.length)return alert("Kam se kam ek tent item select karein.");
- const msg=`Ramlakhan Tent House - Booking Request\nDate: ${date}\nDays: ${document.getElementById("tentDays").value}\nName: ${name}\nMobile: ${phone}\nFather: ${document.getElementById("tentFather").value}\nAddress: ${village}, ${landmark}\n\n${lines.join("\n")}\nEstimated total: ₹${total}\nAdvance offered: ₹${document.getElementById("tentAdvance").value}\nPayment: ${document.getElementById("tentPay").value}\nNote: Request only; please confirm final rates and availability.`;
- window.open("https://wa.me/91"+SHOP_WHATSAPP+"?text="+encodeURIComponent(msg),"_blank");
+ const advance=Math.max(0,Number(document.getElementById("tentAdvance").value||0)),balance=Math.max(0,total-advance),pay=document.getElementById("tentPay").value,father=document.getElementById("tentFather").value.trim(),address=`${village}, ${landmark}`;
+ const msg=`Ramlakhan Tent House - Pre-Booking Receipt\nGrahak: ${name}\nPita/Pati: ${father||"-"}\nMobile: ${phone}\nEvent Date: ${date} (${days} Din)\nPata: ${address}\n\n${lines.join("\n")}\nEstimated Total: ₹${total}\nAdvance: ₹${advance}\nBaqi Rashi: ₹${balance}\nAdvance Payment: ${pay}\nNote: Ye pre-booking request hai; final rate aur availability dukandar confirm karega.`;
+ openReceiptPage({title:"RAMLAKHAN TENT HOUSE",subtitle:"PRE-BOOKING RECEIPT",accent:"#a45112",details:[["Grahak",name],["Pita/Pati",father||"-"],["Mobile",phone],["Event Date",`${date} (${days} Din)`],["Pata",address],["Advance Paid",`₹${advance.toLocaleString("en-IN")} (${pay})`]],items,totalLabel:"EST. TOTAL",total,extraRows:[["Advance", "₹"+advance.toLocaleString("en-IN")],["Baqi Rashi","₹"+balance.toLocaleString("en-IN")]],message:msg});
 }
 renderTentItems();calcTent();loadProducts();
 </script>
