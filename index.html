@@ -226,6 +226,13 @@ main{padding-top:13px;padding-bottom:100px}.panel{background:white;border:1px so
   <input id="editId" type="hidden"><label class="field-label">Saman ka Naam *</label><div class="voice-field-row"><input id="pName" placeholder="Jaise: Aata 5kg"><button type="button" class="voice-field-btn" onclick="startVoiceInput('pName')" title="Bolkar saman ka naam likhein">🎙️ Bolkar likhein</button></div>
   <div class="grid2"><div><label class="field-label">Price (₹) *</label><input id="pPrice" type="number" min="0" placeholder="Price"></div><div><label class="field-label">Stock Qty</label><input id="pStock" type="number" min="0" placeholder="Stock"></div></div>
   <div class="grid2"><div><label class="field-label">Category</label><select id="pCategory"><option value="staples">Aata, Chawal & Daal</option><option value="oil-spices">Tel & Masale</option><option value="snacks">Biscuits & Drinks</option><option value="cleaning">Sabun & Surf</option><option value="other">Other</option></select></div><div><label class="field-label">Photo URL (optional)</label><input id="pImageUrl" placeholder="https://…"></div></div>
+  <details id="categoryManager" style="margin-top:10px;border:1px solid #ddd6fe;background:#faf5ff;border-radius:12px;padding:12px">
+    <summary style="font-weight:900;color:#6b21a8;cursor:pointer">🗂️ Category add / edit karein</summary>
+    <p class="muted">Nayi category add karein, ya purani category ka naam edit karein. Ye sabhi visitors ke liye save hogi.</p>
+    <div class="voice-field-row" style="margin:8px 0"><input id="newCategoryName" placeholder="Jaise: Cold Drinks, Dairy"><button type="button" class="primary" style="white-space:nowrap" onclick="addCategory()">＋ Add</button></div>
+    <div id="categoryAdminList"></div>
+    <p id="categoryMessage" class="msg"></p>
+  </details>
   <label class="new-admin-toggle"><input id="pIsNew" type="checkbox"> ✨ Is item ko “Naya Saman / NEW” mark karein</label>
   <p class="muted">Checkbox save karne par item Naya Saman tab mein dikhega aur NEW badge animation chalegi.</p>
   <label class="field-label">Gallery se photo ya camera se photo choose karein</label><input id="pImageFile" type="file" accept="image/*">
@@ -357,7 +364,19 @@ function toggleDeliveryStatus() {
 
 function configured(){return /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(API_URL)}
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function imageUrl(v){try{let u=new URL(v);return ["https:","http:"].includes(u.protocol)?u.href:""}catch(e){return""}}
+function imageUrl(v){
+ try{
+  const u=new URL(String(v||"").trim());
+  if(!["https:","http:"].includes(u.protocol))return "";
+  if(u.hostname==="drive.google.com"||u.hostname.endsWith(".drive.google.com")){
+   let id=u.searchParams.get("id");
+   if(!id){const m=u.pathname.match(/\/file\/d\/([^/]+)/);if(m)id=m[1]}
+   if(!id){const m=u.pathname.match(/\/uc\/([^/]+)/);if(m)id=u.searchParams.get("id")}
+   if(id)return "https://drive.google.com/thumbnail?id="+encodeURIComponent(id)+"&sz=w1000";
+  }
+  return u.href;
+ }catch(e){return ""}
+}
 function setStatus(t,good=false){let el=document.getElementById("syncStatus");el.textContent=(good?"🟢 ":"🔴 ")+t;el.style.color=good?"#6ee7b7":"#fecaca"}
 
 async function api(action,data={},pin=""){
@@ -423,12 +442,70 @@ function startVoiceInput(targetId){
  try{rec.start();}catch(e){}
 }
 
+const DEFAULT_CATEGORIES=[
+ {id:"staples",name:"Aata, Chawal & Daal"},
+ {id:"oil-spices",name:"Tel & Masale"},
+ {id:"snacks",name:"Biscuits & Drinks"},
+ {id:"cleaning",name:"Sabun & Surf"},
+ {id:"other",name:"Other"}
+];
+let productCategories=DEFAULT_CATEGORIES.map(x=>({...x}));
+function slugCategory(name){return String(name||"").toLowerCase().trim().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||("category-"+Date.now());}
+function categoryLabel(id){const c=productCategories.find(x=>String(x.id)===String(id));return c?c.name:String(id||"Other");}
+function renderCategoryControls(){
+ const sel=document.getElementById("pCategory"),old=sel.value;
+ sel.innerHTML=productCategories.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
+ if(productCategories.some(c=>c.id===old))sel.value=old;else sel.value=productCategories[0]?.id||"other";
+ const tabs=document.querySelector(".tabs");
+ tabs.innerHTML=`<button class="${activeCategory==="all"?"active":""}" data-cat="all" onclick="setCategory('all',this)">Sabhi Saman (सभी)</button><button class="${activeCategory==="new"?"active":""}" data-cat="new" onclick="setCategory('new',this)">✨ Naya Saman (नया)</button>`+productCategories.map(c=>`<button class="${activeCategory===c.id?"active":""}" data-cat="${esc(c.id)}" onclick="setCategory('${esc(c.id)}',this)">${esc(c.name)}</button>`).join("");
+ const list=document.getElementById("categoryAdminList");
+ if(list)list.innerHTML=productCategories.map(c=>`<div class="admin-row"><div style="min-width:0;font-weight:800">${esc(c.name)}</div><div class="row-actions"><button class="tiny-btn" style="background:#dbeafe;color:#1d4ed8" onclick="renameCategory('${esc(c.id)}')">Edit</button><button class="tiny-btn" style="background:#fee2e2;color:#b91c1c" onclick="removeCategory('${esc(c.id)}')" ${c.id==="other"?"disabled":""}>Delete</button></div></div>`).join("");
+}
+async function loadCategories(){
+ try{
+  const r=await api("getCategories");
+  if(Array.isArray(r.categories)&&r.categories.length)productCategories=r.categories;
+  else productCategories=DEFAULT_CATEGORIES.map(x=>({...x}));
+ }catch(e){
+  try{const saved=JSON.parse(localStorage.getItem("ck_product_categories")||"null");if(Array.isArray(saved)&&saved.length)productCategories=saved;else productCategories=DEFAULT_CATEGORIES.map(x=>({...x}));}
+  catch(_){productCategories=DEFAULT_CATEGORIES.map(x=>({...x}));}
+ }
+ renderCategoryControls();
+}
+async function persistCategories(){
+ localStorage.setItem("ck_product_categories",JSON.stringify(productCategories));
+ try{await api("saveCategories",{categories:productCategories},adminPin);document.getElementById("categoryMessage").textContent="✅ Category sabhi users ke liye save ho gayi.";}
+ catch(e){document.getElementById("categoryMessage").textContent="⚠️ Category is device par save hui, lekin sabhi users ke liye sync karne ko Apps Script mein category actions add karein.";}
+ renderCategoryControls();renderProducts();renderAdminProducts();
+}
+async function addCategory(){
+ const input=document.getElementById("newCategoryName"),name=input.value.trim();
+ if(!name)return alert("Category ka naam likhein.");
+ if(productCategories.some(c=>c.name.toLowerCase()===name.toLowerCase()))return alert("Ye category pehle se hai.");
+ let id=slugCategory(name);while(productCategories.some(c=>c.id===id))id+="-2";
+ productCategories.push({id,name});input.value="";await persistCategories();
+}
+async function renameCategory(id){
+ const c=productCategories.find(x=>x.id===id);if(!c)return;
+ const name=prompt("Category ka naya naam likhein:",c.name);if(name===null)return;
+ const clean=name.trim();if(!clean)return alert("Category ka naam khaali nahi ho sakta.");
+ if(productCategories.some(x=>x.id!==id&&x.name.toLowerCase()===clean.toLowerCase()))return alert("Is naam ki category pehle se hai.");
+ c.name=clean;await persistCategories();
+}
+async function removeCategory(id){
+ const c=productCategories.find(x=>x.id===id);if(!c)return;
+ if(id==="other")return alert("Other category delete nahi kar sakte.");
+ if(products.some(p=>String(p.category)===String(id)))return alert("Is category mein product hain. Pehle un products ki category badlein.");
+ if(!confirm(`“${c.name}” category delete karein?`))return;
+ productCategories=productCategories.filter(x=>x.id!==id);if(activeCategory===id)activeCategory="all";await persistCategories();
+}
+
 function renderProducts(){
  const q=document.getElementById("search").value.trim().toLowerCase();
  const arr=products.filter(p=>(activeCategory==="all"||(activeCategory==="new"?(p.isNew===true||String(p.isNew).toLowerCase()==="true"||String(p.isNew)==="1"):p.category===activeCategory))&&String(p.name||"").toLowerCase().includes(q));
  document.getElementById("productList").innerHTML=arr.map(p=>{
    const im=imageUrl(p.imageUrl||"");
-   return `<article class="product">${im?`<img class="prod-image" src="${esc(im)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`:`<div class="prod-placeholder">🛍️</div>`}<div class="prod-body">${(p.isNew===true||String(p.isNew).toLowerCase()==="true"||String(p.isNew)==="1")?'<span class="new-tag">NEW</span>':''}<div class="prod-name">${esc(p.name)}</div><div class="prod-meta"><span>Stock: ${Number(p.stock||0)} bacha</span><span>${esc(p.category||"")}</span></div><div class="prod-bottom"><span class="price">₹${Number(p.price||0)}</span><button class="add-btn" ${Number(p.stock||0)<=0?'disabled':''} onclick="addToCart('${esc(p.id)}')">+ Add</button></div></div></article>`;
+   return `<article class="product">${im?`<img class="prod-image" src="${esc(im)}" alt="${esc(p.name)}" onerror="this.outerHTML='<div class=&quot;prod-placeholder&quot; title=&quot;Photo load nahi hui&quot;>🛍️</div>'">`:`<div class="prod-placeholder">🛍️</div>`}<div class="prod-body">${(p.isNew===true||String(p.isNew).toLowerCase()==="true"||String(p.isNew)==="1")?'<span class="new-tag">NEW</span>':''}<div class="prod-name">${esc(p.name)}</div><div class="prod-meta"><span>Stock: ${Number(p.stock||0)} bacha</span><span>${esc(categoryLabel(p.category||""))}</span></div><div class="prod-bottom"><span class="price">₹${Number(p.price||0)}</span><button class="add-btn" ${Number(p.stock||0)<=0?'disabled':''} onclick="addToCart('${esc(p.id)}')">+ Add</button></div></div></article>`;
  }).join("");
  document.getElementById("emptyMessage").classList.toggle("hidden",arr.length>0);
 }
@@ -630,6 +707,7 @@ function editProduct(id){
  document.getElementById("pName").value=p.name||"";
  document.getElementById("pPrice").value=p.price??"";
  document.getElementById("pStock").value=p.stock??0;
+ if(!productCategories.some(c=>String(c.id)===String(p.category||"other"))){productCategories.push({id:String(p.category||"other"),name:String(p.category||"Other")});renderCategoryControls();}
  document.getElementById("pCategory").value=p.category||"other";
  document.getElementById("pImageUrl").value=p.imageUrl||"";
  document.getElementById("pIsNew").checked=(p.isNew===true||String(p.isNew).toLowerCase()==="true"||String(p.isNew)==="1");
@@ -693,8 +771,9 @@ async function saveProduct(){
      msg.textContent="Photo compress aur upload ho rahi hai…";
      const small=await compressProductImage(f);
      const r=await api("uploadImage",{fileName:small.name,mimeType:small.type,base64:await fileBase64(small)},adminPin);
-     if(!r||!r.imageUrl)throw Error("Photo upload link nahi mila.");
+     if(!r||!r.imageUrl)throw Error("Photo upload link nahi mila. Apps Script ka uploadImage response check karein.");
      imageUrl=r.imageUrl;
+     msg.textContent="Photo upload ho gayi; product save ho raha hai…";
    }
    const product={id,name,price,stock,category:document.getElementById("pCategory").value,imageUrl,isNew:document.getElementById("pIsNew").checked};
    await api(id?"updateProduct":"addProduct",{product},adminPin);
@@ -887,6 +966,6 @@ async function sendTentBooking(){
 updateShopUI();
 renderTentItems();
 calcTent();
-loadProducts();
+loadCategories().then(()=>loadProducts());
 </script>
 </body></html>
