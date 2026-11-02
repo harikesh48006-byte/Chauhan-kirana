@@ -279,6 +279,18 @@ main{padding-top:13px;padding-bottom:100px}.panel{background:white;border:1px so
    <button class="primary" style="width:100%;margin-top:8px" onclick="changeAdminPin()">Save New PIN</button>
    <p id="pinMessage" class="msg"></p>
   </details>
+
+  <details id="tentItemManager" open style="margin-top:14px;border:1px solid #fed7aa;background:#fffaf5;border-radius:12px;padding:12px">
+   <summary style="font-weight:900;color:#9a3412;cursor:pointer">🎪 Tent House ke item add / edit karein</summary>
+   <p class="muted">Yahan tent booking ke saman, rate aur photo add/edit kar sakte hain. Photo optional hai.</p>
+   <input id="tentEditId" type="hidden">
+   <label class="field-label">Item ka naam *</label><input id="tentItemName" placeholder="Jaise: Sofa Set, Cooler, Carpet">
+   <div class="grid2"><div><label class="field-label">Rate (₹) *</label><input id="tentItemRate" type="number" min="0" placeholder="Rate"></div><div><label class="field-label">Unit</label><input id="tentItemUnit" placeholder="per piece/day"></div></div>
+   <div class="grid2"><div><label class="field-label">Icon (optional)</label><input id="tentItemIcon" placeholder="🎪"></div><div><label class="field-label">Photo URL (optional)</label><input id="tentItemImageUrl" placeholder="https://..."></div></div>
+   <label class="field-label">Gallery / Camera se item photo</label><input id="tentItemPhoto" type="file" accept="image/*">
+   <div class="grid2" style="margin-top:8px"><button class="primary" onclick="saveTentItemAdmin()">💾 Save Tent Item</button><button type="button" onclick="clearTentItemForm()" style="background:#e5e7eb;border-radius:10px;font-weight:900">Clear</button></div>
+   <p id="tentItemAdminMsg" class="msg"></p><div id="tentAdminList"></div>
+  </details>
   <hr style="border:0;border-top:1px solid #e5e7eb;margin:16px 0"><div class="product-head" style="margin:0"><h2>Manage Products</h2><button class="refresh" onclick="loadProducts()">Reload</button></div><div id="adminProductList"></div><button style="width:100%;margin-top:14px;background:#111827;color:white;padding:11px;border-radius:10px" onclick="adminLogout()">Logout</button>
  </div>
 </div></div>
@@ -320,7 +332,7 @@ let isShopOpen = localStorage.getItem("ck_shop_open") !== "false";
 let isDeliveryEnabled = localStorage.getItem("ck_delivery_enabled") !== "false";
 
 // Tent Rates as shown in screenshot
-const tentRates=[
+let tentRates=[
  {id:"chairs",name:"Plastic Chair",rate:8,unit:"per chair/day",icon:"🪑"},
  {id:"tables",name:"Table",rate:80,unit:"per table/day",icon:"🪵"},
  {id:"plates",name:"Bartan / Plate Set",rate:5,unit:"per set/day",icon:"🍽️"},
@@ -795,6 +807,7 @@ async function adminLogin(){
    await loadSiteSettings();
    await loadCategories();
    await loadProducts();
+   await loadTentItems();
  }catch(e){
    document.getElementById("loginError").textContent=e.message+" — PIN check karein.";
  }
@@ -913,10 +926,64 @@ async function changeAdminPin(){
  }catch(e){out.className="msg err";out.textContent="PIN change nahi hua: "+e.message;}
 }
 
+
+async function loadTentItems(){
+  try {
+    const r=await api("getTentItems");
+    if(Array.isArray(r.items) && r.items.length) tentRates=r.items;
+    renderTentItems(); calcTent(); renderTentAdminItems();
+  } catch(e) {
+    console.warn("Tent items load failed:",e);
+    renderTentItems(); calcTent();
+  }
+}
+function renderTentAdminItems(){
+ const box=document.getElementById("tentAdminList"); if(!box)return;
+ box.innerHTML=tentRates.map(x=>`<div class="admin-row"><div style="min-width:0;display:flex;align-items:center;gap:8px">${x.imageUrl?`<img src="${esc(imageUrl(x.imageUrl))}" style="width:42px;height:42px;object-fit:cover;border-radius:8px">`:''}<div><b>${esc(x.icon||"🎪")} ${esc(x.name)}</b><div class="muted">₹${Number(x.rate)} · ${esc(x.unit||"")}</div></div></div><div class="row-actions"><button class="tiny-btn" style="background:#dbeafe;color:#1d4ed8" onclick="editTentItem('${esc(x.id)}')">Edit</button><button class="tiny-btn" style="background:#fee2e2;color:#b91c1c" onclick="removeTentItem('${esc(x.id)}')">Delete</button></div></div>`).join("")||'<p class="muted">Abhi tent item nahi hai.</p>';
+}
+function editTentItem(id){
+ const x=tentRates.find(v=>String(v.id)===String(id)); if(!x)return;
+ document.getElementById("tentEditId").value=x.id;
+ document.getElementById("tentItemName").value=x.name||"";
+ document.getElementById("tentItemRate").value=x.rate||0;
+ document.getElementById("tentItemUnit").value=x.unit||"per day";
+ document.getElementById("tentItemIcon").value=x.icon||"🎪";
+ document.getElementById("tentItemImageUrl").value=x.imageUrl||"";
+ document.getElementById("tentItemPhoto").value="";
+ document.getElementById("tentItemManager").open=true;
+ document.getElementById("tentItemManager").scrollIntoView({behavior:"smooth",block:"center"});
+}
+function clearTentItemForm(){
+ ["tentEditId","tentItemName","tentItemRate","tentItemUnit","tentItemIcon","tentItemImageUrl"].forEach(id=>document.getElementById(id).value="");
+ document.getElementById("tentItemPhoto").value="";
+}
+async function saveTentItemAdmin(){
+ const msg=document.getElementById("tentItemAdminMsg");
+ const name=document.getElementById("tentItemName").value.trim();
+ const rate=document.getElementById("tentItemRate").value;
+ if(!name||rate===""){msg.className="msg err";msg.textContent="Item ka naam aur rate bharein.";return;}
+ const btn=document.querySelector('#tentItemManager button.primary');btn.disabled=true;
+ try{
+  let photoUrl=document.getElementById("tentItemImageUrl").value.trim();
+  const f=document.getElementById("tentItemPhoto").files[0];
+  if(f){const small=await compressProductImage(f);const up=await api("uploadImage",{fileName:small.name,mimeType:small.type,base64:await fileBase64(small)},adminPin);photoUrl=up.imageUrl;}
+  const item={id:document.getElementById("tentEditId").value,name,rate:Number(rate),unit:document.getElementById("tentItemUnit").value.trim()||"per day",icon:document.getElementById("tentItemIcon").value.trim()||"🎪",imageUrl:photoUrl};
+  await api("saveTentItem",{item},adminPin);
+  msg.className="msg ok";msg.textContent="✅ Tent item save ho gaya.";
+  clearTentItemForm();await loadTentItems();
+ }catch(e){msg.className="msg err";msg.textContent="❌ "+e.message;}
+ finally{btn.disabled=false;}
+}
+async function removeTentItem(id){
+ if(!confirm("Is tent item ko delete karein?"))return;
+ try{await api("deleteTentItem",{id},adminPin);await loadTentItems();}
+ catch(e){alert("Delete nahi hua: "+e.message);}
+}
+
 function renderTentItems(){
  document.getElementById("tentItems").innerHTML=tentRates.map(x=>`
    <div class="tent-rate-row">
-     <label>${x.icon} ${x.name}<small>₹${x.rate} · ${x.unit}</small></label>
+     <label>${x.imageUrl?`<img src="${esc(imageUrl(x.imageUrl))}" alt="" style="width:48px;height:42px;object-fit:cover;border-radius:7px;vertical-align:middle;margin-right:5px">`:''}${x.icon||"🎪"} ${esc(x.name)}<small>₹${x.rate} · ${esc(x.unit)}</small></label>
      <div class="tent-qty-control"><button type="button" aria-label="${x.name} kam karein" onclick="changeTentQty('${x.id}',-1)">−</button><input aria-label="${x.name} quantity" id="tq_${x.id}" type="number" min="0" step="1" value="0" onchange="calcTent()" oninput="calcTent()"><button type="button" aria-label="${x.name} badhayein" onclick="changeTentQty('${x.id}',1)">+</button></div>
      <span style="font-size:13px;font-weight:900;text-align:right">₹<span id="ts_${x.id}">0</span></span>
    </div>
@@ -943,6 +1010,7 @@ function calcTent(){
 function openTent(){
   if(siteSettings.showTentBooking===false||String(siteSettings.showTentBooking)==="false")return;
   document.getElementById("tentModal").classList.remove("hidden");
+  loadTentItems();
   // Always scroll to top on opening
   document.getElementById("tentModal").scrollTop = 0;
 }
@@ -1074,6 +1142,7 @@ async function sendTentBooking(){
 updateShopUI();
 renderTentItems();
 calcTent();
+loadTentItems();
 loadSiteSettings();
 loadCategories().then(()=>loadProducts());
 </script>
