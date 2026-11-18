@@ -449,6 +449,8 @@ img{max-width:100%;height:auto}
 .ck-delivery-note strong{display:block;font-size:18px}.ck-delivery-note span{display:block;color:#463a37;font-size:13px;margin-top:3px}
 .ck-trust{text-align:center;color:#ffe6c7;font-size:12px;margin:14px 0 0;padding:0 14px}
 #ckWelcome .msg{min-height:20px;margin:10px 2px 0;font-weight:700;text-align:center;color:#b42332}
+.ck-welcome-location{display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 14px 12px;padding:9px 12px;border:1px solid #ead7bd;border-radius:14px;background:linear-gradient(135deg,#fffaf0,#fff);color:#71351f;text-align:center;font-size:13px;font-weight:800;line-height:1.45;box-shadow:0 3px 10px #5b341410}
+.ck-welcome-location .pin{font-size:19px;flex:0 0 auto}
 #storeApp{min-height:100vh;background:var(--bg)}
 #storeApp .brand-strip{background:linear-gradient(100deg,#4b151d,#8f1237 60%,#bd7a1a);border-bottom:3px solid #f5c542}
 #storeApp header{background:linear-gradient(135deg,#fff8e8,#fff);border-bottom:1px solid #e9d3a2}
@@ -463,6 +465,7 @@ img{max-width:100%;height:auto}
    <button type="button" class="ck-lang-hit en" aria-label="English" onclick="ckSetWelcomeLanguage('en')"></button>
    <button type="button" class="ck-lang-hit hi" aria-label="Hindi" onclick="ckSetWelcomeLanguage('hi')"></button>
   </div>
+  <div class="ck-welcome-location"><span class="pin">📍</span><span>Kutubpur, Bahadurpur, Mau, Uttar Pradesh – 221602</span></div>
   <div class="ck-login-card">
    <h2 class="ck-login-title" id="ckLoginHeading">👤 Login / Register</h2>
    <p class="ck-login-sub" id="ckLoginSub">अपने मोबाइल नंबर से खाता बनाएं या लॉगिन करें</p>
@@ -584,7 +587,7 @@ img{max-width:100%;height:auto}
 <!-- Admin modal with Manual Shop Open/Close and Delivery Enable/Disable Switch -->
 <div id="adminModal" class="modal hidden"><div class="modal-box">
  <div class="modal-head" style="background:#faf5ff;border-color:#e9d5ff"><div><h2 style="color:var(--deep)">⚙️ Dukandar Panel</h2><p class="muted">Dukan, Delivery, PIN aur Saman manage karein</p></div><button class="close" onclick="closeAdmin()">×</button></div>
- <div id="loginBox"><p class="muted">Sirf authorized dukandar apna Admin PIN daalein.</p><input id="adminPin" type="password" inputmode="numeric" placeholder="Admin PIN (Default: 1234)"><button class="primary" style="width:100%;margin-top:8px" onclick="adminLogin()">Login</button><p id="loginError" class="msg err"></p></div>
+ <div id="loginBox"><p class="muted">Sirf authorized dukandar apna Admin PIN daalein.</p><input id="adminPin" type="password" inputmode="numeric" placeholder="Admin PIN"><button class="primary" style="width:100%;margin-top:8px" onclick="adminLogin()">Login</button><p id="loginError" class="msg err"></p></div>
  <div id="adminPanel" class="hidden">
   
   <!-- DUKAN STATUS & DELIVERY CONTROLS -->
@@ -1945,7 +1948,25 @@ async function ckCustomerLogin(){
  ckRegisterMode=false;document.getElementById('ckNameField').style.display='none';document.getElementById('ckLoginHeading').textContent='👤 Login / Register';
  const name=document.getElementById('ckAccountName').value.trim(),mobile=document.getElementById('ckAccountMobile').value.replace(/\D/g,''),pin=document.getElementById('ckAccountPin').value;
  if(!/^\d{10}$/.test(mobile)||!/^\d{4,6}$/.test(pin))return ckAccountMsg('10 digit mobile aur 4–6 digit PIN bharein.');
- try{const r=await api('loginCustomer',{name,mobile,pin});ckApplyCustomerSession({name:r.customer.name,mobile:r.customer.mobile,token:r.token});ckAccountMsg('Login successful.',true);}catch(e){ckAccountMsg(e.message);}
+ try{
+   const r=await api('loginCustomer',{name,mobile,pin});
+   ckApplyCustomerSession({name:r.customer.name,mobile:r.customer.mobile,token:r.token});
+   if(r.isAdmin===true && r.adminToken){
+     adminPin=r.adminToken;
+     document.getElementById('adminModal').classList.remove('hidden');
+     document.getElementById('loginBox').classList.add('hidden');
+     document.getElementById('adminPanel').classList.remove('hidden');
+     document.getElementById('loginError').textContent='';
+     ckAccountMsg('Owner login successful. Admin Dashboard khul raha hai.',true);
+     updateShopUI();
+     await loadSiteSettings();
+     await loadCategories();
+     await loadProducts();
+     await loadTentItems();
+   }else{
+     ckAccountMsg('Login successful.',true);
+   }
+ }catch(e){ckAccountMsg(e.message);}
 }
 function ckCustomerLogout(){ckCustomerSession=null;try{sessionStorage.removeItem(CK_CUSTOMER_TOKEN_KEY);}catch(e){}const status=document.getElementById('customerAccountStatus');if(status)status.textContent='Logout ho gaya. Login karein.';const history=document.getElementById('customerHistoryWrap');if(history)history.classList.add('hidden');const gate=document.getElementById('ckWelcome'),store=document.getElementById('storeApp');if(gate)gate.style.display='block';if(store)store.style.display='none';window.scrollTo(0,0);}
 async function ckLoadOrderHistory(){
