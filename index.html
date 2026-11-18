@@ -837,7 +837,11 @@ function setStatus(t,good=false){let el=document.getElementById("syncStatus");el
 
 async function api(action,data={},pin=""){
  if(!configured())throw Error("API_URL check karein.");
- const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action,...data,pin})});
+ // IMPORTANT: preserve customer PIN supplied inside data for register/login.
+ // Only override it when an explicit admin PIN/session token argument is passed.
+ const payload={action,...data};
+ if(pin!==undefined && pin!==null && String(pin)!=="") payload.pin=pin;
+ const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
  if(!res.ok)throw Error("Server HTTP "+res.status);
  const r=await res.json();if(!r.success)throw Error(r.error||"Request failed");return r;
 }
