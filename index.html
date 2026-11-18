@@ -486,10 +486,22 @@ img{max-width:100%;height:auto}
     <button id="modeDelivery" class="mode" onclick="setMode('delivery')">🚚 Ghar Par Delivery (घर पर)<small id="deliverySubText">15 se 60 Minute</small></button>
   </div>
   <div class="grid2" style="margin-top:10px"><input id="custName" placeholder="Aapka Naam (नाम) *"><input id="custFather" placeholder="Pita/Pati Ka Naam (पिता का नाम)"></div><label class="field-label">Mobile Number / मोबाइल नंबर *</label><input id="custMobile" inputmode="numeric" maxlength="10" placeholder="10 digit mobile number">
-  <label class="field-label">💰 Payment Method (भुगतान का तरीका)</label><select id="payment"><option value="Cash (नकद)">💵 Cash (नकद)</option><option value="Online UPI">📱 Online UPI (Google Pay / PhonePe / Paytm)</option><option value="Khata (उधार)">📒 Khata Book (खाता / उधार)</option></select>
+  <div id="customerAccountBox" class="customer-account-box">
+ <div class="customer-account-head"><strong>👤 Customer Account / ग्राहक लॉगिन</strong><button type="button" class="rating-btn" onclick="ckOpenCustomerAccount()">Login / Register</button></div>
+ <p id="customerAccountStatus" class="muted">Apna mobile number aur account PIN se login karein. Login ke baad purane orders dekh sakte hain.</p>
+ <div id="customerHistoryWrap" class="hidden"><button type="button" class="rating-btn" onclick="ckLoadOrderHistory()">📦 My Order History</button><button type="button" class="rating-btn" onclick="ckCustomerLogout()">Logout</button><div id="customerHistoryList"></div></div>
+</div>
+<label class="field-label">💰 Payment Method (भुगतान का तरीका)</label><select id="payment"><option value="Cash (नकद)">💵 Cash (नकद)</option><option value="Online UPI">📱 Online UPI (Google Pay / PhonePe / Paytm)</option><option value="Khata (उधार)">📒 Khata Book (खाता / उधार)</option></select>
   <div id="deliveryFields" class="hidden"><label class="field-label">Tola / Mohalla *</label><input id="custTola" placeholder="जैसे: Chauhan Basti, Purab Tola"><label class="field-label">🏠 Ghar ki Pehchan / Landmark *</label><textarea id="custLandmark" rows="2" placeholder="मंदिर के पास, ट्रांसफॉर्मर के सामने…"></textarea><button class="primary" style="width:100%;margin-top:8px" onclick="getLocation()">📍 Add Live GPS Location</button><p id="locStatus" class="muted"></p></div>
  </section>
- <section class="panel" id="looseItemsPanel"><h2 class="section-title">🛢️ Khula Saman / खुला सामान जोड़ें</h2><p class="muted">Apne budget ya quantity ke hisaab se loose saman add karein. Ek hi saman dobara bhi add kar sakte hain.</p><label class="field-label">Saman select karein</label><select id="looseName"><option value="खुला तेल">खुला तेल</option><option value="खुली चीनी">खुली चीनी</option><option value="खुली दाल">खुली दाल</option><option value="खुला आटा">खुला आटा</option><option value="अन्य खुला सामान">अन्य खुला सामान</option></select><div class="grid2"><div><label class="field-label">Rate (₹ per Kg/Litre)</label><input id="looseRate" type="number" min="1" placeholder="Shop rate"></div><div><label class="field-label">Add by</label><select id="looseMode" onchange="toggleLooseMode()"><option value="rupees">Rupees / रुपये</option><option value="quantity">Quantity / मात्रा</option></select></div></div><label class="field-label" id="looseValueLabel">Kitne rupaye ka? (₹)</label><input id="looseValue" type="number" min="1" placeholder="50"><button type="button" class="primary" style="width:100%;margin-top:9px" onclick="addLooseItem()">＋ Add Loose Saman</button><div id="looseFeedback" class="muted" style="margin-top:6px">Rate dukandar se confirm karke bharein.</div></section>
+ <section class="panel" id="looseItemsPanel"><h2 class="section-title">🛢️ Khula Saman / खुला सामान जोड़ें</h2>
+ <p class="muted">Saman ka naam aur jitne rupaye ka chahiye, bas woh bharein. Rate dukandar confirm karega.</p>
+ <label class="field-label" for="looseName">Saman ka naam / सामान का नाम</label>
+ <input id="looseName" type="text" maxlength="80" placeholder="Jaise: Khula Tel, Chini, Aata..." autocomplete="off">
+ <label class="field-label" for="looseValue">Kitne rupaye ka chahiye? (₹)</label>
+ <input id="looseValue" type="number" min="1" max="50000" step="1" placeholder="50" inputmode="numeric">
+ <button type="button" class="primary" style="width:100%;margin-top:9px" onclick="addLooseItem()">＋ Add Loose Saman</button>
+ <div id="looseFeedback" class="muted" style="margin-top:6px">Saman ka naam aur amount bharein.</div></section>
 <section id="cartSummary" class="cart-summary hidden" aria-live="polite">
    <h2>🧾 Aapke Chune Hue Saman (Order Summary)</h2>
    <div id="cartSummaryItems"></div>
@@ -1811,4 +1823,90 @@ body:not(.ck-location-verified) #ckLocationGate{display:block}
 })();
 </script>
 
+
+
+<div id="customerAccountModal" class="modal hidden"><div class="modal-box">
+ <div class="modal-head"><div><h2>👤 Customer Login / Register</h2><p class="muted">Mobile number se apna account banayein</p></div><button class="close" onclick="ckCloseCustomerAccount()">×</button></div>
+ <label class="field-label">Aapka naam</label><input id="ckAccountName" maxlength="80" placeholder="Apna naam">
+ <label class="field-label">10 digit mobile number</label><input id="ckAccountMobile" inputmode="numeric" maxlength="10" placeholder="Mobile number">
+ <label class="field-label">4–6 digit account PIN</label><input id="ckAccountPin" type="password" inputmode="numeric" maxlength="6" placeholder="Apna PIN banayein / enter karein">
+ <p class="muted">Pehli baar Register karein. Agli baar isi mobile number aur PIN se Login karein. PIN kisi ke saath share na karein.</p>
+ <div class="grid2"><button type="button" class="primary" onclick="ckCustomerRegister()">Register</button><button type="button" class="primary" onclick="ckCustomerLogin()">Login</button></div>
+ <p id="ckAccountMessage" class="msg"></p>
+ </div></div>
+
+<style id="customer-account-style">
+.customer-account-box{border:1px solid #dce8df;border-radius:13px;padding:12px;margin:12px 0;background:#f8fcf9}
+.customer-account-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+#customerHistoryList{margin-top:10px;max-height:260px;overflow:auto}
+.ck-order-row{padding:9px;border-bottom:1px solid #e5e7eb;font-size:13px}
+</style>
+<script id="customer-account-and-loose-v2">
+/* Custom loose items: customer supplies item name and rupee amount only. */
+function addLooseItem(){
+ const name=(document.getElementById('looseName').value||'').trim();
+ const amount=Number(document.getElementById('looseValue').value);
+ if(!name)return alert('Saman ka naam likhein.');
+ if(name.length>80)return alert('Saman ka naam 80 characters se chhota rakhein.');
+ if(!Number.isFinite(amount)||amount<=0||amount>50000)return alert('₹1 se ₹50,000 ke beech amount bharein.');
+ looseCart.push({id:'L'+Date.now()+Math.random().toString(16).slice(2,5),name,rate:amount,qty:1,amount,unit:'item'});
+ document.getElementById('looseName').value='';
+ document.getElementById('looseValue').value='';
+ document.getElementById('looseFeedback').textContent='✅ '+name+' · ₹'+amount+' cart mein add ho gaya.';
+ updateCart();
+}
+const CK_CUSTOMER_TOKEN_KEY='ck_customer_session_v1';
+let ckCustomerSession=null;
+function ckAccountMsg(t,good=false){const e=document.getElementById('ckAccountMessage');if(e){e.textContent=t;e.style.color=good?'#15803d':'#b91c1c';}}
+function ckOpenCustomerAccount(){document.getElementById('customerAccountModal').classList.remove('hidden');}
+function ckCloseCustomerAccount(){document.getElementById('customerAccountModal').classList.add('hidden');}
+function ckApplyCustomerSession(s){
+ ckCustomerSession=s;
+ try{sessionStorage.setItem(CK_CUSTOMER_TOKEN_KEY,JSON.stringify(s));}catch(e){}
+ document.getElementById('custName').value=s.name||'';
+ document.getElementById('custMobile').value=s.mobile||'';
+ const status=document.getElementById('customerAccountStatus');
+ if(status)status.textContent='✅ Login hai: '+s.name+' · '+s.mobile;
+ document.getElementById('customerHistoryWrap').classList.remove('hidden');
+ ckCloseCustomerAccount();
+}
+function ckRestoreCustomerSession(){
+ try{const s=JSON.parse(sessionStorage.getItem(CK_CUSTOMER_TOKEN_KEY)||'null');if(s&&s.token&&s.name&&s.mobile){ckCustomerSession=s;const status=document.getElementById('customerAccountStatus');if(status)status.textContent='✅ Login hai: '+s.name+' · '+s.mobile;document.getElementById('custName').value=s.name;document.getElementById('custMobile').value=s.mobile;document.getElementById('customerHistoryWrap').classList.remove('hidden');}}catch(e){}
+}
+async function ckCustomerRegister(){
+ const name=document.getElementById('ckAccountName').value.trim(),mobile=document.getElementById('ckAccountMobile').value.replace(/\D/g,''),pin=document.getElementById('ckAccountPin').value;
+ if(!name||!/^\d{10}$/.test(mobile)||!/^\d{4,6}$/.test(pin))return ckAccountMsg('Naam, 10 digit mobile aur 4–6 digit PIN sahi bharein.');
+ try{const r=await api('registerCustomer',{name,mobile,pin});ckApplyCustomerSession({name:r.customer.name,mobile:r.customer.mobile,token:r.token});ckAccountMsg('Account ban gaya.',true);}catch(e){ckAccountMsg(e.message);}
+}
+async function ckCustomerLogin(){
+ const name=document.getElementById('ckAccountName').value.trim(),mobile=document.getElementById('ckAccountMobile').value.replace(/\D/g,''),pin=document.getElementById('ckAccountPin').value;
+ if(!/^\d{10}$/.test(mobile)||!/^\d{4,6}$/.test(pin))return ckAccountMsg('10 digit mobile aur 4–6 digit PIN bharein.');
+ try{const r=await api('loginCustomer',{name,mobile,pin});ckApplyCustomerSession({name:r.customer.name,mobile:r.customer.mobile,token:r.token});ckAccountMsg('Login successful.',true);}catch(e){ckAccountMsg(e.message);}
+}
+function ckCustomerLogout(){ckCustomerSession=null;try{sessionStorage.removeItem(CK_CUSTOMER_TOKEN_KEY);}catch(e){}document.getElementById('customerAccountStatus').textContent='Logout ho gaya. Order history dekhne ke liye login karein.';document.getElementById('customerHistoryWrap').classList.add('hidden');}
+async function ckLoadOrderHistory(){
+ if(!ckCustomerSession?.token)return alert('Pehle customer login karein.');
+ const host=document.getElementById('customerHistoryList');host.textContent='Order history load ho rahi hai…';
+ try{const r=await api('listCustomerOrders',{token:ckCustomerSession.token});const rows=r.orders||[];host.innerHTML=rows.length?rows.map(o=>'<div class="ck-order-row"><b>'+ckEsc(o.orderId)+'</b> · '+ckEsc(o.date)+'<br>'+ckEsc(o.summary)+'<br><b>Total: ₹'+Number(o.total||0).toFixed(2)+'</b> · '+ckEsc(o.status)+'</div>').join(''):'Abhi koi purana order nahi mila.';}catch(e){host.textContent='History load nahi hui: '+e.message;}
+}
+function ckEsc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+const ckPreviousSendOrder=window.sendOrder;
+window.sendOrder=async function(){
+ if(!isShopOpen){alert('Dukan abhi band hai. Kripya dukan khulne par order karein.');return;}
+ if(!Object.keys(cart).length&&!looseCart.length){alert('Pehle saman add karein.');return;}
+ if(!ckCustomerSession?.token){alert('Order place karne se pehle Customer Login / Register karein.');ckOpenCustomerAccount();return;}
+ if(orderMode==='delivery'){const chk=v9DistanceCheck();if(!chk.ok)return alert(chk.msg);}
+ const name=document.getElementById('custName').value.trim(),mobile=(document.getElementById('custMobile').value||'').replace(/\D/g,'');
+ if(name!==ckCustomerSession.name||mobile!==ckCustomerSession.mobile){alert('Customer details login account se match nahi karte.');return;}
+ let items=[];
+ Object.entries(cart).forEach(([id,q])=>{const p=products.find(x=>String(x.id)===String(id));if(p)items.push({name:p.name,qty:Number(q),amount:Number(p.price||0)*Number(q)});});
+ looseCart.forEach(x=>items.push({name:x.name,qty:1,amount:Number(x.amount)}));
+ const sub=v9Subtotal(),total=sub+(orderMode==='delivery'?v9DeliveryFee(sub):0),address=orderMode==='pickup'?'Dukan se pickup':[document.getElementById('custTola').value.trim(),document.getElementById('custLandmark').value.trim()].filter(Boolean).join(', ');
+ try{
+   await api('saveCustomerOrder',{token:ckCustomerSession.token,items,total,orderType:orderMode,address,payment:document.getElementById('payment').value,distanceKm:orderMode==='delivery'?deliveryDistanceKm:null});
+ }catch(e){alert('Order history save nahi hui, isliye order aage nahi bheja gaya: '+e.message);return;}
+ await ckPreviousSendOrder();
+};
+document.addEventListener('DOMContentLoaded',ckRestoreCustomerSession);
+</script>
 </body></html>
