@@ -425,6 +425,13 @@ img{max-width:100%;height:auto}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}
 </style>
 
+<style id="v17-cartbar-final-fix">
+/* V17 mobile cart bar alignment reinforcement */
+#cartBar{box-sizing:border-box!important;display:flex!important;align-items:center!important;gap:10px!important;left:8px!important;right:8px!important;width:auto!important;max-width:700px!important;transform:none!important;margin-left:auto!important;margin-right:auto!important}
+#cartBar>div{min-width:0!important;flex:1 1 auto!important}
+#cartBar #orderSubmitBtn{box-sizing:border-box!important;flex:0 1 58%!important;min-width:0!important;max-width:58%!important;white-space:normal!important;overflow-wrap:anywhere!important;line-height:1.25!important}
+@media(max-width:380px){#cartBar{gap:6px!important;padding:9px!important}#cartBar #orderSubmitBtn{font-size:11px!important;flex-basis:56%!important;max-width:56%!important}}
+</style>
 </head>
 <body>
 
@@ -582,6 +589,19 @@ img{max-width:100%;height:auto}
 <!-- Off-screen Container for High-Resolution WhatsApp Parchi Image -->
 <div id="receiptContainer" style="position:absolute;left:-9999px;top:0;width:380px;background-color:#ffffff;padding:22px 18px;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
   <div id="captureContent" style="width:100%;box-sizing:border-box;"></div>
+</div>
+
+<!-- Receipt share panel: user taps Share AFTER image generation so Android keeps the user gesture. -->
+<div id="receiptSharePanel" class="hidden" style="position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.62);padding:18px;display:flex;align-items:center;justify-content:center;">
+ <div style="width:100%;max-width:430px;background:#fff;border-radius:20px;padding:20px;box-shadow:0 18px 50px #0005;color:#20352a;">
+  <div style="font-size:20px;font-weight:900;margin-bottom:8px;">🧾 Parchi taiyar hai!</div>
+  <p style="font-size:14px;line-height:1.5;color:#64746a;margin:0 0 15px;">Ab neeche Share dabayein, Android share screen mein WhatsApp chunein aur apni dukaan ka WhatsApp chat select karke Send karein. Parchi image file ke roop mein saath jayegi — pehle download karne ki zaroorat nahi.</p>
+  <button type="button" onclick="shareReceiptNow(true)" style="width:100%;padding:14px;border:0;border-radius:12px;background:#176b43;color:#fff;font-size:15px;font-weight:900;margin-bottom:9px;">📲 WhatsApp Message + Parchi Share</button>
+  <button type="button" onclick="shareReceiptNow(false)" style="width:100%;padding:13px;border:1px solid #cbd8cf;border-radius:12px;background:#f5faf6;color:#21472c;font-size:14px;font-weight:850;margin-bottom:9px;">🧾 Sirf Parchi Share</button>
+  <button type="button" onclick="downloadReceiptFallback()" style="width:100%;padding:11px;border:1px solid #d6dce0;border-radius:12px;background:#fff;color:#53635a;font-size:13px;font-weight:750;margin-bottom:9px;">Download Parchi (Backup)</button>
+  <button type="button" onclick="closeReceiptSharePanel()" style="width:100%;padding:10px;border:0;background:transparent;color:#64746a;font-size:13px;">Baad mein</button>
+  <div id="receiptShareStatus" style="font-size:12px;color:#64746a;margin-top:7px;text-align:center;"></div>
+ </div>
 </div>
 
 <!-- Admin modal with Manual Shop Open/Close and Delivery Enable/Disable Switch -->
@@ -1090,6 +1110,61 @@ function openDirectWhatsApp(phone, text) {
   window.location.href = `https://api.whatsapp.com/send?phone=91${phone}&text=${encoded}`;
 }
 
+// Keep the generated receipt in memory. Do not auto-download or open text-only WhatsApp.
+let pendingReceiptFile = null;
+let pendingReceiptText = "";
+function showReceiptSharePanel(file, text) {
+  pendingReceiptFile = file;
+  pendingReceiptText = text || "";
+  const panel = document.getElementById("receiptSharePanel");
+  const status = document.getElementById("receiptShareStatus");
+  if (status) status.textContent = "Share button dabane ke baad WhatsApp aur shop chat select karein.";
+  if (panel) panel.classList.remove("hidden");
+}
+function closeReceiptSharePanel() {
+  const panel = document.getElementById("receiptSharePanel");
+  if (panel) panel.classList.add("hidden");
+}
+async function shareReceiptNow(includeText) {
+  const file = pendingReceiptFile;
+  if (!file) { alert("Parchi abhi taiyar nahi hai. Order dobara try karein."); return; }
+  const status = document.getElementById("receiptShareStatus");
+  // This function is called directly by a button tap; invoke Web Share immediately
+  // (before any await) so Android does not lose its transient user activation.
+  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+    const data = { files: [file], title: "Chauhan Kirana Store Parchi" };
+    if (includeText && pendingReceiptText) data.text = pendingReceiptText;
+    try {
+      const sharePromise = navigator.share(data);
+      if (status) status.textContent = "Share menu khul raha hai… WhatsApp select karein.";
+      await sharePromise;
+      closeReceiptSharePanel();
+      return;
+    } catch (err) {
+      if (err && err.name === "AbortError") {
+        if (status) status.textContent = "Share cancel hua. Dobara Share dabakar try kar sakte hain.";
+        return;
+      }
+      if (status) status.textContent = "Is browser mein direct file sharing available nahi hui. Backup download use karein.";
+      alert("Is browser/device par direct image sharing support nahi hui. Backup Download Parchi button use karein.");
+      return;
+    }
+  }
+  if (status) status.textContent = "Aapke browser mein direct file share support nahi hai. Backup download use karein.";
+  alert("Aapka browser WhatsApp par image direct share support nahi karta. Backup Download Parchi button use karein.");
+}
+function downloadReceiptFallback() {
+  const file = pendingReceiptFile;
+  if (!file) { alert("Parchi abhi taiyar nahi hai."); return; }
+  const url = URL.createObjectURL(file);
+  const a = document.createElement("a");
+  a.href = url; a.download = file.name || "Chauhan_Kirana_Parchi.png";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+  const status = document.getElementById("receiptShareStatus");
+  if (status) status.textContent = "Parchi download ho gayi. Ise WhatsApp mein manually attach karein.";
+}
+
 // Crisp HTML Parchi Generator with html2canvas (No Sideways Cropping)
 async function sendOrder(){
  if (!isShopOpen) {
@@ -1135,7 +1210,7 @@ async function sendOrder(){
                    `🛍️ *Saman Bill:* ₹${total}\n` +
                    `🚚 *Delivery Charge:* ₹${deliveryFee}\n` +
                    `💵 *TOTAL BILL: ₹${finalTotal}*\n` +
-                   `📸 *(Parchi photo download ho rahi hai)*`;
+                   `📎 *Parchi image saath mein attach hogi — Share screen par WhatsApp select karein.*`;
 
  const btn=document.getElementById("orderSubmitBtn");
  const origBtnText=btn.innerText;
@@ -1193,38 +1268,14 @@ async function sendOrder(){
    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
    if (!blob) throw new Error('Parchi image generate nahi ho payi.');
    const imageFile = new File([blob], `Parchi_${name.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
-   const includeOrderText = confirm('WhatsApp message ke saath parchi bhejein?\nOK = Message + Parchi\nCancel = Sirf Parchi');
+   // Do not download first and do not launch WhatsApp with text alone.
+   // Show a second-step share button so Android receives a fresh user gesture
+   // after html2canvas has finished creating the PNG.
+   showReceiptSharePanel(imageFile, orderText);
 
-   // Android/Chrome share sheet attaches the actual PNG, with optional order text.
-   if (navigator.share && navigator.canShare && navigator.canShare({ files: [imageFile] })) {
-     try {
-       const shareData = { files: [imageFile], title: 'Chauhan Kirana Parchi' };
-       if (includeOrderText) shareData.text = orderText;
-       await navigator.share(shareData);
-       return; // User completed or deliberately closed the share sheet; do not send a text-only duplicate.
-     } catch (err) {
-       if (err && err.name === 'AbortError') return;
-     }
-   }
-
-   // Compatibility fallback for browsers that cannot share files: save the PNG, then open WhatsApp text.
-   const downloadUrl = URL.createObjectURL(blob);
-   const link = document.createElement("a");
-   link.href = downloadUrl;
-   link.download = `Chauhan_Kirana_Parchi.png`;
-   document.body.appendChild(link);
-   link.click();
-   document.body.removeChild(link);
-   setTimeout(() => URL.revokeObjectURL(downloadUrl), 60000);
-   if (includeOrderText) {
-     alert('Parchi PNG download ho gayi hai. WhatsApp khulne par attachment 📎 se Parchi file bhi select karke bhejein.');
-     openDirectWhatsApp(SHOP_WHATSAPP, orderText);
-   } else {
-     alert('Sirf Parchi PNG download ho gayi hai. Ise WhatsApp mein photo/document ke roop mein bhej sakte hain.');
-   }
  } catch(e){
    alert('Parchi banane mein dikkat hui: ' + (e.message || e));
-   openDirectWhatsApp(SHOP_WHATSAPP, orderText);
+   // Do not send a text-only order when receipt generation fails.
  } finally {
    btn.innerText = origBtnText;
  }
