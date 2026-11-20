@@ -474,6 +474,19 @@ img{max-width:100%;height:auto}
    <div class="ck-account-field"><label for="ckAccountPin" id="ckPinLabel">4–6 digit account PIN / खाता PIN</label><input id="ckAccountPin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="6" placeholder="4–6 digit PIN"></div>
    <div class="ck-account-actions"><button type="button" class="ck-reg-btn" onclick="ckCustomerRegister()">👤＋ <span id="ckRegisterText">Register</span><small id="ckRegisterHi">नया खाता बनाएं</small></button><button type="button" class="ck-login-btn" onclick="ckCustomerLogin()">↪ <span id="ckLoginText">Login</span><small id="ckLoginHi">लॉगिन करें</small></button></div>
    <p id="ckAccountMessage" class="msg" role="status" aria-live="polite"></p>
+   <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0">
+    <button type="button" class="rating-btn" onclick="ckSendLoginOtp()">📩 Login with OTP</button>
+    <button type="button" class="rating-btn" onclick="ckShowForgotPin()">🔑 Forgot PIN?</button>
+   </div>
+   <div id="ckOtpLoginBox" style="display:none;padding:12px;border:1px solid #e5d7b5;border-radius:12px;margin:8px 0">
+    <label class="field-label">SMS OTP</label><input id="ckLoginOtp" inputmode="numeric" maxlength="6" placeholder="6 digit OTP">
+    <button type="button" class="rating-btn" onclick="ckVerifyLoginOtp()">Verify OTP & Login</button>
+   </div>
+   <div id="ckForgotPinBox" style="display:none;padding:12px;border:1px solid #e5d7b5;border-radius:12px;margin:8px 0">
+    <label class="field-label">OTP</label><input id="ckResetOtp" inputmode="numeric" maxlength="6" placeholder="6 digit OTP">
+    <label class="field-label">New PIN (4–6 digits)</label><input id="ckResetNewPin" type="password" inputmode="numeric" maxlength="6" placeholder="New account PIN">
+    <button type="button" class="rating-btn" onclick="ckResetPinOtp()">Verify OTP & Reset PIN</button>
+   </div>
    <div class="ck-delivery-note"><strong id="ckDeliveryHi">📍 डिलीवरी केवल 2 KM के अंदर</strong><span id="ckDeliveryEn">Delivery is available within 2 km of our store only.</span></div>
   </div>
   <p class="ck-trust" id="ckTrust">🔒 आपका मोबाइल नंबर और PIN सुरक्षित रखें · Fresh Grocery · Fast Local Delivery</p>
@@ -542,7 +555,29 @@ img{max-width:100%;height:auto}
   <div id="customerAccountBox" class="customer-account-box">
  <div class="customer-account-head"><strong>👤 Customer Account / ग्राहक लॉगिन</strong><button type="button" class="rating-btn" onclick="ckOpenCustomerAccount()">Login / Register</button></div>
  <p id="customerAccountStatus" class="muted">Apna mobile number aur account PIN se login karein. Login ke baad purane orders dekh sakte hain.</p>
- <div id="customerHistoryWrap" class="hidden"><button type="button" class="rating-btn" onclick="ckLoadOrderHistory()">📦 My Order History</button><button type="button" class="rating-btn" onclick="ckCustomerLogout()">Logout</button><div id="customerHistoryList"></div></div>
+ <div id="customerHistoryWrap" class="hidden">
+ <div style="border:1px solid #d9e8d9;border-radius:14px;padding:12px;margin:10px 0;background:#f7fff7">
+  <h3 style="margin:0 0 8px;color:#155e35">👤 My Profile / मेरी प्रोफाइल</h3>
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+   <img id="ckProfilePreview" alt="Profile photo" src="" style="width:68px;height:68px;object-fit:cover;border-radius:50%;background:#e5e7eb;display:none">
+   <input id="ckProfilePhotoFile" type="file" accept="image/*" style="max-width:220px">
+   <button type="button" class="rating-btn" onclick="ckUploadProfilePhoto()">Upload / Change Photo</button>
+  </div>
+  <label class="field-label">Name / नाम</label><input id="ckProfileName" maxlength="80" placeholder="Your name">
+  <label class="field-label">Mobile / मोबाइल (cannot change)</label><input id="ckProfileMobile" readonly>
+  <button type="button" class="rating-btn" onclick="ckSaveProfile()">Save Profile</button>
+ </div>
+ <div style="border:1px solid #e5d7b5;border-radius:14px;padding:12px;margin:10px 0">
+  <h3 style="margin:0 0 8px">🔐 Change Password / PIN बदलें</h3>
+  <input id="ckOldPin" type="password" inputmode="numeric" maxlength="6" placeholder="Current PIN">
+  <input id="ckNewPin" type="password" inputmode="numeric" maxlength="6" placeholder="New PIN (4–6 digits)">
+  <button type="button" class="rating-btn" onclick="ckChangePin()">Change PIN</button>
+  <p id="ckProfileMessage" class="muted" aria-live="polite"></p>
+ </div>
+ <button type="button" class="rating-btn" onclick="ckLoadOrderHistory()">📦 My Order History & Tracking</button>
+ <button type="button" class="rating-btn" onclick="ckCustomerLogout()">Logout</button>
+ <div id="customerHistoryList"></div>
+</div>
 </div>
 <label class="field-label">💰 Payment Method (भुगतान का तरीका)</label><select id="payment"><option value="Cash (नकद)">💵 Cash (नकद)</option><option value="Online UPI">📱 Online UPI (Google Pay / PhonePe / Paytm)</option><option value="Khata (उधार)">📒 Khata Book (खाता / उधार)</option></select>
   <div id="deliveryFields" class="hidden"><label class="field-label">Tola / Mohalla *</label><input id="custTola" placeholder="जैसे: Chauhan Basti, Purab Tola"><label class="field-label">🏠 Ghar ki Pehchan / Landmark *</label><textarea id="custLandmark" rows="2" placeholder="मंदिर के पास, ट्रांसफॉर्मर के सामने…"></textarea><button class="primary" style="width:100%;margin-top:8px" onclick="getLocation()">📍 Add Live GPS Location</button><p id="locStatus" class="muted"></p></div>
@@ -2004,7 +2039,7 @@ function ckApplyCustomerSession(s){
 }
 function ckRestoreCustomerSession(){
  const gate=document.getElementById('ckWelcome'),store=document.getElementById('storeApp');
- try{const s=JSON.parse(sessionStorage.getItem(CK_CUSTOMER_TOKEN_KEY)||'null');if(s&&s.token&&s.name&&s.mobile){ckCustomerSession=s;const status=document.getElementById('customerAccountStatus');if(status)status.textContent='✅ Login hai: '+s.name+' · '+s.mobile;document.getElementById('custName').value=s.name;document.getElementById('custMobile').value=s.mobile;document.getElementById('customerHistoryWrap').classList.remove('hidden');if(gate)gate.style.display='none';if(store)store.style.display='block';return;}}catch(e){}
+ try{const s=JSON.parse(sessionStorage.getItem(CK_CUSTOMER_TOKEN_KEY)||'null');if(s&&s.token&&s.name&&s.mobile){ckCustomerSession=s;ckPopulateProfile(s);const status=document.getElementById('customerAccountStatus');if(status)status.textContent='✅ Login hai: '+s.name+' · '+s.mobile;document.getElementById('custName').value=s.name;document.getElementById('custMobile').value=s.mobile;document.getElementById('customerHistoryWrap').classList.remove('hidden');if(gate)gate.style.display='none';if(store)store.style.display='block';return;}}catch(e){}
  if(gate)gate.style.display='block';if(store)store.style.display='none';
 }
 async function ckCustomerRegister(){
@@ -2039,6 +2074,50 @@ async function ckCustomerLogin(){
    }
  }catch(e){ckAccountMsg(e.message);}
 }
+
+function ckPopulateProfile(s){
+ const n=document.getElementById('ckProfileName'),m=document.getElementById('ckProfileMobile'),p=document.getElementById('ckProfilePreview');
+ if(n)n.value=s.name||'';if(m)m.value=s.mobile||'';
+ if(p&&s.profilePhotoUrl){p.src=imageUrl(s.profilePhotoUrl)||s.profilePhotoUrl;p.style.display='block';}
+}
+async function ckSaveProfile(){
+ if(!ckCustomerSession?.token)return;
+ const name=document.getElementById('ckProfileName').value.trim();
+ try{const r=await api('updateCustomerProfile',{token:ckCustomerSession.token,name});ckCustomerSession.name=r.customer.name;ckApplyCustomerSession(ckCustomerSession);const msg=document.getElementById('ckProfileMessage');msg.textContent='Profile saved successfully.';msg.style.color='#15803d';}
+ catch(e){document.getElementById('ckProfileMessage').textContent=e.message;}
+}
+async function ckUploadProfilePhoto(){
+ if(!ckCustomerSession?.token)return;
+ const file=document.getElementById('ckProfilePhotoFile').files[0];if(!file)return alert('Pehle photo select karein.');
+ if(file.size>3*1024*1024)return alert('Photo 3 MB se chhoti honi chahiye.');
+ const reader=new FileReader();
+ reader.onload=async()=>{try{const data=String(reader.result).split(',')[1];const r=await api('saveCustomerProfilePhoto',{token:ckCustomerSession.token,fileName:file.name,mimeType:file.type,base64:data});ckCustomerSession.profilePhotoUrl=r.profilePhotoUrl;ckApplyCustomerSession(ckCustomerSession);document.getElementById('ckProfileMessage').textContent='Profile photo updated.';}catch(e){document.getElementById('ckProfileMessage').textContent=e.message;}};
+ reader.readAsDataURL(file);
+}
+async function ckChangePin(){
+ const oldPin=document.getElementById('ckOldPin').value,newPin=document.getElementById('ckNewPin').value;
+ if(!/^\d{4,6}$/.test(oldPin)||!/^\d{4,6}$/.test(newPin))return alert('Current aur new PIN 4–6 digits ka hona chahiye.');
+ try{await api('changeCustomerPin',{token:ckCustomerSession.token,oldPin,newPin});document.getElementById('ckOldPin').value='';document.getElementById('ckNewPin').value='';document.getElementById('ckProfileMessage').textContent='PIN successfully changed.';}catch(e){document.getElementById('ckProfileMessage').textContent=e.message;}
+}
+async function ckSendLoginOtp(){
+ const mobile=document.getElementById('ckAccountMobile').value.replace(/\D/g,'');
+ if(!/^\d{10}$/.test(mobile))return ckAccountMsg('Pehle 10 digit mobile number bharein.');
+ try{await api('sendCustomerOtp',{mobile,purpose:'login'});document.getElementById('ckOtpLoginBox').style.display='block';ckAccountMsg('OTP bhej diya gaya. 5 minute mein verify karein.',true);}catch(e){ckAccountMsg(e.message);}
+}
+async function ckVerifyLoginOtp(){
+ const mobile=document.getElementById('ckAccountMobile').value.replace(/\D/g,''),otp=document.getElementById('ckLoginOtp').value.trim();
+ try{const r=await api('verifyCustomerLoginOtp',{mobile,otp});ckApplyCustomerSession({name:r.customer.name,mobile:r.customer.mobile,token:r.token});ckAccountMsg('OTP login successful.',true);}catch(e){ckAccountMsg(e.message);}
+}
+async function ckShowForgotPin(){
+ const mobile=document.getElementById('ckAccountMobile').value.replace(/\D/g,'');
+ if(!/^\d{10}$/.test(mobile))return ckAccountMsg('Forgot PIN ke liye pehle registered mobile number bharein.');
+ try{await api('sendCustomerOtp',{mobile,purpose:'reset'});document.getElementById('ckForgotPinBox').style.display='block';ckAccountMsg('Reset OTP bhej diya gaya. 5 minute mein verify karein.',true);}catch(e){ckAccountMsg(e.message);}
+}
+async function ckResetPinOtp(){
+ const mobile=document.getElementById('ckAccountMobile').value.replace(/\D/g,''),otp=document.getElementById('ckResetOtp').value.trim(),newPin=document.getElementById('ckResetNewPin').value;
+ if(!/^\d{4,6}$/.test(newPin))return ckAccountMsg('New PIN 4–6 digits ka hona chahiye.');
+ try{await api('resetCustomerPinWithOtp',{mobile,otp,newPin});document.getElementById('ckForgotPinBox').style.display='none';document.getElementById('ckAccountPin').value=newPin;ckAccountMsg('PIN reset ho gaya. Ab naye PIN se login karein.',true);}catch(e){ckAccountMsg(e.message);}
+}
 function ckCustomerLogout(){ckCustomerSession=null;try{sessionStorage.removeItem(CK_CUSTOMER_TOKEN_KEY);}catch(e){}const status=document.getElementById('customerAccountStatus');if(status)status.textContent='Logout ho gaya. Login karein.';const history=document.getElementById('customerHistoryWrap');if(history)history.classList.add('hidden');const gate=document.getElementById('ckWelcome'),store=document.getElementById('storeApp');if(gate)gate.style.display='block';if(store)store.style.display='none';window.scrollTo(0,0);}
 async function ckLoadOrderHistory(){
  if(!ckCustomerSession?.token)return alert('Pehle customer login karein.');
@@ -2049,7 +2128,10 @@ async function ckLoadOrderHistory(){
    const confirmBtn=String(o.status).toLowerCase().includes('delivered')&&!o.customerConfirmed
     ? `<br><button class="rating-btn" onclick="ckConfirmReceived(${JSON.stringify(String(o.orderId))})">✅ Confirm Received</button>`
     : (o.customerConfirmed?'<br><small>✅ Receipt confirmed</small>':'');
-   return `<div class="ck-order-row"><b>${ckEsc(o.orderId)}</b> · ${ckEsc(o.date)}<br>${ckEsc(o.summary)}<br><b>Total: ₹${Number(o.total||0).toFixed(2)}</b> · ${ckEsc(o.status)}${confirmBtn}</div>`;
+   const steps=['Order initiated','Confirmed','Packed','Out for delivery','Delivered'];
+   const current=steps.findIndex(x=>x.toLowerCase()===String(o.status||'').toLowerCase());
+   const progress=String(o.status||'').toLowerCase()==='cancelled'?'❌ Order Cancelled':steps.map((s,i)=>`<span style="display:inline-block;padding:5px 7px;margin:3px;border-radius:8px;background:${i<=(current<0?0:current)?'#dcfce7':'#f1f5f9'};color:${i<=(current<0?0:current)?'#166534':'#64748b'};font-size:11px">${i<=(current<0?0:current)?'✓':'○'} ${s}</span>`).join('');
+   return `<div class="ck-order-row" style="padding:12px;margin:10px 0;border:1px solid #dbe7dc;border-radius:12px"><b>${ckEsc(o.orderId)}</b> · ${ckEsc(o.date)}<br>${ckEsc(o.summary)}<br><b>Total: ₹${Number(o.total||0).toFixed(2)}</b><br><b>Status: ${ckEsc(o.status)}</b><div style="margin-top:7px">${progress}</div>${confirmBtn}</div>`;
   }).join(''):'Abhi koi purana order nahi mila.';
  }catch(e){host.textContent='History load nahi hui: '+e.message;}
 }
