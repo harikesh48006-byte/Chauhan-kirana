@@ -425,13 +425,6 @@ img{max-width:100%;height:auto}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}
 </style>
 
-<style id="v17-cartbar-final-fix">
-/* V17 mobile cart bar alignment reinforcement */
-#cartBar{box-sizing:border-box!important;display:flex!important;align-items:center!important;gap:10px!important;left:8px!important;right:8px!important;width:auto!important;max-width:700px!important;transform:none!important;margin-left:auto!important;margin-right:auto!important}
-#cartBar>div{min-width:0!important;flex:1 1 auto!important}
-#cartBar #orderSubmitBtn{box-sizing:border-box!important;flex:0 1 58%!important;min-width:0!important;max-width:58%!important;white-space:normal!important;overflow-wrap:anywhere!important;line-height:1.25!important}
-@media(max-width:380px){#cartBar{gap:6px!important;padding:9px!important}#cartBar #orderSubmitBtn{font-size:11px!important;flex-basis:56%!important;max-width:56%!important}}
-</style>
 </head>
 <body>
 
@@ -591,19 +584,6 @@ img{max-width:100%;height:auto}
   <div id="captureContent" style="width:100%;box-sizing:border-box;"></div>
 </div>
 
-<!-- Receipt share panel: user taps Share AFTER image generation so Android keeps the user gesture. -->
-<div id="receiptSharePanel" class="hidden" style="position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.62);padding:18px;display:flex;align-items:center;justify-content:center;">
- <div style="width:100%;max-width:430px;background:#fff;border-radius:20px;padding:20px;box-shadow:0 18px 50px #0005;color:#20352a;">
-  <div style="font-size:20px;font-weight:900;margin-bottom:8px;">🧾 Parchi taiyar hai!</div>
-  <p style="font-size:14px;line-height:1.5;color:#64746a;margin:0 0 15px;">Ab neeche Share dabayein, Android share screen mein WhatsApp chunein aur apni dukaan ka WhatsApp chat select karke Send karein. Parchi image file ke roop mein saath jayegi — pehle download karne ki zaroorat nahi.</p>
-  <button type="button" onclick="shareReceiptNow(true)" style="width:100%;padding:14px;border:0;border-radius:12px;background:#176b43;color:#fff;font-size:15px;font-weight:900;margin-bottom:9px;">📲 WhatsApp Message + Parchi Share</button>
-  <button type="button" onclick="shareReceiptNow(false)" style="width:100%;padding:13px;border:1px solid #cbd8cf;border-radius:12px;background:#f5faf6;color:#21472c;font-size:14px;font-weight:850;margin-bottom:9px;">🧾 Sirf Parchi Share</button>
-  <button type="button" onclick="downloadReceiptFallback()" style="width:100%;padding:11px;border:1px solid #d6dce0;border-radius:12px;background:#fff;color:#53635a;font-size:13px;font-weight:750;margin-bottom:9px;">Download Parchi (Backup)</button>
-  <button type="button" onclick="closeReceiptSharePanel()" style="width:100%;padding:10px;border:0;background:transparent;color:#64746a;font-size:13px;">Baad mein</button>
-  <div id="receiptShareStatus" style="font-size:12px;color:#64746a;margin-top:7px;text-align:center;"></div>
- </div>
-</div>
-
 <!-- Admin modal with Manual Shop Open/Close and Delivery Enable/Disable Switch -->
 <div id="adminModal" class="modal hidden"><div class="modal-box">
  <div class="modal-head" style="background:#faf5ff;border-color:#e9d5ff"><div><h2 style="color:var(--deep)">⚙️ Dukandar Panel</h2><p class="muted">Dukan, Delivery, PIN aur Saman manage karein</p></div><button class="close" onclick="closeAdmin()">×</button></div>
@@ -669,7 +649,7 @@ img{max-width:100%;height:auto}
   </div>
 
   <input id="editId" type="hidden"><label class="field-label">Saman ka Naam *</label><div class="voice-field-row"><input id="pName" placeholder="Jaise: Aata 5kg"><button type="button" class="voice-field-btn" onclick="startVoiceInput('pName')" title="Bolkar saman ka naam likhein">🎙️ Bolkar likhein</button></div>
-  <div class="grid2"><div><label class="field-label">Price (₹) *</label><input id="pPrice" type="number" min="0" placeholder="Price"></div><div><label class="field-label">Stock Qty</label><input id="pStock" type="number" min="0" placeholder="Stock"></div></div>
+  <label class="field-label">Product Description / विवरण</label><textarea id="pDescription" rows="2" maxlength="1000" placeholder="Product ke baare mein chhoti jankari"></textarea><div class="grid2"><div><label class="field-label">Price (₹) *</label><input id="pPrice" type="number" min="0" placeholder="Price"></div><div><label class="field-label">Stock Qty</label><input id="pStock" type="number" min="0" placeholder="Stock"></div></div>
   <div class="grid2"><div><label class="field-label">Category</label><select id="pCategory"><option value="staples">Aata, Chawal & Daal</option><option value="oil-spices">Tel & Masale</option><option value="snacks">Biscuits & Drinks</option><option value="cleaning">Sabun & Surf</option><option value="other">Other</option></select></div><div><label class="field-label">Photo URL (optional)</label><input id="pImageUrl" placeholder="https://…"></div></div>
   <details id="categoryManager" style="margin-top:10px;border:1px solid #ddd6fe;background:#faf5ff;border-radius:12px;padding:12px">
     <summary style="font-weight:900;color:#6b21a8;cursor:pointer">🗂️ Category add / edit karein</summary>
@@ -966,10 +946,11 @@ function renderCategoryControls(){
  sel.innerHTML=productCategories.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
  if(productCategories.some(c=>c.id===old))sel.value=old;else sel.value=productCategories[0]?.id||"other";
  const tabs=document.querySelector(".tabs");
- tabs.innerHTML=`<button class="${activeCategory==="all"?"active":""}" data-cat="all" onclick="setCategory('all',this)">Sabhi Saman (सभी)</button><button class="${activeCategory==="new"?"active":""}" data-cat="new" onclick="setCategory('new',this)">✨ Naya Saman (नया)</button>`+productCategories.map(c=>`<button class="${activeCategory===c.id?"active":""}" data-cat="${esc(c.id)}" onclick="setCategory('${esc(c.id)}',this)">${esc(c.name)}</button>`).join("");
+ tabs.innerHTML=`<button class="${activeCategory==="all"?"active":""}" data-cat="all" onclick="setCategory('all',this)">Sabhi Saman (सभी)</button><button class="${activeCategory==="new"?"active":""}" data-cat="new" onclick="setCategory('new',this)">✨ Naya Saman (नया)</button>` +productCategories.filter(c=>c.active!==false).map(c=>`<button class="${activeCategory===c.id?"active":""}" data-cat="${esc(c.id)}" onclick="setCategory('${esc(c.id)}',this)" style="${c.imageUrl?`background-image:linear-gradient(0deg,rgba(0,0,0,.65),rgba(0,0,0,.05)),url('${esc(c.imageUrl)}');background-size:cover;background-position:center;color:#fff;min-height:58px;text-shadow:0 1px 3px #000`:''}">${esc(c.name)}</button>`).join("");
  const list=document.getElementById("categoryAdminList");
- if(list)list.innerHTML=productCategories.map(c=>`<div class="admin-row"><div style="min-width:0;font-weight:800">${esc(c.name)}</div><div class="row-actions"><button class="tiny-btn" style="background:#dbeafe;color:#1d4ed8" onclick="renameCategory('${esc(c.id)}')">Edit</button><button class="tiny-btn" style="background:#fee2e2;color:#b91c1c" onclick="removeCategory('${esc(c.id)}')" ${c.id==="other"?"disabled":""}>Delete</button></div></div>`).join("");
+ if(list)list.innerHTML=productCategories.map(c=>`<div class="admin-row" style="align-items:center;gap:8px"><div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1">${c.imageUrl?`<img src="${esc(c.imageUrl)}" style="width:46px;height:46px;object-fit:cover;border-radius:9px">`:`<div style="width:46px;height:46px;border-radius:9px;background:#e5e7eb;display:grid;place-items:center">🛍️</div>`}<div style="min-width:0;font-weight:800">${esc(c.name)}<label style="display:block;font-size:11px;color:#2563eb;cursor:pointer">📷 Photo change<input type="file" accept="image/*" style="display:none" onchange="uploadCategoryPhoto('${esc(c.id)}',this)"></label></div></div><div class="row-actions"><button class="tiny-btn" style="background:#dbeafe;color:#1d4ed8" onclick="renameCategory('${esc(c.id)}')">Edit</button><button class="tiny-btn" style="background:#fee2e2;color:#b91c1c" onclick="removeCategory('${esc(c.id)}')" ${c.id==="other"?"disabled":""}>Delete</button></div></div>`).join("");
 }
+async function uploadCategoryPhoto(id,input){const file=input.files&&input.files[0];if(!file)return;try{const small=await compressProductImage(file);const r=await api("uploadImage",{fileName:"category-"+id+"-"+small.name,mimeType:small.type,base64:await fileBase64(small)},adminPin);const c=productCategories.find(x=>String(x.id)===String(id));if(!c)throw Error("Category nahi mili.");c.imageUrl=r.imageUrl;await persistCategories();alert("Category photo save ho gayi.");}catch(e){alert("Photo upload nahi hui: "+e.message);}}
 async function loadCategories(){
  try{
   const r=await api("getCategories");
@@ -1023,7 +1004,7 @@ function renderProducts(){
  const arr=products.filter(p=>(activeCategory==="all"||(activeCategory==="new"?(p.isNew===true||String(p.isNew).toLowerCase()==="true"||String(p.isNew)==="1"):p.category===activeCategory))&&String(p.name||"").toLowerCase().includes(q));
  document.getElementById("productList").innerHTML=arr.map(p=>{
    const im=imageUrl(p.imageUrl||"");
-   return `<article class="product">${im?`<img class="prod-image" src="${esc(im)}" alt="${esc(p.name)}" onerror="this.outerHTML='<div class=&quot;prod-placeholder&quot; title=&quot;Photo load nahi hui&quot;>🛍️</div>'">`:`<div class="prod-placeholder">🛍️</div>`}<div class="prod-body">${(p.isNew===true||String(p.isNew).toLowerCase()==="true"||String(p.isNew)==="1")?'<span class="new-tag">NEW</span>':''}<div class="prod-name">${esc(p.name)}</div><div class="product-rating" data-product-rating="${esc(p.id)}">☆ ☆ ☆ ☆ ☆ <small>Rating load ho rahi hai</small></div><div class="prod-meta"><span>Stock: ${Number(p.stock||0)} bacha</span><span>${esc(categoryLabel(p.category||""))}</span></div><div class="prod-bottom"><span class="price">₹${Number(p.price||0)}</span>${(cart[p.id]||0)>0?`<div class="qty-control" aria-label="${Number(cart[p.id])} item cart mein"><button type="button" aria-label="${esc(p.name)} ki quantity kam karein" onclick="changeCartQty('${esc(p.id)}',-1)">−</button><strong aria-live="polite">${Number(cart[p.id])}</strong><button type="button" aria-label="${esc(p.name)} ki quantity badhayein" ${Number(cart[p.id]||0)>=Number(p.stock||0)?'disabled':''} onclick="changeCartQty('${esc(p.id)}',1)">+</button></div>`:`<button class="add-btn" ${Number(p.stock||0)<=0?'disabled':''} onclick="addToCart('${esc(p.id)}')">+ Add</button>`}</div></div></article>`;
+   return `<article class="product">${im?`<img class="prod-image" src="${esc(im)}" alt="${esc(p.name)}" onclick="openProductDetail('${esc(p.id)}')" style="cursor:zoom-in" onerror="this.outerHTML='<div class=&quot;prod-placeholder&quot; title=&quot;Photo load nahi hui&quot;>🛍️</div>'">`:`<div class="prod-placeholder" onclick="openProductDetail('${esc(p.id)}')" style="cursor:pointer">🛍️</div>`}<div class="prod-body">${(p.isNew===true||String(p.isNew).toLowerCase()==="true"||String(p.isNew)==="1")?'<span class="new-tag">NEW</span>':''}<div class="prod-name" onclick="openProductDetail('${esc(p.id)}')" style="cursor:pointer">${esc(p.name)}</div><div class="product-rating" data-product-rating="${esc(p.id)}">☆ ☆ ☆ ☆ ☆ <small>Rating load ho rahi hai</small></div><div class="prod-meta"><span>Stock: ${Number(p.stock||0)} bacha</span><span>${esc(categoryLabel(p.category||""))}</span></div><div class="prod-bottom"><span class="price">₹${Number(p.price||0)}</span>${(cart[p.id]||0)>0?`<div class="qty-control" aria-label="${Number(cart[p.id])} item cart mein"><button type="button" aria-label="${esc(p.name)} ki quantity kam karein" onclick="changeCartQty('${esc(p.id)}',-1)">−</button><strong aria-live="polite">${Number(cart[p.id])}</strong><button type="button" aria-label="${esc(p.name)} ki quantity badhayein" ${Number(cart[p.id]||0)>=Number(p.stock||0)?'disabled':''} onclick="changeCartQty('${esc(p.id)}',1)">+</button></div>`:`<button class="add-btn" ${Number(p.stock||0)<=0?'disabled':''} onclick="addToCart('${esc(p.id)}')">+ Add</button>`}</div></div></article>`;
  }).join("");
  document.getElementById("emptyMessage").classList.toggle("hidden",arr.length>0);
   renderNewItemsTicker();
@@ -1096,73 +1077,9 @@ function getLocation(){
  },()=>{out.textContent="Location nahi mili. Permission allow karein.";},{enableHighAccuracy:true,timeout:10000});
 }
 
-function formatReceiptQty(qty, unit) {
-  const n = Number(qty);
-  if (!Number.isFinite(n)) return String(qty ?? '');
-  const value = Number.isInteger(n) ? String(n) : String(Number(n.toFixed(3)));
-  const u = String(unit || '').trim();
-  if (!u || /^(piece|pieces|pc|pcs|item|items)$/i.test(u)) return `${value} Piece`;
-  return `${value} ${u}`;
-}
-
 function openDirectWhatsApp(phone, text) {
   const encoded = encodeURIComponent(text);
   window.location.href = `https://api.whatsapp.com/send?phone=91${phone}&text=${encoded}`;
-}
-
-// Keep the generated receipt in memory. Do not auto-download or open text-only WhatsApp.
-let pendingReceiptFile = null;
-let pendingReceiptText = "";
-function showReceiptSharePanel(file, text) {
-  pendingReceiptFile = file;
-  pendingReceiptText = text || "";
-  const panel = document.getElementById("receiptSharePanel");
-  const status = document.getElementById("receiptShareStatus");
-  if (status) status.textContent = "Share button dabane ke baad WhatsApp aur shop chat select karein.";
-  if (panel) panel.classList.remove("hidden");
-}
-function closeReceiptSharePanel() {
-  const panel = document.getElementById("receiptSharePanel");
-  if (panel) panel.classList.add("hidden");
-}
-async function shareReceiptNow(includeText) {
-  const file = pendingReceiptFile;
-  if (!file) { alert("Parchi abhi taiyar nahi hai. Order dobara try karein."); return; }
-  const status = document.getElementById("receiptShareStatus");
-  // This function is called directly by a button tap; invoke Web Share immediately
-  // (before any await) so Android does not lose its transient user activation.
-  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-    const data = { files: [file], title: "Chauhan Kirana Store Parchi" };
-    if (includeText && pendingReceiptText) data.text = pendingReceiptText;
-    try {
-      const sharePromise = navigator.share(data);
-      if (status) status.textContent = "Share menu khul raha hai… WhatsApp select karein.";
-      await sharePromise;
-      closeReceiptSharePanel();
-      return;
-    } catch (err) {
-      if (err && err.name === "AbortError") {
-        if (status) status.textContent = "Share cancel hua. Dobara Share dabakar try kar sakte hain.";
-        return;
-      }
-      if (status) status.textContent = "Is browser mein direct file sharing available nahi hui. Backup download use karein.";
-      alert("Is browser/device par direct image sharing support nahi hui. Backup Download Parchi button use karein.");
-      return;
-    }
-  }
-  if (status) status.textContent = "Aapke browser mein direct file share support nahi hai. Backup download use karein.";
-  alert("Aapka browser WhatsApp par image direct share support nahi karta. Backup Download Parchi button use karein.");
-}
-function downloadReceiptFallback() {
-  const file = pendingReceiptFile;
-  if (!file) { alert("Parchi abhi taiyar nahi hai."); return; }
-  const url = URL.createObjectURL(file);
-  const a = document.createElement("a");
-  a.href = url; a.download = file.name || "Chauhan_Kirana_Parchi.png";
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 60000);
-  const status = document.getElementById("receiptShareStatus");
-  if (status) status.textContent = "Parchi download ho gayi. Ise WhatsApp mein manually attach karein.";
 }
 
 // Crisp HTML Parchi Generator with html2canvas (No Sideways Cropping)
@@ -1182,12 +1099,12 @@ async function sendOrder(){
    if(p){
      const sub=q*Number(p.price||0);
      total+=sub;
-     lines.push(`${p.name} ➔ [ ${formatReceiptQty(q, p.unit || "Piece")} ] = ₹${sub}`);
-     items.push({name:p.name,unit:p.unit||"Piece",qty:formatReceiptQty(q, p.unit || "Piece"),total:sub});
+     lines.push(`${p.name} ➔ [ ${q} Piece ] = ₹${sub}`);
+     items.push({name:p.name,unit:p.unit||"",qty:q,total:sub});
    }
  });
 
- if(typeof looseCart!=="undefined") looseCart.forEach(x=>{total+=Number(x.amount||0);const qtyText=formatReceiptQty(x.qty,x.unit);lines.push(`${x.name} ➔ [ ${qtyText} ] = ₹${Number(x.amount).toFixed(2)}`);items.push({name:x.name,unit:x.unit,qty:qtyText,total:Number(x.amount)});});
+ if(typeof looseCart!=="undefined") looseCart.forEach(x=>{total+=Number(x.amount||0);lines.push(`${x.name} ➔ [ ${x.qty.toFixed(3)} ${x.unit} ] = ₹${Number(x.amount).toFixed(2)}`);items.push({name:x.name,unit:x.unit,qty:x.qty.toFixed(3),total:Number(x.amount)});});
  const deliveryFee=(orderMode==="delivery" && typeof v9DeliveryFee==="function")?v9DeliveryFee(total):0;
  const finalTotal=total+deliveryFee;
  const father=document.getElementById("custFather").value.trim();
@@ -1210,7 +1127,7 @@ async function sendOrder(){
                    `🛍️ *Saman Bill:* ₹${total}\n` +
                    `🚚 *Delivery Charge:* ₹${deliveryFee}\n` +
                    `💵 *TOTAL BILL: ₹${finalTotal}*\n` +
-                   `📎 *Parchi image saath mein attach hogi — Share screen par WhatsApp select karein.*`;
+                   `📸 *(Parchi photo download ho rahi hai)*`;
 
  const btn=document.getElementById("orderSubmitBtn");
  const origBtnText=btn.innerText;
@@ -1265,19 +1182,30 @@ async function sendOrder(){
  try{
    const captureElement = document.getElementById("receiptContainer");
    const canvas = await html2canvas(captureElement, { scale: 2.5, useCORS: true, backgroundColor: "#ffffff", windowWidth: 1000 });
-   const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-   if (!blob) throw new Error('Parchi image generate nahi ho payi.');
-   const imageFile = new File([blob], `Parchi_${name.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
-   // Do not download first and do not launch WhatsApp with text alone.
-   // Show a second-step share button so Android receives a fresh user gesture
-   // after html2canvas has finished creating the PNG.
-   showReceiptSharePanel(imageFile, orderText);
+   canvas.toBlob(async (blob) => {
+     btn.innerText = origBtnText;
+     const imageFile = new File([blob], `Parchi_${name.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
 
+     if (navigator.canShare && navigator.canShare({ files: [imageFile] })) {
+       try {
+         await navigator.share({ files: [imageFile], title: 'Chauhan Kirana Parchi', text: orderText });
+         return;
+       } catch (err) {}
+     }
+
+     const downloadUrl = URL.createObjectURL(blob);
+     const link = document.createElement("a");
+     link.href = downloadUrl;
+     link.download = `Chauhan_Kirana_Parchi.png`;
+     document.body.appendChild(link);
+     link.click();
+     document.body.removeChild(link);
+
+     openDirectWhatsApp(SHOP_WHATSAPP, orderText);
+   }, 'image/png');
  } catch(e){
-   alert('Parchi banane mein dikkat hui: ' + (e.message || e));
-   // Do not send a text-only order when receipt generation fails.
- } finally {
    btn.innerText = origBtnText;
+   openDirectWhatsApp(SHOP_WHATSAPP, orderText);
  }
 }
 
@@ -1338,13 +1266,13 @@ async function adminChangeOrderStatus(orderId,status){
 }
 
 function adminLogout(){adminPin="";document.getElementById("loginBox").classList.remove("hidden");document.getElementById("adminPanel").classList.add("hidden");document.getElementById("adminPin").value=""}
-function clearForm(){["editId","pName","pPrice","pStock","pImageUrl"].forEach(id=>document.getElementById(id).value="");document.getElementById("pCategory").value="staples";document.getElementById("pIsNew").checked=false;document.getElementById("pImageFile").value="";const preview=document.getElementById("productPhotoPreview");if(preview)preview.remove()}
+function clearForm(){["editId","pName","pDescription","pPrice","pStock","pImageUrl"].forEach(id=>document.getElementById(id).value="");document.getElementById("pCategory").value="staples";document.getElementById("pIsNew").checked=false;document.getElementById("pImageFile").value="";const preview=document.getElementById("productPhotoPreview");if(preview)preview.remove()}
 
 function editProduct(id){
  const p=products.find(x=>String(x.id)===String(id));
  if(!p)return;
  document.getElementById("editId").value=p.id;
- document.getElementById("pName").value=p.name||"";
+ document.getElementById("pName").value=p.name||"";document.getElementById("pDescription").value=p.description||"";
  document.getElementById("pPrice").value=p.price??"";
  document.getElementById("pStock").value=p.stock??0;
  if(!productCategories.some(c=>String(c.id)===String(p.category||"other"))){productCategories.push({id:String(p.category||"other"),name:String(p.category||"Other")});renderCategoryControls();}
@@ -1415,7 +1343,7 @@ async function saveProduct(){
      imageUrl=r.imageUrl;
      msg.textContent="Photo upload ho gayi; product save ho raha hai…";
    }
-   const product={id,name,price,stock,category:document.getElementById("pCategory").value,imageUrl,isNew:document.getElementById("pIsNew").checked};
+   const product={id,name,price,stock,category:document.getElementById("pCategory").value,imageUrl,isNew:document.getElementById("pIsNew").checked,description:document.getElementById("pDescription")?.value||""};
    await api(id?"updateProduct":"addProduct",{product},adminPin);
    msg.className="msg ok";msg.textContent="✅ Product Google Sheet mein save ho gaya.";
    clearForm();await loadProducts();
@@ -1714,9 +1642,9 @@ loadCategories().then(()=>loadProducts());
       const qty=Number(cart[p.id]||0),stock=Number(p.stock||0),fav=favourites.includes(String(p.id));
       return `<article class="product">
         <button class="v5-heart ${fav?"active":""}" type="button" aria-label="Favourite" onclick="toggleV5Favourite('${esc(p.id)}')">${fav?"♥":"♡"}</button>
-        ${im?`<img class="prod-image" src="${esc(im)}" alt="${esc(p.name)}" loading="lazy" onerror="this.outerHTML='<div class=&quot;prod-placeholder&quot;>🛍️</div>'">`:`<div class="prod-placeholder">🛍️</div>`}
+        ${im?`<img class="prod-image" src="${esc(im)}" alt="${esc(p.name)}" loading="lazy" onerror="this.outerHTML='<div class=&quot;prod-placeholder&quot;>🛍️</div>'">`:`<div class="prod-placeholder" onclick="openProductDetail('${esc(p.id)}')" style="cursor:pointer">🛍️</div>`}
         <div class="prod-body">${isNew?'<span class="new-tag">NEW / नया</span>':''}
-          <div class="prod-name">${esc(p.name)}</div><div class="product-rating" data-product-rating="${esc(p.id)}">☆ ☆ ☆ ☆ ☆ <small>Rating load ho rahi hai</small></div>
+          <div class="prod-name" onclick="openProductDetail('${esc(p.id)}')" style="cursor:pointer">${esc(p.name)}</div><div class="product-rating" data-product-rating="${esc(p.id)}">☆ ☆ ☆ ☆ ☆ <small>Rating load ho rahi hai</small></div>
           <div class="prod-meta"><span>${stock>0?`In Stock / उपलब्ध: ${stock}`:"Out of Stock / स्टॉक खत्म"}</span><span>${esc(categoryLabel(p.category||""))}</span></div>
           <div class="prod-bottom"><span class="price">₹${Number(p.price||0)}</span>
           ${qty>0?`<div class="qty-control"><button type="button" onclick="changeCartQty('${esc(p.id)}',-1)">−</button><strong>${qty}</strong><button type="button" ${qty>=stock?"disabled":""} onclick="changeCartQty('${esc(p.id)}',1)">+</button></div>`:`<button class="add-btn" ${stock<=0?"disabled":""} onclick="addToCart('${esc(p.id)}')">+ Add / जोड़ें</button>`}</div>
@@ -1931,7 +1859,7 @@ const v9OldGetLocation=window.getLocation;
 window.getLocation=function(){const out=document.getElementById('locStatus');if(!navigator.geolocation){out.textContent='GPS available nahi hai.';return;}out.textContent='GPS location le rahe hain…';navigator.geolocation.getCurrentPosition(p=>{customerCoords={lat:p.coords.latitude,lng:p.coords.longitude};gps=`https://maps.google.com/?q=${customerCoords.lat},${customerCoords.lng}`;const check=v9DistanceCheck();out.textContent=check.ok?'✅ GPS added · Shop se '+check.km.toFixed(2)+' km':(SHOP_GPS.lat===null?'GPS add ho gaya. Shop pin configure hone par distance check hoga.':check.msg);if(check.ok){const fee=v9DeliveryFee(v9Subtotal());const q=document.getElementById('deliveryQuote');if(q)q.textContent='Distance '+check.km.toFixed(2)+' km · Delivery charge ₹'+fee;}},()=>{out.textContent='Location permission allow karein.';},{enableHighAccuracy:true,timeout:12000,maximumAge:0});};
 function v9Subtotal(){let t=0;Object.entries(cart).forEach(([id,q])=>{const p=products.find(x=>String(x.id)===String(id));if(p)t+=Number(p.price||0)*Number(q||0);});looseCart.forEach(x=>t+=x.amount);return t;}
 const v9OldUpdateCart=window.updateCart;
-window.updateCart=function(){v9OldUpdateCart();const host=document.getElementById('cartSummaryItems');if(!host)return;let subtotal=v9Subtotal();if(looseCart.length){host.insertAdjacentHTML('beforeend',looseCart.map(x=>`<div class="loose-line"><span>${x.name} · ${formatReceiptQty(x.qty,x.unit)} · ₹${x.rate}/${x.unit}</span><b>₹${x.amount.toFixed(2)} <button class="rating-btn" onclick="removeLooseItem('${x.id}')">Remove</button></b></div>`).join(''));}const count=Object.values(cart).reduce((a,b)=>a+Number(b),0)+looseCart.length;document.getElementById('totalItems').textContent=count;document.getElementById('summaryCount').textContent=count;document.getElementById('totalPrice').textContent=subtotal.toFixed(2).replace(/\.00$/,'');document.getElementById('summaryTotal').textContent=subtotal.toFixed(2).replace(/\.00$/,'');document.getElementById('cartBar').classList.toggle('hidden',count===0);document.getElementById('cartSummary').classList.toggle('hidden',count===0);};
+window.updateCart=function(){v9OldUpdateCart();const host=document.getElementById('cartSummaryItems');if(!host)return;let subtotal=v9Subtotal();if(looseCart.length){host.insertAdjacentHTML('beforeend',looseCart.map(x=>`<div class="loose-line"><span>${x.name} · ${x.qty.toFixed(3)} ${x.unit} · ₹${x.rate}/${x.unit}</span><b>₹${x.amount.toFixed(2)} <button class="rating-btn" onclick="removeLooseItem('${x.id}')">Remove</button></b></div>`).join(''));}const count=Object.values(cart).reduce((a,b)=>a+Number(b),0)+looseCart.length;document.getElementById('totalItems').textContent=count;document.getElementById('summaryCount').textContent=count;document.getElementById('totalPrice').textContent=subtotal.toFixed(2).replace(/\.00$/,'');document.getElementById('summaryTotal').textContent=subtotal.toFixed(2).replace(/\.00$/,'');document.getElementById('cartBar').classList.toggle('hidden',count===0);document.getElementById('cartSummary').classList.toggle('hidden',count===0);};
 // Wrap existing order function to enforce radius and include loose goods / delivery charge in WhatsApp bill.
 const v9OldSendOrder=window.sendOrder;
 window.sendOrder=async function(){
@@ -1939,7 +1867,7 @@ window.sendOrder=async function(){
  const name=document.getElementById('custName').value.trim(),mobile=(document.getElementById('custMobile')?.value||'').trim();if(!name)return alert('Apna naam bharein.');if(!/^\d{10}$/.test(mobile))return alert('10 digit mobile number bharein.');
  const subtotal=v9Subtotal();let fee=0;
  if(orderMode==='delivery'){const check=v9DistanceCheck();if(!check.ok)return alert(check.msg);fee=v9DeliveryFee(subtotal);}
- const looseText=looseCart.map((x,i)=>`${i+1}. ${x.name} · ${formatReceiptQty(x.qty,x.unit)} × ₹${x.rate} = ₹${x.amount.toFixed(2)}`).join('\n');
+ const looseText=looseCart.map((x,i)=>`${i+1}. ${x.name} · ${x.qty.toFixed(3)} ${x.unit} × ₹${x.rate} = ₹${x.amount.toFixed(2)}`).join('\n');
  // Existing receipt function is retained for standard cart. Append validated loose-item and delivery summary before invoking WhatsApp sharing.
  const orig=window.openDirectWhatsApp;window.openDirectWhatsApp=function(phone,text){let extra='';if(orderMode==='delivery')extra+='\n📍 *Distance:* '+deliveryDistanceKm.toFixed(2)+' km';text+=extra+'\n📞 *Customer Mobile:* '+mobile;return orig(phone,text);};
  try{await v9OldSendOrder();}finally{window.openDirectWhatsApp=orig;}
@@ -2115,8 +2043,17 @@ function ckCustomerLogout(){ckCustomerSession=null;try{sessionStorage.removeItem
 async function ckLoadOrderHistory(){
  if(!ckCustomerSession?.token)return alert('Pehle customer login karein.');
  const host=document.getElementById('customerHistoryList');host.textContent='Order history load ho rahi hai…';
- try{const r=await api('listCustomerOrders',{token:ckCustomerSession.token});const rows=r.orders||[];host.innerHTML=rows.length?rows.map(o=>'<div class="ck-order-row"><b>'+ckEsc(o.orderId)+'</b> · '+ckEsc(o.date)+'<br>'+ckEsc(o.summary)+'<br><b>Total: ₹'+Number(o.total||0).toFixed(2)+'</b> · '+ckEsc(o.status)+'</div>').join(''):'Abhi koi purana order nahi mila.';}catch(e){host.textContent='History load nahi hui: '+e.message;}
+ try{
+  const r=await api('listCustomerOrders',{token:ckCustomerSession.token}),rows=r.orders||[];
+  host.innerHTML=rows.length?rows.map(o=>{
+   const confirmBtn=String(o.status).toLowerCase().includes('delivered')&&!o.customerConfirmed
+    ? `<br><button class="rating-btn" onclick="ckConfirmReceived(${JSON.stringify(String(o.orderId))})">✅ Confirm Received</button>`
+    : (o.customerConfirmed?'<br><small>✅ Receipt confirmed</small>':'');
+   return `<div class="ck-order-row"><b>${ckEsc(o.orderId)}</b> · ${ckEsc(o.date)}<br>${ckEsc(o.summary)}<br><b>Total: ₹${Number(o.total||0).toFixed(2)}</b> · ${ckEsc(o.status)}${confirmBtn}</div>`;
+  }).join(''):'Abhi koi purana order nahi mila.';
+ }catch(e){host.textContent='History load nahi hui: '+e.message;}
 }
+async function ckConfirmReceived(orderId){try{await api("confirmOrderReceived",{token:ckCustomerSession.token,orderId});alert("Delivery confirmation save ho gayi.");await ckLoadOrderHistory();}catch(e){alert("Confirmation nahi hui: "+e.message);}}
 function ckEsc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 const ckPreviousSendOrder=window.sendOrder;
 window.sendOrder=async function(){
@@ -2138,35 +2075,4 @@ window.sendOrder=async function(){
 document.addEventListener('DOMContentLoaded',ckRestoreCustomerSession);
 </script>
 </div><!-- /storeApp -->
-
-<style id="ck-v17-receipt-share-mobile-fix">
-/* V17 receipt/share and mobile cart-button alignment fix */
-.cartbar {
-  box-sizing: border-box !important;
-  left: 8px !important;
-  right: 8px !important;
-  width: auto !important;
-  max-width: 700px !important;
-  transform: none !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  gap: 8px !important;
-}
-.cartbar > div { min-width: 0 !important; flex: 1 1 auto !important; }
-.cartbar .cart-btn {
-  box-sizing: border-box !important;
-  flex: 0 1 58% !important;
-  min-width: 0 !important;
-  max-width: 58% !important;
-  white-space: normal !important;
-  overflow-wrap: anywhere !important;
-  line-height: 1.25 !important;
-  padding: 11px 9px !important;
-}
-@media (max-width: 380px) {
-  .cartbar { padding: 9px !important; gap: 6px !important; }
-  .cartbar .cart-btn { font-size: 11px !important; max-width: 56% !important; flex-basis: 56% !important; }
-}
-</style>
-
-</body></html>
+<div id="ckProductDetailModal" class="ck-v18-modal" style="display:none" role="dialog" aria-modal="true"><div class="ck-v18-sheet"><button type="button" class="ck-v18-close" onclick="closeProductDetail()">✕</button><img id="ckDetailImage" alt="Product photo"><h2 id="ckDetailName"></h2><p id="ckDetailDescription"></p><strong id="ckDetailPrice"></strong><p id="ckDetailStock"></p><button id="ckDetailAdd" class="add-btn">＋ Add to Cart</button></div></div><style>.ck-v18-modal{position:fixed;inset:0;z-index:99999;background:#0009;display:flex;align-items:center;justify-content:center;padding:16px}.ck-v18-sheet{background:#fff;color:#172033;width:min(100%,460px);max-height:90vh;overflow:auto;border-radius:18px;padding:18px;position:relative}.ck-v18-sheet>img{width:100%;height:260px;object-fit:contain;background:#f8fafc;border-radius:12px}.ck-v18-close{position:absolute;right:22px;top:22px;border:0;border-radius:50%;width:36px;height:36px;background:#fff}.ck-v18-sheet h2{margin:12px 0 6px}.ck-v18-sheet strong{font-size:22px;color:#166534}</style><script id="ck-v18-ui">function openProductDetail(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;const im=imageUrl(p.imageUrl||"");document.getElementById("ckDetailImage").src=im||"";document.getElementById("ckDetailName").textContent=p.name||"";document.getElementById("ckDetailDescription").textContent=p.description||"Product description available nahi hai.";document.getElementById("ckDetailPrice").textContent="₹"+Number(p.price||0);document.getElementById("ckDetailStock").textContent="Stock: "+Number(p.stock||0);const b=document.getElementById("ckDetailAdd");b.disabled=Number(p.stock||0)<=0;b.onclick=()=>{addToCart(p.id);closeProductDetail();};document.getElementById("ckProductDetailModal").style.display="flex";}function closeProductDetail(){document.getElementById("ckProductDetailModal").style.display="none";}document.addEventListener("keydown",e=>{if(e.key==="Escape")closeProductDetail();});</script></body></html>
