@@ -620,7 +620,19 @@ img{max-width:100%;height:auto}
 </div>
 </div>
 <label class="field-label">💰 Payment Method (भुगतान का तरीका)</label><select id="payment"><option value="Cash (नकद)">💵 Cash (नकद)</option><option value="Online UPI">📱 Online UPI (Google Pay / PhonePe / Paytm)</option><option value="Khata (उधार)">📒 Khata Book (खाता / उधार)</option></select>
-  <div id="deliveryFields" class="hidden"><label class="field-label">Tola / Mohalla *</label><input id="custTola" placeholder="जैसे: Chauhan Basti, Purab Tola"><label class="field-label">🏠 Ghar ki Pehchan / Landmark *</label><textarea id="custLandmark" rows="2" placeholder="मंदिर के पास, ट्रांसफॉर्मर के सामने…"></textarea><button class="primary" style="width:100%;margin-top:8px" onclick="getLocation()">📍 Add Live GPS Location</button><p id="locStatus" class="muted"></p></div>
+  <div id="deliveryFields" class="hidden">
+ <label class="field-label">Tola / Mohalla *</label><input id="custTola" placeholder="जैसे: Chauhan Basti, Purab Tola">
+ <label class="field-label">🏠 Ghar ki Pehchan / Landmark *</label><textarea id="custLandmark" rows="2" placeholder="मंदिर के पास, ट्रांसफॉर्मर के सामने…"></textarea>
+ <div style="margin-top:10px;padding:12px;border:1px solid #bbd7c2;border-radius:12px;background:#f3fbf4">
+  <b>📍 Delivery Location / घर की सही लोकेशन</b>
+  <p class="muted" style="margin:5px 0">Aap kahin se bhi order kar sakte hain. Yahan us ghar/destination ka pin set karein jahan saman pahunchana hai — apni current location zaroori nahi.</p>
+  <button type="button" class="primary" style="width:100%;margin:5px 0" onclick="getLocation()">📍 Is device ki GPS location ko delivery address banayein</button>
+  <label class="field-label" for="deliveryMapInput">Google Maps link ya Latitude, Longitude</label>
+  <input id="deliveryMapInput" type="text" placeholder="26.1051, 83.7100 ya Google Maps link" autocomplete="off">
+  <button type="button" class="rating-btn" style="width:100%;margin-top:7px" onclick="ckSetDeliveryPinFromInput()">Set delivery location / Pin lagayein</button>
+  <p id="locStatus" class="muted" aria-live="polite">Delivery pin set karna zaroori hai. 2 KM limit isi pin se check hogi.</p>
+ </div>
+</div>
  </section>
  <section class="panel" id="looseItemsPanel"><h2 class="section-title">🛢️ Khula Saman / खुला सामान जोड़ें</h2>
  <p class="muted">Saman ka naam aur jitne rupaye ka chahiye, bas woh bharein. Rate dukandar confirm karega.</p>
@@ -1453,7 +1465,7 @@ async function adminLoadDashboard(){
    const id=esc(o.orderId),status=String(o.status||"Order initiated");
    const opts=["Order initiated","Confirmed","Processing","Packed","Out for delivery","Delivered","Cancelled"].map(v=>'<option value="'+esc(v)+'" '+(v===status?'selected':'')+'>'+esc(v)+'</option>').join('');
    const familyOpts=['<option value="">Not assigned</option>'].concat((d.familyMembers||[]).map(f=>'<option value="'+esc(f.mobile)+'" '+(String(o.assignedFamilyMobile||'')===String(f.mobile)?'selected':'')+'>'+esc(f.name)+'</option>')).join('');
-   return '<tr style="border-top:1px solid #e2e8f0"><td style="padding:7px"><b>'+id+'</b><br>'+esc(o.name)+' · '+esc(o.mobile)+'<br><span style="color:#64748b">'+esc(o.summary)+'</span></td><td style="padding:7px;white-space:nowrap">'+esc(o.date)+'</td><td style="padding:7px;white-space:nowrap;font-weight:800">'+adminMoney(o.total)+'</td><td style="padding:7px"><select style="min-width:130px;padding:6px;border:1px solid #cbd5e1;border-radius:7px;margin-bottom:5px" onchange="adminChangeOrderStatus(\''+id+'\',this.value)">'+opts+'</select><br><select aria-label="Assign family member" style="min-width:130px;padding:6px;border:1px solid #cbd5e1;border-radius:7px" onchange="adminAssignOrder(\''+id+'\',this.value)">'+familyOpts+'</select></td></tr>';
+   return '<tr style="border-top:1px solid #e2e8f0"><td style="padding:7px"><b>'+id+'</b><br>'+esc(o.name)+' · '+esc(o.mobile)+'<br><span style="color:#64748b">'+esc(o.summary)+'</span>'+(o.deliveryMapUrl?'<br><a target="_blank" rel="noopener" href="'+esc(o.deliveryMapUrl)+'" style="display:inline-block;margin-top:5px;color:#166534;font-weight:800">📍 Open Delivery Location in Maps</a>':'')+'</td><td style="padding:7px;white-space:nowrap">'+esc(o.date)+'</td><td style="padding:7px;white-space:nowrap;font-weight:800">'+adminMoney(o.total)+'</td><td style="padding:7px"><select style="min-width:130px;padding:6px;border:1px solid #cbd5e1;border-radius:7px;margin-bottom:5px" onchange="adminChangeOrderStatus(\''+id+'\',this.value)">'+opts+'</select><br><select aria-label="Assign family member" style="min-width:130px;padding:6px;border:1px solid #cbd5e1;border-radius:7px" onchange="adminAssignOrder(\''+id+'\',this.value)">'+familyOpts+'</select></td></tr>';
   }).join('')+'</tbody></table>':'<p>Is date range mein koi order nahi mila.</p>';
   const customers=Array.isArray(d.customers)?d.customers:[];
   const customerHost=document.getElementById("adminCustomerDirectory");
@@ -1606,7 +1618,7 @@ async function changeAdminPin(){
  if(!/^\d{4,6}$/.test(next)){out.className="msg err";out.textContent="Naya PIN 4–6 digits ka hona chahiye.";return}
  if(next!==confirm){out.className="msg err";out.textContent="Dono naye PIN match nahi kar rahe.";return}
  try{
-  await api("changePin",{newPin:next},adminPin);
+  await api("changePin",{currentPin:current,newPin:next},adminPin);
   ["currentPin","newPin","confirmPin"].forEach(id=>document.getElementById(id).value="");
   out.className="msg ok";out.textContent="✅ PIN successfully change ho gaya.";
  }catch(e){out.className="msg err";out.textContent="PIN change nahi hua: "+e.message;}
@@ -2074,7 +2086,7 @@ function addLooseItem(){
 }
 function removeLooseItem(id){looseCart=looseCart.filter(x=>x.id!==id);updateCart();}
 function v9Haversine(a,b){const R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180,x=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
-function v9DeliveryFee(subtotal){return subtotal>=100?0:10;}
+function v9DeliveryFee(subtotal){return Number(subtotal)>=200?0:10;}
 function v9DistanceCheck(){
  if(!customerCoords)return {ok:false,msg:'Delivery ke liye pehle Add Live GPS Location karein.'};
  if(SHOP_GPS.lat===null||SHOP_GPS.lng===null)return {ok:false,msg:'Shop location configure nahi hai.'};
@@ -2119,22 +2131,7 @@ setTimeout(()=>{if(typeof renderProducts==='function')renderProducts();},900);
 </script>
 
 
-<style id="ck-2km-access-style">
-/* Grocery storefront is hidden until the customer's GPS is verified inside the 2 km radius.
-   Tent House booking remains available everywhere. */
-body:not(.ck-location-verified) .shop-hero-v5,
-body:not(.ck-location-verified) .app-benefits-v5,
-body:not(.ck-location-verified) #newItemsTicker,
-body:not(.ck-location-verified) .offer,
-body:not(.ck-location-verified) main.container,
-body:not(.ck-location-verified) header .status,
-body:not(.ck-location-verified) header .search-wrap,
-body:not(.ck-location-verified) header .tabs { display:none !important; }
-#ckLocationGate{display:none;margin:14px auto;padding:16px;border:1px solid #f59e0b;border-radius:14px;background:#fffbeb;color:#78350f;max-width:720px;text-align:center}
-body:not(.ck-location-verified) #ckLocationGate{display:block}
-#ckLocationGate button{margin-top:10px;background:#166534;color:white;border:0;border-radius:9px;padding:10px 16px;font-weight:800}
-
-/* V8 FINAL FIX: keep the full Ramlakhan Tent House poster visible without cropping */
+<style>/* V8 FINAL FIX: keep the full Ramlakhan Tent House poster visible without cropping */
 #tentModal .tent-promo-photo img{
   display:block!important;
   width:100%!important;
@@ -2145,48 +2142,6 @@ body:not(.ck-location-verified) #ckLocationGate{display:block}
   background:#fffaf1!important;
 }
 </style>
-<div id="ckLocationGate" role="status" aria-live="polite">
- <strong>📍 Chauhan Kirana Store – 2 KM Service Area</strong>
- <p id="ckLocationGateText">Aapki location check ho rahi hai. Kirana Store ki online shopping sirf shop se 2 KM ke andar available hai. Ramlakhan Tent House booking sabhi locations ke liye available rahegi.</p>
- <button type="button" onclick="ckCheckStoreLocation()">Location dobara check karein</button>
-</div>
-<script id="ck-2km-access-control">
-(function(){
- const gateText=()=>document.getElementById('ckLocationGateText');
- window.ckCheckStoreLocation=function(){
-   const out=gateText();
-   if(!navigator.geolocation){if(out)out.textContent='Is browser mein GPS available nahi hai. Location permission wale browser se try karein. Tent House booking available hai.';return;}
-   if(out)out.textContent='Aapki live location check ho rahi hai…';
-   navigator.geolocation.getCurrentPosition(function(pos){
-     customerCoords={lat:pos.coords.latitude,lng:pos.coords.longitude};
-     gps='https://maps.google.com/?q='+customerCoords.lat+','+customerCoords.lng;
-     deliveryDistanceKm=v9Haversine(SHOP_GPS,customerCoords);
-     if(deliveryDistanceKm<=KIRANA_SERVICE_RADIUS_KM){
-       document.body.classList.add('ck-location-verified');
-       if(out)out.textContent='';
-       const status=document.getElementById('locStatus');if(status)status.textContent='✅ Location verified · Shop se '+deliveryDistanceKm.toFixed(2)+' km';
-     }else{
-       document.body.classList.remove('ck-location-verified');
-       if(out)out.textContent='Aap shop se '+deliveryDistanceKm.toFixed(2)+' km door hain. Chauhan Kirana Store ki website par grocery shopping sirf 2 KM ke andar available hai. Ramlakhan Tent House ki booking yahan se kar sakte hain.';
-     }
-   },function(){
-     document.body.classList.remove('ck-location-verified');
-     if(out)out.textContent='Kirana Store access ke liye location permission allow karein. Tent House booking bina location check ke available hai.';
-   },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
- };
- // Keep delivery checkout protected too, even after the page has been opened.
- const oldCheck=window.v9DistanceCheck;
- window.v9DistanceCheck=function(){
-   if(!customerCoords)return {ok:false,msg:'Kirana Store ke liye pehle live location verify karein.'};
-   const km=v9Haversine(SHOP_GPS,customerCoords);
-   deliveryDistanceKm=km;
-   if(km>KIRANA_SERVICE_RADIUS_KM)return {ok:false,msg:'Aap '+km.toFixed(2)+' km door hain. Kirana Store ki online service sirf 2 KM ke andar available hai.'};
-   return {ok:true,km};
- };
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',window.ckCheckStoreLocation,{once:true});
- else window.ckCheckStoreLocation();
-})();
-</script>
 
 
 
@@ -2342,7 +2297,7 @@ async function ckLoadOrderHistory(){
    const steps=['Order initiated','Confirmed','Processing','Packed','Out for delivery','Delivered'];
    const current=steps.findIndex(x=>x.toLowerCase()===String(o.status||'').toLowerCase());
    const progress=String(o.status||'').toLowerCase()==='cancelled'?'❌ Order Cancelled':steps.map((s,i)=>`<span style="display:inline-block;padding:5px 7px;margin:3px;border-radius:8px;background:${i<=(current<0?0:current)?'#dcfce7':'#f1f5f9'};color:${i<=(current<0?0:current)?'#166534':'#64748b'};font-size:11px">${i<=(current<0?0:current)?'✓':'○'} ${s}</span>`).join('');
-   return `<div class="ck-order-row" style="padding:12px;margin:10px 0;border:1px solid #dbe7dc;border-radius:12px"><b>${ckEsc(o.orderId)}</b> · ${ckEsc(o.date)}<br>${ckEsc(o.summary)}<br><b>Total: ₹${Number(o.total||0).toFixed(2)}</b><br><b>Status: ${ckEsc(o.status)}</b><div style="margin-top:7px">${progress}</div>${o.assignedFamilyName?`<br><small>Delivery handled by: ${ckEsc(o.assignedFamilyName)}</small>`:""}${o.statusUpdatedAt?`<br><small>Last update: ${ckEsc(o.statusUpdatedAt)}</small>`:""}${confirmBtn}</div>`;
+   return `<div class="ck-order-row" style="padding:12px;margin:10px 0;border:1px solid #dbe7dc;border-radius:12px"><b>${ckEsc(o.orderId)}</b> · ${ckEsc(o.date)}<br>${ckEsc(o.summary)}<br><b>Total: ₹${Number(o.total||0).toFixed(2)}</b><br><b>Status: ${ckEsc(o.status)}</b>${o.deliveryMapUrl?`<br><a href="${ckEsc(o.deliveryMapUrl)}" target="_blank" rel="noopener" style="color:#166534;font-weight:800">📍 Delivery Location in Maps</a>`:''}<div style="margin-top:7px">${progress}</div>${o.assignedFamilyName?`<br><small>Delivery handled by: ${ckEsc(o.assignedFamilyName)}</small>`:""}${o.statusUpdatedAt?`<br><small>Last update: ${ckEsc(o.statusUpdatedAt)}</small>`:""}${confirmBtn}</div>`;
   }).join(''):'Abhi koi purana order nahi mila.';
  }catch(e){host.textContent='History load nahi hui: '+e.message;}
 }
@@ -2357,15 +2312,64 @@ window.sendOrder=async function(){
  const name=document.getElementById('custName').value.trim(),mobile=(document.getElementById('custMobile').value||'').replace(/\D/g,'');
  if(name!==ckCustomerSession.name||mobile!==ckCustomerSession.mobile){alert('Customer details login account se match nahi karte.');return;}
  let items=[];
- Object.entries(cart).forEach(([id,q])=>{const p=products.find(x=>String(x.id)===String(id));if(p)items.push({productId:String(p.id),name:p.name,qty:Number(q),amount:Number(p.price||0)*Number(q)});});
- looseCart.forEach(x=>items.push({name:x.name,qty:1,amount:Number(x.amount)}));
+ Object.entries(cart).forEach(([id,q])=>{const p=products.find(x=>String(x.id)===String(id));if(p)items.push({itemType:'catalog',productId:String(p.id),name:p.name,qty:Number(q),amount:Number(p.price||0)*Number(q)});});
+ looseCart.forEach(x=>items.push({itemType:'loose',name:x.name,qty:1,amount:Number(x.amount)}));
  const sub=v9Subtotal(),total=sub+(orderMode==='delivery'?v9DeliveryFee(sub):0),address=orderMode==='pickup'?'Dukan se pickup':[document.getElementById('custTola').value.trim(),document.getElementById('custLandmark').value.trim()].filter(Boolean).join(', ');
  try{
-   await api('saveCustomerOrder',{token:ckCustomerSession.token,items,total,orderType:orderMode,address,payment:document.getElementById('payment').value,distanceKm:orderMode==='delivery'?deliveryDistanceKm:null});
+   await api('saveCustomerOrder',{token:ckCustomerSession.token,items,total,orderType:orderMode,address:orderMode==='delivery'?address+' | Delivery pin: '+gps:address,payment:document.getElementById('payment').value,distanceKm:orderMode==='delivery'?deliveryDistanceKm:null,deliveryLatitude:orderMode==='delivery'?(ckDeliveryDestination||customerCoords).lat:null,deliveryLongitude:orderMode==='delivery'?(ckDeliveryDestination||customerCoords).lng:null,deliveryMapUrl:orderMode==='delivery'?gps:''});
  }catch(e){alert('Order history save nahi hui, isliye order aage nahi bheja gaya: '+e.message);return;}
  await ckPreviousSendOrder();
 };
 document.addEventListener('DOMContentLoaded',ckRestoreCustomerSession);
 </script>
 </div><!-- /storeApp -->
-<div id="ckProductDetailModal" class="ck-v18-modal" style="display:none" role="dialog" aria-modal="true"><div class="ck-v18-sheet"><button type="button" class="ck-v18-close" onclick="closeProductDetail()">✕</button><img id="ckDetailImage" alt="Product photo"><h2 id="ckDetailName"></h2><p id="ckDetailDescription"></p><strong id="ckDetailPrice"></strong><p id="ckDetailStock"></p><button id="ckDetailAdd" class="add-btn">＋ Add to Cart</button></div></div><style>.ck-v18-modal{position:fixed;inset:0;z-index:99999;background:#0009;display:flex;align-items:center;justify-content:center;padding:16px}.ck-v18-sheet{background:#fff;color:#172033;width:min(100%,460px);max-height:90vh;overflow:auto;border-radius:18px;padding:18px;position:relative}.ck-v18-sheet>img{width:100%;height:260px;object-fit:contain;background:#f8fafc;border-radius:12px}.ck-v18-close{position:absolute;right:22px;top:22px;border:0;border-radius:50%;width:36px;height:36px;background:#fff}.ck-v18-sheet h2{margin:12px 0 6px}.ck-v18-sheet strong{font-size:22px;color:#166534}</style><script id="ck-v18-ui">function openProductDetail(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;const im=imageUrl(p.imageUrl||"");const detailImg=document.getElementById("ckDetailImage");detailImg.src=im||"";detailImg.onclick=()=>{if(im)window.open(im,"_blank","noopener");};document.getElementById("ckDetailName").textContent=p.name||"";document.getElementById("ckDetailDescription").textContent=p.description||"Product description available nahi hai.";document.getElementById("ckDetailPrice").textContent="₹"+Number(p.price||0);document.getElementById("ckDetailStock").textContent="Stock: "+Number(p.stock||0);const b=document.getElementById("ckDetailAdd");b.disabled=Number(p.stock||0)<=0;b.onclick=()=>{addToCart(p.id);closeProductDetail();};document.getElementById("ckProductDetailModal").style.display="flex";}function closeProductDetail(){document.getElementById("ckProductDetailModal").style.display="none";}document.addEventListener("keydown",e=>{if(e.key==="Escape")closeProductDetail();});</script></body></html>
+<div id="ckProductDetailModal" class="ck-v18-modal" style="display:none" role="dialog" aria-modal="true"><div class="ck-v18-sheet"><button type="button" class="ck-v18-close" onclick="closeProductDetail()">✕</button><img id="ckDetailImage" alt="Product photo"><h2 id="ckDetailName"></h2><p id="ckDetailDescription"></p><strong id="ckDetailPrice"></strong><p id="ckDetailStock"></p><button id="ckDetailAdd" class="add-btn">＋ Add to Cart</button></div></div><style>.ck-v18-modal{position:fixed;inset:0;z-index:99999;background:#0009;display:flex;align-items:center;justify-content:center;padding:16px}.ck-v18-sheet{background:#fff;color:#172033;width:min(100%,460px);max-height:90vh;overflow:auto;border-radius:18px;padding:18px;position:relative}.ck-v18-sheet>img{width:100%;height:260px;object-fit:contain;background:#f8fafc;border-radius:12px}.ck-v18-close{position:absolute;right:22px;top:22px;border:0;border-radius:50%;width:36px;height:36px;background:#fff}.ck-v18-sheet h2{margin:12px 0 6px}.ck-v18-sheet strong{font-size:22px;color:#166534}</style><script id="ck-v18-ui">function openProductDetail(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;const im=imageUrl(p.imageUrl||"");const detailImg=document.getElementById("ckDetailImage");detailImg.src=im||"";detailImg.onclick=()=>{if(im)window.open(im,"_blank","noopener");};document.getElementById("ckDetailName").textContent=p.name||"";document.getElementById("ckDetailDescription").textContent=p.description||"Product description available nahi hai.";document.getElementById("ckDetailPrice").textContent="₹"+Number(p.price||0);document.getElementById("ckDetailStock").textContent="Stock: "+Number(p.stock||0);const b=document.getElementById("ckDetailAdd");b.disabled=Number(p.stock||0)<=0;b.onclick=()=>{addToCart(p.id);closeProductDetail();};document.getElementById("ckProductDetailModal").style.display="flex";}function closeProductDetail(){document.getElementById("ckProductDetailModal").style.display="none";}document.addEventListener("keydown",e=>{if(e.key==="Escape")closeProductDetail();});</script>
+<script id="ck-remote-delivery-location-v1">
+/* Remote ordering: the delivery destination, not the ordering phone's current position, is checked. */
+let ckDeliveryDestination = null;
+function ckParseDeliveryCoordinates(raw){
+ const s=String(raw||'').trim(); if(!s)return null;
+ let m=s.match(/^\s*(-?\d{1,2}(?:\.\d+)?)\s*[, ]\s*(-?\d{1,3}(?:\.\d+)?)\s*$/);
+ if(!m)m=s.match(/[?&]q=(-?\d{1,2}\.\d+)[,%2C ]+(-?\d{1,3}\.\d+)/i);
+ if(!m)m=s.match(/@(-?\d{1,2}\.\d+),(-?\d{1,3}\.\d+)/);
+ if(!m)m=s.match(/!3d(-?\d{1,2}\.\d+)!4d(-?\d{1,3}\.\d+)/);
+ if(!m)m=s.match(/[?&]ll=(-?\d{1,2}\.\d+),(-?\d{1,3}\.\d+)/i);
+ if(!m)return null;
+ const lat=Number(m[1]),lng=Number(m[2]);
+ if(!Number.isFinite(lat)||!Number.isFinite(lng)||lat < -90||lat>90||lng < -180||lng>180)return null;
+ return {lat,lng};
+}
+function ckSetDeliveryDestination(lat,lng,source){
+ lat=Number(lat);lng=Number(lng);
+ if(!Number.isFinite(lat)||!Number.isFinite(lng)||lat < -90||lat>90||lng < -180||lng>180){alert('Valid delivery map pin nahi mila.');return false;}
+ ckDeliveryDestination={lat,lng};
+ customerCoords={lat,lng};
+ gps='https://www.google.com/maps?q='+encodeURIComponent(lat+','+lng);
+ const inp=document.getElementById('deliveryMapInput');if(inp)inp.value=lat.toFixed(6)+', '+lng.toFixed(6);
+ const check=v9DistanceCheck();
+ const out=document.getElementById('locStatus');
+ if(out)out.textContent=check.ok?'✅ Delivery pin set · Shop se '+check.km.toFixed(2)+' km ('+(source||'map pin')+').':'📍 Pin set ho gaya, lekin '+check.msg;
+ return true;
+}
+window.ckSetDeliveryPinFromInput=function(){
+ const el=document.getElementById('deliveryMapInput');const p=ckParseDeliveryCoordinates(el&&el.value);
+ if(!p){alert('Google Maps ka full link ya latitude,longitude paste karein. Short maps.app.goo.gl link ki jagah Maps se Copy link ke baad coordinates wala link ya direct coordinates use karein.');return;}
+ ckSetDeliveryDestination(p.lat,p.lng,'Google Maps pin');
+};
+window.getLocation=function(){
+ const out=document.getElementById('locStatus');
+ if(!navigator.geolocation){if(out)out.textContent='Is browser mein GPS available nahi hai. Google Maps pin paste karein.';return;}
+ if(out)out.textContent='GPS location li ja rahi hai… Agar aap remote order kar rahe hain to GPS tabhi use karein jab device delivery ghar par ho.';
+ navigator.geolocation.getCurrentPosition(p=>ckSetDeliveryDestination(p.coords.latitude,p.coords.longitude,'device GPS'),()=>{if(out)out.textContent='GPS permission nahi mili. Delivery ghar ka Google Maps pin paste karein.';},{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+};
+window.v9DistanceCheck=function(){
+ const p=ckDeliveryDestination||customerCoords;
+ if(!p)return {ok:false,msg:'Pehle delivery ghar ka map pin set karein.'};
+ if(!SHOP_GPS||SHOP_GPS.lat==null||SHOP_GPS.lng==null)return {ok:false,msg:'Shop location configure nahi hai.'};
+ const km=v9Haversine(SHOP_GPS,p);deliveryDistanceKm=km;
+ if(km>KIRANA_SERVICE_RADIUS_KM)return {ok:false,km,msg:'Selected delivery address shop se '+km.toFixed(2)+' km door hai. Delivery sirf 2 KM ke andar available hai.'};
+ return {ok:true,km};
+};
+</script>
+
+</body></html>
